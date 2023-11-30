@@ -1,0 +1,74 @@
+{
+	"id": "86a67ca8-0557-4ef6-8c08-12b72b044399",
+	"name": "Developer Portal Version 0.12",
+	"values": [
+		{
+			"key": "api_base_url",
+			"value": "https://sandbox.api.payme.hsbc.com.hk",
+			"enabled": true
+		},
+		{
+			"key": "client_id",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "client_secret",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "signing_key_id",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "signing_key",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "transactionId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "version",
+			"value": "0.12",
+			"enabled": true
+		},
+		{
+			"key": "access_token",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "utc_now",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "trace_id",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "signature",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "paymentRequestId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "digest",
+			"value": "",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2019-11-26T08:28:31.168Z",
+	"_postman_exported_using": "Postman/7.12.0"
+}
