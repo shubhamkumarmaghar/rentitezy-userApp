@@ -14,7 +14,6 @@ class CheckoutModel {
   String cardId;
   String maintenance;
   List<Photos> imageList;
-
   CheckoutModel(
       {required this.name,
       required this.address,

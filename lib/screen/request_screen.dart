@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/model/assets_req_model.dart';
 import 'package:rentitezy/model/issues_model.dart';
@@ -12,7 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/const/appConfig.dart';
 import '../utils/const/app_urls.dart';
-import 'login_screen.dart';
+import '../login/view/login_screen.dart';
+import '../utils/const/widgets.dart';
+import '../utils/view/rie_widgets.dart';
 
 class RequestScreen extends StatefulWidget {
   const RequestScreen({super.key});
@@ -41,7 +44,7 @@ class _MyAgreeState extends State<RequestScreen> {
     try {
       var sharedPreferences = await prefs;
       if (sharedPreferences.containsKey(Constants.userId)) {
-        userId = sharedPreferences.getString(Constants.userId).toString();
+        userId = GetStorage().read(Constants.userId).toString();
         var list = allIssuesGet(userId);
         futureFaq = Future.value(list);
         setState(() {});
@@ -60,7 +63,7 @@ class _MyAgreeState extends State<RequestScreen> {
     try {
       var sharedPreferences = await prefs;
       if (sharedPreferences.containsKey(Constants.userId)) {
-        userId = sharedPreferences.getString(Constants.userId).toString();
+        userId = GetStorage().read(Constants.userId).toString();
         var list = getAllAssetsReq(userId);
         futureAssetsReq = Future.value(list);
         setState(() {});
@@ -101,7 +104,7 @@ class _MyAgreeState extends State<RequestScreen> {
                   fontWeight: FontWeight.bold),
             ),
           ),
-          height(5),
+          height(0.005),
           Container(
             height: 2,
             width: 70,
@@ -158,9 +161,9 @@ class _MyAgreeState extends State<RequestScreen> {
         future: futureFaq,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return listFaq(snapshot.data!);
@@ -171,7 +174,7 @@ class _MyAgreeState extends State<RequestScreen> {
             }
           }
 
-          return loading();
+          return RIEWidgets.getLoader();
         });
   }
 
@@ -229,9 +232,9 @@ class _MyAgreeState extends State<RequestScreen> {
         future: futureAssetsReq,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return listAssetsReq(snapshot.data!);
@@ -242,14 +245,14 @@ class _MyAgreeState extends State<RequestScreen> {
             }
           }
 
-          return loading();
+          return RIEWidgets.getLoader();
         });
   }
 
   Future<List<LeadsModel>> fetchLeadHistory() async {
     var sharedPreferences = await prefs;
     var list = getAllLeadReq(
-        '${AppUrls.leads}?userId=${sharedPreferences.getString(Constants.userId)}');
+        '${AppUrls.leads}?userId=${GetStorage().read(Constants.userId)}');
     futureLeadReq = Future.value(list);
     setState(() {});
     return list;
@@ -260,9 +263,9 @@ class _MyAgreeState extends State<RequestScreen> {
         future: futureLeadReq,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return listTLeadReq(snapshot.data!);
@@ -273,7 +276,7 @@ class _MyAgreeState extends State<RequestScreen> {
             }
           }
 
-          return loading();
+          return RIEWidgets.getLoader();
         });
   }
 
@@ -310,10 +313,10 @@ class _MyAgreeState extends State<RequestScreen> {
                 future: fetchAllProductsById(faqModel.proIds),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.none) {
-                    return loading();
+                    return RIEWidgets.getLoader();
                   } else if (snapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return loading();
+                    return RIEWidgets.getLoader();
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {
                       return ListView.builder(
@@ -329,7 +332,7 @@ class _MyAgreeState extends State<RequestScreen> {
                     }
                   }
 
-                  return loading();
+                  return RIEWidgets.getLoader();
                 }),
             Text(
               convertToAgo(faqModel.createdOn),

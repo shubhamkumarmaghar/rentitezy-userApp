@@ -8,7 +8,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_getx_widget.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
-import '../../screen/login_screen.dart';
+import '../../login/view/login_screen.dart';
 import '../const/appConfig.dart';
 import '../const/app_urls.dart';
 import '../view/rie_widgets.dart';
@@ -22,14 +22,14 @@ class RIEUserApiService extends GetxController {
 
   Future<String?> _getRegisteredToken() async {
     registeredToken = GetStorage().read(Constants.token);
-   // registeredToken = await _shared.getString(rms_registeredUserToken);
+   // registeredToken = await GetStorage().read(rms_registeredUserToken);
     return registeredToken;
   }
 
   Future<Map<String, String>> get getHeaders async {
 
     return {
-        'admin-auth-token':
+        'user-auth-token':
         (registeredToken ?? await _getRegisteredToken()).toString()
       };
   }
@@ -115,7 +115,8 @@ class RIEUserApiService extends GetxController {
   Future<dynamic>  getApiCallWithURL({
     required String endPoint,
   }) async {
-    log('URL :: $endPoint ');
+    log('URL :: $endPoint , Token :: ${await getHeaders}');
+
     try {
       final response = await http.get(
           Uri.parse(

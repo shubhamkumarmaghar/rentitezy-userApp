@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/screen/home_screen.dart';
+import 'package:rentitezy/home/home_view/home_screen.dart';
 
 PreferredSizeWidget appBarBooking(
     String title, BuildContext context, bool from, Function() onTap) {

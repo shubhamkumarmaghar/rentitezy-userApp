@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:rentitezy/screen/login_screen.dart';
+import 'package:rentitezy/login/view/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -117,12 +118,12 @@ class Constants {
 
 executeLogOut(BuildContext context) async {
   final SharedPreferences prefs = await _prefs;
-  prefs.setBool(Constants.isLogin, false);
-  prefs.setString(Constants.usernamekey, "guest");
-  prefs.setString(Constants.userId, "guest");
-  prefs.setString(Constants.phonekey, "guest");
-  prefs.setString(Constants.emailkey, "guest");
-  prefs.setBool(Constants.isTenant, false);
+  GetStorage().write(Constants.isLogin, false);
+  GetStorage().write(Constants.usernamekey, "guest");
+  GetStorage().write(Constants.userId, "guest");
+  GetStorage().write(Constants.phonekey, "guest");
+  GetStorage().write(Constants.emailkey, "guest");
+  GetStorage().write(Constants.isTenant, false);
 
   if (context.mounted) {
     Navigator.pop(context);

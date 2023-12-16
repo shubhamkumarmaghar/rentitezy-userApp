@@ -4,6 +4,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
@@ -13,9 +14,11 @@ import 'package:rentitezy/web_view/webview.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import '../my_bookings/my_booking_controller.dart';
 import '../utils/const/app_urls.dart';
+import '../utils/const/widgets.dart';
 import 'faq_screen.dart';
-import 'my_bookings/my_booking_controller.dart';
+
 
 class ProfileScreenNew extends StatefulWidget {
   const ProfileScreenNew({super.key});
@@ -127,7 +130,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
           style: TextStyle(
               fontWeight: FontWeight.w600, fontSize: 15, color: Colors.grey),
         ),
-        height(3),
+        height(0.001),
         infoTile(packageInfo.version),
       ],
     );
@@ -135,41 +138,40 @@ class _MyProfileState extends State<ProfileScreenNew> {
 
   void fetchLocal() async {
     SharedPreferences sharedPreferences = await prefs;
-    if (sharedPreferences.containsKey(Constants.userId) &&
-        (sharedPreferences.getString(Constants.userId) != null)) {
+    if (GetStorage().read(Constants.userId) != null) {
       dynamic result = await fetchTenantUserApi(
-          '${AppUrls.getUser}?id=${sharedPreferences.getString(Constants.userId).toString()}');
+          '${AppUrls.getUser}?id=${GetStorage().read(Constants.userId).toString()}');
       if (result["success"]) {
         UserModel userModel = UserModel.fromJson(result["data"][0]);
-        sharedPreferences.setString(Constants.userId, userModel.id);
+        GetStorage().write(Constants.userId, userModel.id);
         userId = userModel.id.toString();
-        if (sharedPreferences.getBool(Constants.isTenant)!) {
+        if (GetStorage().read(Constants.isTenant)!) {
           vendorId = userModel.id.toString();
-          sharedPreferences.setString(
+          GetStorage().write(
               Constants.tenantId, userModel.id.toString());
           isTenant = true;
         }
         // if (result['isTenant']) {
-        //   sharedPreferences.setBool(Constants.isTenant, true);
+        //   GetStorage().write(Constants.isTenant, true);
         // TenantModel tempTenant = TenantModel.fromJson(result['tenantDet']);
-        // sharedPreferences.setString(Constants.tenantId, userModel.id);
-        sharedPreferences.setString(Constants.usernamekey,
+        // GetStorage().write(Constants.tenantId, userModel.id);
+        GetStorage().write(Constants.usernamekey,
             '${userModel.firstName} ${userModel.lastName}');
-        sharedPreferences.setString(Constants.phonekey, userModel.phone);
-        // sharedPreferences.setString(Constants.emailkey, tempTenant.email);
-        // sharedPreferences.setString(Constants.profileUrl, tempTenant.photo);
+        GetStorage().write(Constants.phonekey, userModel.phone);
+        // GetStorage().write(Constants.emailkey, tempTenant.email);
+        // GetStorage().write(Constants.profileUrl, tempTenant.photo);
         userName = '${userModel.firstName} ${userModel.lastName}';
         userEmail = userModel.email;
         userPhone = userModel.phone;
         profileImg = userModel.image;
         // isTenant = true;
         // vendorId = userModel.id.toString();
-        // sharedPreferences.setBool(Constants.isTenant, true);
+        // GetStorage().write(Constants.isTenant, true);
         // isTenant = true;
         // if (tempTenant.isAgree == 'true') {
-        //   sharedPreferences.setBool(Constants.isAgree, true);
+        //   GetStorage().write(Constants.isAgree, true);
         // } else {
-        //   sharedPreferences.setBool(Constants.isAgree, false);
+        //   GetStorage().write(Constants.isAgree, false);
         // }
         // } else {
         // isTenant = false;
@@ -179,10 +181,10 @@ class _MyProfileState extends State<ProfileScreenNew> {
         // userEmail = userModel.email;
         // userPhone = userModel.phone;
         // profileImg = userModel.image;
-        // sharedPreferences.setString(Constants.usernamekey, userModel.firstName);
-        // sharedPreferences.setString(Constants.phonekey, userModel.phone);
-        sharedPreferences.setString(Constants.emailkey, userModel.email);
-        sharedPreferences.setString(Constants.profileUrl, userModel.image);
+        // GetStorage().write(Constants.usernamekey, userModel.firstName);
+        // GetStorage().write(Constants.phonekey, userModel.phone);
+        GetStorage().write(Constants.emailkey, userModel.email);
+        GetStorage().write(Constants.profileUrl, userModel.image);
         // userId = userModel.id.toString();
         // userName = userModel.firstName;
         //}
@@ -190,17 +192,17 @@ class _MyProfileState extends State<ProfileScreenNew> {
         isTenant = false;
         userId = 'guest';
         userName = 'guest';
-        sharedPreferences.setString(Constants.tenantId, 'guest');
-        sharedPreferences.setBool(Constants.isTenant, false);
-        sharedPreferences.setBool(Constants.isAgree, false);
+        GetStorage().write(Constants.tenantId, 'guest');
+        GetStorage().write(Constants.isTenant, false);
+        GetStorage().write(Constants.isAgree, false);
       }
     } else {
       isTenant = false;
       userId = 'guest';
       userName = 'guest';
-      sharedPreferences.setString(Constants.tenantId, 'guest');
-      sharedPreferences.setBool(Constants.isTenant, false);
-      sharedPreferences.setBool(Constants.isAgree, false);
+      GetStorage().write(Constants.tenantId, 'guest');
+      GetStorage().write(Constants.isTenant, false);
+      GetStorage().write(Constants.isAgree, false);
     }
     setState(() {});
   }
@@ -213,7 +215,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           iconWidget(image, 30, 30),
-          width(30),
+          width(0.1),
           Expanded(
             child: Text(
               title,
@@ -268,7 +270,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                 onPressed: () async {
                   SharedPreferences sharedPreferences = await prefs;
                   dynamic result = await deleteUser(
-                      sharedPreferences.getString(Constants.userId).toString());
+                      GetStorage().read(Constants.userId).toString());
                   if (result['success']) {
                     executeLogOut(context);
                   }
@@ -296,7 +298,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           iconWidget(image, 30, 30),
-          width(30),
+          width(0.1),
           Text(
             title,
             style: TextStyle(fontFamily: Constants.fontsFamily, fontSize: 16),
@@ -449,19 +451,19 @@ class _MyProfileState extends State<ProfileScreenNew> {
                   tilePadding: const EdgeInsets.all(5),
                   children: [
                     rowText('Property name',
-                        item.property!.propListing.property.name),
-                    rowText('Flat No', item.property!.flatNo),
+                        '${item.propUnit?.listing?.property?.name}'),
+                    rowText('Flat No', '${item.propUnit?.flatNo}'),
                     rowText(
                         'Monthly Rent', '${Constants.currency}.${item.rent}'),
                     rowText('Deposit Amount',
                         '${Constants.currency}.${item.deposit}'),
                     rowText('Guest', '${Constants.currency}.${item.guest}'),
-                    rowText('House Type', item.property!.propListing.unitType),
+                    rowText('House Type', '${item.propUnit?.listing?.listingType}'),
                     rowText('11 Months Rent',
                         '${Constants.currency}.${(double.parse(item.rent.toString()) * 11)}'),
                     // rowText('Pay Date', getFormatedDate(tenantModel.payDate)),
                     rowText('Pay Status (This month)',
-                        item.invoicesList.first.status.toUpperCase()),
+                        '${item.invoices?.first.status.toUpperCase()}'),
                   ],
                 ),
               ),
@@ -565,7 +567,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  height(15),
+                  height(0.005),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -621,7 +623,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                                 ),
                               ],
                             ),
-                            height(5),
+                            height(0.005),
                             Text(
                               userName,
                               style: TextStyle(
@@ -644,7 +646,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                                   color: Colors.black,
                                   fontSize: 13),
                             ),
-                            height(10),
+                            height(0.005),
                             Visibility(
                               visible: isTenant,
                               child: Container(
@@ -689,7 +691,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                       ),
                     ],
                   ),
-                  height(15),
+                  height(0.005),
                 ]),
           ),
         ));
@@ -715,7 +717,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                     padding: const EdgeInsets.only(bottom: 50),
                     child: Column(children: [
                       profileView(),
-                      height(10),
+                      height(0.005),
                       Card(
                         child: Column(children: [
                           Visibility(
@@ -736,7 +738,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                               'Delete My Rentiseasy Account '),
                         ]),
                       ),
-                      height(20),
+                      height(0.05),
                       columnVersionText()
                     ]),
                   ),

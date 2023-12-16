@@ -1,37 +1,41 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/fav_model.dart';
 import 'package:rentitezy/model/property_model.dart';
 import 'package:rentitezy/model/search_listing_model.dart';
+import 'package:rentitezy/utils/services/rie_user_api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/const/app_urls.dart';
+import '../home/model/property_list_nodel.dart';
 
 class FavController extends GetxController {
+  PropertyListModel? allWishlistData;
+  RIEUserApiService apiService = RIEUserApiService();
   var loadFav = false.obs;
-  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   var apiFavPropertyList = <FavModel>[].obs;
   var loadProperty = false.obs;
-  var apiPropertyList = <Property>[].obs;
+  //var apiPropertyList = <Property>[].obs;
   var proFetch = 'Data Fetching...Please wait'.obs;
   @override
   void onInit() {
-    fetchFavProperties();
+    //fetchFavProperties();
+    getWishListProperty();
     super.onInit();
   }
 
   void fetchFavProperties() async {
     loadFav(true);
-    var sharedPreferences = await prefs;
     debugPrint(
-        'WISH: ${AppUrls.wishlist} -- ${sharedPreferences.getString(Constants.token).toString()}');
+        'WISH: ${AppUrls.wishlist} -- ${GetStorage().read(Constants.token).toString()}');
     final response = await http.get(
       Uri.parse(AppUrls.wishlist),
       headers: <String, String>{
-        "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+        "Auth-Token": GetStorage().read(Constants.token).toString()
       },
     );
     if (response.statusCode == 200) {
@@ -55,14 +59,34 @@ class FavController extends GetxController {
     }
   }
 
+  void getWishListProperty()async {
+    String url = AppUrls.wishlist;
+    final response = await apiService.getApiCallWithURL(endPoint: url);
+
+    bool success = response["success"];
+    try {
+      if (success) {
+
+        allWishlistData = PropertyListModel.fromJson(response);
+        /* (response["data"] as List)
+              .map((stock) => PropertyModel.fromJson(stock))
+              .toList();*/
+        //allPropertyData.addAll(apiPropertyList);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+
+  }
+
   Future<FlatModel?> fetchProperties(String id) async {
     debugPrint('id ${id.toString()}');
     loadProperty(true);
-    var sharedPreferences = await prefs;
     final response = await http.get(
       Uri.parse('${AppUrls.listingDetail}?id=$id'),
       headers: <String, String>{
-        "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+        "Auth-Token": GetStorage().read(Constants.token).toString()
       },
     );
 
@@ -88,11 +112,10 @@ class FavController extends GetxController {
   }
 
   Future<List<PropertyModel>> fetchListingDetails(String id) async {
-    var sharedPreferences = await prefs;
     final response = await http.get(
       Uri.parse('${AppUrls.property}?id=$id'),
       headers: <String, String>{
-        "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+        "Auth-Token": GetStorage().read(Constants.token).toString()
       },
     );
     if (response.statusCode == 200) {

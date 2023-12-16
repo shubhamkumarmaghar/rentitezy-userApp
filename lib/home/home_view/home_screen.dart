@@ -3,17 +3,18 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/controller.dart';
+import 'package:rentitezy/home/home_controller/home_controller.dart';
 import 'package:rentitezy/model/property_model.dart';
 import 'package:rentitezy/model/tenant_model.dart';
 import 'package:rentitezy/model/ticketModel.dart';
 import 'package:rentitezy/pdf/pdf_api.dart';
 import 'package:rentitezy/pdf/pdf_new.dart';
-import 'package:rentitezy/screen/fav/my_fav_screen.dart';
-import 'package:rentitezy/screen/login_screen.dart';
+import 'package:rentitezy/login/view/login_screen.dart';
 import 'package:rentitezy/screen/profile_screen_new.dart';
 import 'package:rentitezy/screen/terms_conditions.dart/terms_and_condition.dart';
 import 'package:rentitezy/widgets/app_bar.dart';
@@ -25,12 +26,16 @@ import 'package:rentitezy/screen/update_profile.dart';
 import 'package:rentitezy/widgets/near_by_items.dart';
 import 'package:rentitezy/widgets/recommend_items.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/const/app_urls.dart';
-import 'faq_screen.dart';
-import 'my_bookings/my_booking_controller.dart';
-import 'my_bookings/my_booking_screen.dart';
-import 'search/all_properties_page.dart';
-import 'terms_conditions.dart/policy_data.dart';
+import '../../fav/my_fav_screen.dart';
+import '../../my_bookings/my_booking_controller.dart';
+import '../../my_bookings/my_booking_screen.dart';
+import '../../utils/const/app_urls.dart';
+import '../../utils/const/widgets.dart';
+import '../../utils/view/rie_widgets.dart';
+import '../../screen/faq_screen.dart';
+import '../../screen/search/all_properties_page.dart';
+import '../../screen/terms_conditions.dart/policy_data.dart';
+import '../model/property_list_nodel.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
@@ -43,93 +48,35 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+
   Widget navWidget = const SizedBox();
   String userId = 'guest';
   String userName = '';
-  String profilePic = '';
   final dbFavItem = DbHelper.instance;
   bool isTenant = false;
-  String tenantName = "";
   late Future<List<TicketModel>> futureTicketReq;
   String tenantId = '';
   var othersController = TextEditingController();
   var commentController = TextEditingController();
   TenantModel? tenantDet;
-  final homeApiController = Get.put(PropertyApiController());
+  final homeApiController = Get.put(HomeController());
   final bookingController = Get.put(MyBookingController());
+
   @override
   void initState() {
+    isTenant = GetStorage().read(Constants.isTenant);
+    userName =  GetStorage().read(Constants.usernamekey);
+    userId = GetStorage().read(Constants.userId)??"guest";
     checkNavPos();
-    fetchUser();
     bookingController.onInit();
     futureTicketReq = fetchTicketReqApi();
     super.initState();
   }
 
-  void fetchUser() async {
-    SharedPreferences sharedPreferences = await prefs;
-    if (sharedPreferences.containsKey(Constants.userId) &&
-        (sharedPreferences.getString(Constants.userId) != null)) {
-      dynamic result = await fetchTenantUserApi(
-          '${AppUrls.getUser}?id=${sharedPreferences.getString(Constants.userId).toString()}');
-      if (result["success"]) {
-        UserModel userModel = UserModel.fromJson(result["data"][0]);
-        sharedPreferences.setString(Constants.userId, userModel.id);
-        userId = userModel.id.toString();
-        // if (result['isTenant']) {
-        // sharedPreferences.setBool(Constants.isTenant, true);
-        // TenantModel tempTenant = TenantModel.fromJson(result['tenantDet']);
-        userName = '${userModel.firstName} ${userModel.lastName}';
-        // tenantDet = tempTenant;
-        // sharedPreferences.setString(Constants.tenantId,
-        //     UserModel.fromJson(result["data"][0]).id.toString());
-        // sharedPreferences.setString(Constants.profileUrl, tempTenant.photo);
-        // sharedPreferences.setBool(Constants.isTenant, true);
-        isTenant = sharedPreferences.getBool(Constants.isTenant)!;
-        if (sharedPreferences.getBool(Constants.isTenant)!) {
-          tenantName = '${userModel.firstName} ${userModel.lastName}';
-          tenantId = userModel.id;
-        }
-        // if (tempTenant.isAgree == 'true') {
-        //   sharedPreferences.setBool(Constants.isAgree, true);
-        // } else {
-        //   sharedPreferences.setBool(Constants.isAgree, false);
-        // }
-        // } else {
-        //   isTenant = false;
-        //   sharedPreferences.setString(
-        //       Constants.usernamekey, userModel.firstName);
-        //   sharedPreferences.setString(Constants.phonekey, userModel.phone);
-        //   sharedPreferences.setString(Constants.emailkey, userModel.email);
-        //   sharedPreferences.setString(Constants.profileUrl, userModel.image);
-        //   userId = userModel.id.toString();
-        //   userName = userModel.firstName;
-        // }
-      } else {
-        isTenant = false;
-        userId = 'guest';
-        userName = 'guest';
-        tenantName = '';
-        sharedPreferences.setString(Constants.tenantId, 'guest');
-        sharedPreferences.setBool(Constants.isTenant, false);
-        sharedPreferences.setBool(Constants.isAgree, false);
-      }
-    } else {
-      isTenant = false;
-      userId = 'guest';
-      userName = 'guest';
-      tenantName = '';
-      sharedPreferences.setString(Constants.tenantId, 'guest');
-      sharedPreferences.setBool(Constants.isTenant, false);
-      sharedPreferences.setBool(Constants.isAgree, false);
-    }
-    setState(() {});
-  }
 
   Widget buildTabBar() {
     return Obx(() => homeApiController.isLoadingLocation.value
-        ? Center(child: loading())
+        ? Center(child: RIEWidgets.getLoader())
         : ListView.builder(
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
@@ -172,9 +119,9 @@ class _MyHomePageState extends State<MyHomePage> {
             }));
   }
 
-  Widget nearProperties(PropertyModel propertyModel) {
+  Widget nearProperties(PropertySingleData? property) {
     return NearByItem(
-      propertyModel: propertyModel,
+      propertyModel: property,
     );
   }
 
@@ -185,16 +132,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List<TicketModel>> fetchTicketReqApi() async {
     try {
-      var sharedPreferences = await prefs;
-      if (sharedPreferences.containsKey(Constants.tenantId)) {
-        isTenant = true;
-        tenantId = sharedPreferences.getString(Constants.tenantId).toString();
+
+      if (GetStorage().read(Constants.isTenant)!= false) {
+        tenantId = GetStorage().read(Constants.userId).toString();
         var list = getAllTicketReq(tenantId);
         futureTicketReq = Future.value(list);
         setState(() {});
         return list;
       } else {
-        isTenant = false;
+
         setState(() {});
         return [];
       }
@@ -211,9 +157,9 @@ class _MyHomePageState extends State<MyHomePage> {
         future: futureTicketReq,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return listTicketReq(snapshot.data!);
@@ -224,7 +170,7 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           }
 
-          return loading();
+          return RIEWidgets.getLoader();
         });
   }
 
@@ -273,19 +219,17 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void ticketRequest(String ticketTxt) async {
-    var sharedPreferences = await prefs;
     if (bookingController.myBookingData.isNotEmpty) {
       var item = bookingController.myBookingData.first;
 
       try {
-        if (sharedPreferences.containsKey(Constants.isTenant) &&
-            sharedPreferences.getBool(Constants.isTenant)!) {
+        if (GetStorage().read(Constants.isTenant).toString().isNotEmpty ) {
           dynamic result = await createTicketApi(
-              sharedPreferences.getString(Constants.tenantId).toString(),
+              GetStorage().read(Constants.tenantId).toString(),
               ticketTxt,
               commentController.text,
-              item.property!.flatNo,
-              item.bookingId);
+              '${item.propUnit?.flatNo}',
+              '${item.id}');
           if (result['success']) {
             futureTicketReq = fetchTicketReqApi();
             othersController.value = const TextEditingValue(text: '');
@@ -428,23 +372,32 @@ class _MyHomePageState extends State<MyHomePage> {
                                     border: InputBorder.none),
                               ),
                             ),
-                            height(15),
+                            height(0.05),
                             GestureDetector(
                               onTap: () {
                                 if (selectedTicket == 'Others') {
                                   if (othersController.text.isEmpty) {
-                                    showCustomToast(
-                                        context, 'Enter valid Ticket');
+                                    RIEWidgets.showSnackbar(
+                                      context: context,
+                                      message: 'Enter valid Ticket',
+                                      color: CustomTheme.white,
+                                    );
                                   } else if (commentController.text.isEmpty) {
-                                    showCustomToast(
-                                        context, 'Enter valid Comment');
+                                    RIEWidgets.showSnackbar(
+                                      context: context,
+                                      message: 'Enter valid Comment',
+                                      color: CustomTheme.white,
+                                    );
                                   } else {
                                     ticketRequest(othersController.text);
                                   }
                                 } else {
                                   if (commentController.text.isEmpty) {
-                                    showCustomToast(
-                                        context, 'Enter valid Comment');
+                                    RIEWidgets.showSnackbar(
+                                      context: context,
+                                      message: 'Enter valid Comment',
+                                      color: CustomTheme.white,
+                                    );
                                   } else {
                                     ticketRequest(selectedTicket);
                                   }
@@ -471,7 +424,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                             ),
-                            height(15),
+                            height(0.05),
                           ],
                         ))),
           );
@@ -489,17 +442,16 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void checkNavPos() async {
-    var sharedPreferences = await prefs;
     if (selectNavPos == 3) {
       navWidget = ListView(
         shrinkWrap: true,
         padding:
             const EdgeInsets.only(top: 50, left: 10, right: 10, bottom: 75),
         children: [
-          sharedPreferences.getString(Constants.userId).toString() != 'guest'
+          /*  GetStorage().read(Constants.userId).toString() != 'guest'
               ? FutureBuilder<dynamic>(
                   future: fetchTenantUserApi(
-                      '${AppUrls.getUser}?id=${sharedPreferences.getString(Constants.userId).toString()}'),
+                      '${AppUrls.getUser}?id=${GetStorage().read(Constants.userId).toString()}'),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       if (snapshot.data!['success']) {
@@ -519,40 +471,42 @@ class _MyHomePageState extends State<MyHomePage> {
                                 UserModel.fromJson(snapshot.data!["data"][0])
                                     .image);
                       } else {
-                        sharedPreferences.setString(Constants.userId, 'guest');
-                        sharedPreferences.setString(
-                            Constants.auth_key, 'guest');
-                        sharedPreferences.setString(Constants.token, 'guest');
+                        GetStorage().write(Constants.userId, 'guest');
+                        GetStorage().write(Constants.auth_key, 'guest');
+                        GetStorage().write(Constants.token, 'guest');
                         return profileData('Guest', '');
                       }
                     } else if (snapshot.hasError) {
                       return profileData('Guest', '');
                     }
-                    return loading();
+                    return RIEWidgets.getLoader();
                   })
-              : profileData('Guest', ''),
+              :*/
+          profileData(GetStorage().read(Constants.usernamekey).toString(),
+              GetStorage().read(Constants.profileUrl).toString()),
           searchWidget(),
-          height(15),
+          height(0.015),
           SizedBox(height: 45, width: screenWidth, child: buildTabBar()),
-          height(15),
+          height(0.015),
           title("Near by Properties", 18),
-          height(15),
+          height(0.015),
           buildOnGoingList(),
-          height(15),
+          height(0.015),
           title("Recommended", 18),
           Obx(
             () => homeApiController.isLoading.value
-                ? Center(child: loading())
+                ? Center(child: RIEWidgets.getLoader())
                 : Column(
                     children: [
                       ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: homeApiController.allPropertyData.length,
+                        itemCount:
+                            homeApiController.allPropertyData?.data?.length,
                         itemBuilder: (context, index) {
                           return recommendWidget(
-                              homeApiController.allPropertyData[index]);
+                              homeApiController.allPropertyData?.data![0]);
                         },
                       ),
                       Container(
@@ -590,11 +544,10 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: const EdgeInsets.only(
                   top: 50, left: 10, right: 10, bottom: 75),
               children: [
-                sharedPreferences.getString(Constants.userId).toString() !=
-                        'guest'
+                GetStorage().read(Constants.userId).toString() != 'guest'
                     ? FutureBuilder<dynamic>(
                         future: fetchTenantUserApi(
-                            '${AppUrls.getUser}?id=${sharedPreferences.getString(Constants.userId).toString()}'),
+                            '${AppUrls.getUser}?id=${GetStorage().read(Constants.userId).toString()}'),
                         builder: (context, snapshot) {
                           if (snapshot.hasData) {
                             if (snapshot.data!['success']) {
@@ -616,18 +569,15 @@ class _MyHomePageState extends State<MyHomePage> {
                                               snapshot.data!["data"][0])
                                           .image);
                             } else {
-                              sharedPreferences.setString(
-                                  Constants.userId, 'guest');
-                              sharedPreferences.setString(
-                                  Constants.auth_key, 'guest');
-                              sharedPreferences.setString(
-                                  Constants.token, 'guest');
+                              GetStorage().write(Constants.userId, 'guest');
+                              GetStorage().write(Constants.auth_key, 'guest');
+                              GetStorage().write(Constants.token, 'guest');
                               return profileData('Guest', '');
                             }
                           } else if (snapshot.hasError) {
                             return profileData('Guest', '');
                           }
-                          return loading();
+                          return RIEWidgets.getLoader();
                         })
                     : profileData('Guest', ''),
                 Visibility(visible: isTenant, child: fetchMyTicketReq()),
@@ -701,7 +651,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    width(10),
+                    width(0.005),
                     Text(
                       'Raise your ticket',
                       style: TextStyle(
@@ -757,15 +707,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       bottomRight: Radius.circular(25))),
               child: Column(
                 children: [
-                  imgLoadWid(
-                      profilePic.contains('https://')
-                          ? profilePic
-                          : AppUrls.imagesRentIsEasyUrl + profilePic,
-                      'assets/images/user_vec.png',
-                      70,
-                      70,
+                  imgLoadWid(GetStorage().read(Constants.profileUrl), 'assets/images/user_vec.png', 70, 70,
                       BoxFit.contain),
-                  height(5),
+                  height(0.015),
                   Text(
                     userName,
                     maxLines: 2,
@@ -829,15 +773,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontFamily: Constants.fontsFamily,
                 )),
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyBookingsScreen(
-                            from: false,
-                          )));
+              Get.to(MyBookingsScreen(
+                from: false,
+              ));
             },
           ),
-
           ListTile(
             leading: iconWidget('help', 26, 26),
             trailing: arrowBack(),
@@ -861,7 +801,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontFamily: Constants.fontsFamily,
                     )),
                 onTap: () {
-                  showInvoice(tempPdf, tenantName);
+                  showInvoice(tempPdf, userName);
                 }),
           ),
           ListTile(
@@ -934,8 +874,7 @@ class _MyHomePageState extends State<MyHomePage> {
               if ((userId.isNotEmpty ||
                   userId != 'null' ||
                   userId != 'guest')) {
-                alertDialog(
-                    context, 'LOG OUT', '* Do you want Logout *');
+                alertDialog(context, 'LOG OUT', '* Do you want Logout *');
               } else {
                 Navigator.pushAndRemoveUntil(
                     context,
@@ -979,25 +918,28 @@ class _MyHomePageState extends State<MyHomePage> {
         height: screenHeight * 0.30,
         child: Obx(
           () => homeApiController.isLoadingLocation.value
-              ? Center(child: loading())
+              ? RIEWidgets.getLoader()
               : ListView.builder(
                   shrinkWrap: false,
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
-                  itemCount: homeApiController.allPropertyData.length > 5
-                      ? 3
-                      : homeApiController.allPropertyData.length,
+                  itemCount: homeApiController.allPropertyData != null &&
+                          homeApiController.allPropertyData?.data != null
+                      ? homeApiController.allPropertyData!.data!.length > 5
+                          ? 3
+                          : homeApiController.allPropertyData?.data?.length
+                      : 0,
                   itemBuilder: (context, index) {
                     return nearProperties(
-                        homeApiController.allPropertyData[index]);
+                        homeApiController.allPropertyData?.data![index]);
                   },
                 ),
         ));
   }
 
-  Widget recommendWidget(PropertyModel propertyModel) {
+  Widget recommendWidget(PropertySingleData? property) {
     return RecommendItem(
-      propertyModel: propertyModel,
+      propertyModel: property,
     );
   }
 
@@ -1057,28 +999,23 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           } else if (items.id == 2) {
             try {
-              bool value = await Navigator.push(
+              /* bool value = await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => FavScreen()),
-              );
-              if (value) {
+              );*/
+              Get.to(FavScreen());
+              /*  if (value) {
                 selectNavPos = 3;
                 checkNavPos();
-              }
+              }*/
             } catch (e) {
               debugPrint(e.toString());
             }
           } else if (items.id == 5) {
+            //Get.to( const RentRemainScreen());
             if (isTenant) {
-              bool value = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const RentRemainScreen()),
-              );
-              if (value) {
-                selectNavPos = 3;
-                checkNavPos();
-              }
+               Get.to( const RentRemainScreen());
+
             } else {
               selectNavPos = 3;
               checkNavPos();
@@ -1130,6 +1067,7 @@ class NavItems {
   final String name;
   final int id;
   final IconData iconData;
+
   const NavItems(this.name, this.id, this.iconData);
 }
 

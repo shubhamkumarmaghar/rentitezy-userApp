@@ -72,9 +72,11 @@ class RIEWidgets {
   }
 
   static Widget getLoader({Color? color}) {
-    return CircularProgressIndicator(
-        valueColor:
-            AlwaysStoppedAnimation<Color>(color ?? CustomTheme.appTheme));
+    return Center(
+      child: CircularProgressIndicator(
+          valueColor:
+              AlwaysStoppedAnimation<Color>(color ?? CustomTheme.appTheme)),
+    );
   }
 
   static Widget noData(

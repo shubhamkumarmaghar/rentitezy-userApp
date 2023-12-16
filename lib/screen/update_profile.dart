@@ -2,15 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:rentitezy/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/const/app_urls.dart';
-import 'home_screen.dart';
+import '../utils/const/widgets.dart';
+import '../home/home_view/home_screen.dart';
 
 class UpdateProfilePage extends StatefulWidget {
   const UpdateProfilePage({super.key});
@@ -41,11 +42,11 @@ class _UpdateState extends State<UpdateProfilePage> {
 
   setValueSB() async {
     var sharedPreferences = await _prefs;
-    if (sharedPreferences.getString(Constants.userId) != '' &&
-        sharedPreferences.getString(Constants.userId) != null) {
-      userId = sharedPreferences.getString(Constants.userId).toString();
+    if (GetStorage().read(Constants.userId) != '' &&
+        GetStorage().read(Constants.userId) != null) {
+      userId = GetStorage().read(Constants.userId).toString();
       userList = await fetchUserApi(
-          '${AppUrls.user}?id=${sharedPreferences.getString(Constants.userId).toString()}');
+          '${AppUrls.user}?id=${GetStorage().read(Constants.userId).toString()}');
     } else {
       userId = 'guest';
     }
@@ -97,7 +98,7 @@ class _UpdateState extends State<UpdateProfilePage> {
           uPhoneController.text,
           uEmailController.text,
           imagePath,
-          sharedPreferences.getString(Constants.userId).toString());
+          GetStorage().read(Constants.userId).toString());
       if (result['success']) {
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const MyHomePage()));
@@ -197,7 +198,7 @@ class _UpdateState extends State<UpdateProfilePage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              height(15),
+              height(0.05),
               Center(
                 child: SizedBox(
                     height: 170,
@@ -208,7 +209,7 @@ class _UpdateState extends State<UpdateProfilePage> {
                     )),
               ),
               Center(child: title("Update Account", 27)),
-              height(15),
+              height(0.05),
               Align(
                 alignment: Alignment.topCenter,
                 child: SizedBox(
@@ -249,7 +250,7 @@ class _UpdateState extends State<UpdateProfilePage> {
                                   ),
                                 )))),
               ),
-              height(15),
+              height(0.05),
               inputFeild('First name', unameController, 5),
               inputFeild('Last name', uLNameController, 5),
               inputFeildPh('Mobile number', uPhoneController, 5),
@@ -286,7 +287,7 @@ class _UpdateState extends State<UpdateProfilePage> {
                       ),
                     )),
               ),
-              height(25),
+              height(0.05),
             ]),
       )),
     );

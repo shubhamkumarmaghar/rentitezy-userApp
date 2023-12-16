@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rentitezy/screen/home_screen.dart';
+import 'package:rentitezy/home/home_view/home_screen.dart';
 import 'package:rentitezy/widgets/home_button.dart';
 
 class ThankYouPage extends StatefulWidget {

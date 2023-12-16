@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/rent_req_model.dart';
@@ -12,15 +13,15 @@ import 'package:rentitezy/model/tenant_model.dart';
 import 'package:rentitezy/model/user_model.dart';
 import 'package:rentitezy/pdf/pdf_api.dart';
 import 'package:rentitezy/pdf/pdf_bill.dart';
-import 'package:rentitezy/screen/my_bookings/my_booking_controller.dart';
 import 'package:rentitezy/screen/thankyou_page.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher_string.dart';
+import '../my_bookings/booking_model.dart';
+import '../my_bookings/my_booking_controller.dart';
 import '../utils/const/app_urls.dart';
-import 'my_bookings/booking_model.dart';
-
+import '../utils/const/widgets.dart';
+import '../utils/view/rie_widgets.dart';
 class RentRemainScreen extends StatefulWidget {
   const RentRemainScreen({super.key});
 
@@ -29,7 +30,6 @@ class RentRemainScreen extends StatefulWidget {
 }
 
 class _MartHomeState extends State<RentRemainScreen> {
-  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   bool isTenant = false;
   String userId = '';
   String tenantId = '';
@@ -48,59 +48,58 @@ class _MartHomeState extends State<RentRemainScreen> {
     // futureTenant = fetchTenant();
     futureRentHistory = fetchRentHistory();
     futureRentPending = fetchRentPending();
-    fetchUser();
+   // fetchUser();
   }
 
   void fetchUser() async {
-    SharedPreferences sharedPreferences = await prefs;
-    if (sharedPreferences.containsKey(Constants.userId) &&
-        (sharedPreferences.getString(Constants.userId) != null)) {
+
+    if (GetStorage().read(Constants.userId) != null) {
       dynamic result = await fetchTenantUserApi(
-          '${AppUrls.getUser}?id=${sharedPreferences.getString(Constants.userId).toString()}');
+          '${AppUrls.getUser}?id=${GetStorage().read(Constants.userId).toString()}');
       if (result["success"]) {
         UserModel userModel = UserModel.fromJson(result["data"][0]);
-        sharedPreferences.setString(Constants.userId, userModel.id);
+        GetStorage().write(Constants.userId, userModel.id);
         userId = userModel.id.toString();
         // if (result['isTenant']) {
         // TenantModel tempTenant = TenantModel.fromJson(result['tenantDet']);
-        if (sharedPreferences.getBool(Constants.isTenant)!) {
+        if (GetStorage().read(Constants.isTenant)!) {
           tenantId = userModel.id.toString();
-          sharedPreferences.setString(
+          GetStorage().write(
               Constants.tenantId, userModel.id.toString());
-          isTenant = sharedPreferences.getBool(Constants.isTenant)!;
+          isTenant = GetStorage().read(Constants.isTenant)!;
         }
-        // sharedPreferences.setBool(Constants.isTenant, true);
+        // GetStorage().write(Constants.isTenant, true);
         // tenantId = userModel.id;
-        // isTenant = sharedPreferences.getBool(Constants.isTenant)!;
-        // sharedPreferences.setString(Constants.tenantId, userModel.id);
-        sharedPreferences.setString(Constants.profileUrl, userModel.image);
-        // sharedPreferences.setBool(Constants.isTenant, true);
+        // isTenant = GetStorage().read(Constants.isTenant)!;
+        // GetStorage().write(Constants.tenantId, userModel.id);
+        GetStorage().write(Constants.profileUrl, userModel.image);
+        // GetStorage().write(Constants.isTenant, true);
         // if (tempTenant.isAgree == 'true') {
-        //   sharedPreferences.setBool(Constants.isAgree, true);
+        //   GetStorage().write(Constants.isAgree, true);
         // } else {
-        //   sharedPreferences.setBool(Constants.isAgree, false);
+        //   GetStorage().write(Constants.isAgree, false);
         // }
         // } else {
         //   isTenant = false;
-        //   sharedPreferences.setString(
+        //   GetStorage().write(
         //       Constants.usernamekey, userModel.firstName);
-        //   sharedPreferences.setString(Constants.phonekey, userModel.phone);
-        //   sharedPreferences.setString(Constants.emailkey, userModel.email);
-        //   sharedPreferences.setString(Constants.profileUrl, userModel.image);
+        //   GetStorage().write(Constants.phonekey, userModel.phone);
+        //   GetStorage().write(Constants.emailkey, userModel.email);
+        //   GetStorage().write(Constants.profileUrl, userModel.image);
         // }
       } else {
         isTenant = false;
         userId = 'guest';
-        sharedPreferences.setString(Constants.tenantId, 'guest');
-        sharedPreferences.setBool(Constants.isTenant, false);
-        sharedPreferences.setBool(Constants.isAgree, false);
+        GetStorage().write(Constants.tenantId, 'guest');
+        GetStorage().write(Constants.isTenant, false);
+        GetStorage().write(Constants.isAgree, false);
       }
     } else {
       isTenant = false;
       userId = 'guest';
-      sharedPreferences.setString(Constants.tenantId, 'guest');
-      sharedPreferences.setBool(Constants.isTenant, false);
-      sharedPreferences.setBool(Constants.isAgree, false);
+      GetStorage().write(Constants.tenantId, 'guest');
+      GetStorage().write(Constants.isTenant, false);
+      GetStorage().write(Constants.isAgree, false);
     }
     setState(() {});
   }
@@ -183,7 +182,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                 fontSize: 18,
                 fontWeight: FontWeight.bold),
           ),
-          height(5),
+          height(0.005),
           Container(
             height: 2,
             width: 100,
@@ -251,12 +250,9 @@ class _MartHomeState extends State<RentRemainScreen> {
                         onSurface: Colors.grey,
                       ),
                       onPressed: () async {
-                        var sharedPreferences = await prefs;
-                        remin.userName = sharedPreferences
-                            .getString(Constants.usernamekey)
+                        remin.userName = GetStorage().read(Constants.usernamekey)
                             .toString();
-                        remin.userPhone = sharedPreferences
-                            .getString(Constants.phonekey)
+                        remin.userPhone = GetStorage().read(Constants.phonekey)
                             .toString();
                         showInvoice(remin);
                       },
@@ -335,7 +331,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                           Navigator.pop(context);
                         },
                         child: title('NO', 15)),
-                    width(10),
+                    width(0.005),
                     TextButton(
                         onPressed: () {
                           // if (selectedRadio == 0) {
@@ -359,22 +355,21 @@ class _MartHomeState extends State<RentRemainScreen> {
   }
 
   void payRequest(String id, String payId, String amt) async {
-    var sharedPreferences = await prefs;
     var response = await http.get(Uri.parse(AppUrls.myBooking), headers: {
-      'auth-token': sharedPreferences.getString(Constants.token).toString()
+      'auth-token': GetStorage().read(Constants.token).toString()
     });
     var responseData = jsonDecode(response.body);
     await Future.delayed(const Duration(seconds: 2));
     if (response.statusCode == 200) {
       if (responseData['success']) {
-        final List<MyBookingModel> photosList = (responseData["data"] as List)
-            .map((stock) => MyBookingModel.fromJson(stock))
+        final List<MyBookingModelData> photosList = (responseData["data"] as List)
+            .map((stock) => MyBookingModelData.fromJson(stock))
             .toList();
         if (photosList.isNotEmpty) {
           try {
             dynamic result = await createPaymentRequest(
-                photosList.first.invoicesList.first.id,
-                sharedPreferences.getString(Constants.token).toString());
+                '${photosList.first.invoices?.first.id}',
+                GetStorage().read(Constants.token).toString());
 
             if (result['success']) {
               String longurl = result['data']['longurl'];
@@ -483,13 +478,13 @@ class _MartHomeState extends State<RentRemainScreen> {
   // Future<List<TenantModel>> fetchTenant() async {
   //   var sharedPreferences = await prefs;
   //   if (sharedPreferences.containsKey(Constants.tenantId)) {
-  //     if (sharedPreferences.getString(Constants.tenantId) != 'null' &&
-  //         sharedPreferences.getString(Constants.tenantId) != 'guest' &&
-  //         sharedPreferences.getString(Constants.tenantId) != 'Null' &&
-  //         sharedPreferences.getString(Constants.tenantId) != 'NULL' &&
-  //         sharedPreferences.getString(Constants.tenantId)!.isNotEmpty) {
+  //     if (GetStorage().read(Constants.tenantId) != 'null' &&
+  //         GetStorage().read(Constants.tenantId) != 'guest' &&
+  //         GetStorage().read(Constants.tenantId) != 'Null' &&
+  //         GetStorage().read(Constants.tenantId) != 'NULL' &&
+  //         GetStorage().read(Constants.tenantId)!.isNotEmpty) {
   //       var list = fetchTenantApi(
-  //           '${AppConfig.tenant}?id=${sharedPreferences.getString(Constants.tenantId)}');
+  //           '${AppConfig.tenant}?id=${GetStorage().read(Constants.tenantId)}');
   //       futureTenant = Future.value(list);
   //       List<TenantModel> listTenant = await list;
   //       if (listTenant.isNotEmpty) {
@@ -504,10 +499,10 @@ class _MartHomeState extends State<RentRemainScreen> {
 
   Future<List<RentReqModel>> fetchRentHistory() async {
     if (controller.myBookingData.isNotEmpty) {
-      var sharedPreferences = await prefs;
+
       var list = getAllRentReq(
-          '${AppUrls.rentReq}?bookingId=${controller.myBookingData.first.bookingId}',
-          sharedPreferences.getString(Constants.token).toString());
+          '${AppUrls.rentReq}?bookingId=${controller.myBookingData.first.id}',
+          GetStorage().read(Constants.token).toString());
       return Future.value(list);
     }
     return [];
@@ -515,10 +510,9 @@ class _MartHomeState extends State<RentRemainScreen> {
 
   Future<List<RentReqModel>> fetchRentPending() async {
     if (controller.myBookingData.isNotEmpty) {
-      var sharedPreferences = await prefs;
       var list = getAllRentReq(
-          '${AppUrls.rentReq}?bookingId=${controller.myBookingData.first.bookingId}',
-          sharedPreferences.getString(Constants.token).toString());
+          '${AppUrls.rentReq}?bookingId=${controller.myBookingData.first.id}',
+          GetStorage().read(Constants.token).toString());
       return Future.value(list);
     }
     return [];
@@ -529,9 +523,9 @@ class _MartHomeState extends State<RentRemainScreen> {
         future: futureRentHistory,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return listRentReq(snapshot.data!);
@@ -542,7 +536,7 @@ class _MartHomeState extends State<RentRemainScreen> {
             }
           }
 
-          return loading();
+          return RIEWidgets.getLoader();
         });
   }
 
@@ -551,9 +545,9 @@ class _MartHomeState extends State<RentRemainScreen> {
         future: futureRentPending,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return loading();
+            return RIEWidgets.getLoader();
           } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return listRemainRent(snapshot.data!);
@@ -564,7 +558,7 @@ class _MartHomeState extends State<RentRemainScreen> {
             }
           }
 
-          return loading();
+          return RIEWidgets.getLoader();
         });
   }
 
@@ -673,14 +667,9 @@ class _MartHomeState extends State<RentRemainScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    height(3),
+                                    height(0.005),
                                     Text(
-                                      controller.myBookingData.first.name
-                                                  .length >
-                                              11
-                                          ? controller.myBookingData.first.name
-                                              .substring(0, 11)
-                                          : controller.myBookingData.first.name,
+                                     '${controller.myBookingData.first.propUnit?.listing?.property?.name}',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -689,39 +678,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                                           fontSize: 17,
                                           fontWeight: FontWeight.w700),
                                     ),
-                                    Text(
-                                      controller.myBookingData.isNotEmpty
-                                          ? (controller
-                                                      .myBookingData
-                                                      .first
-                                                      .property!
-                                                      .propListing
-                                                      .property
-                                                      .name
-                                                      .length >
-                                                  11
-                                              ? controller
-                                                  .myBookingData
-                                                  .first
-                                                  .property!
-                                                  .propListing
-                                                  .property
-                                                  .name
-                                                  .substring(0, 11)
-                                              : controller
-                                                  .myBookingData
-                                                  .first
-                                                  .property!
-                                                  .propListing
-                                                  .property
-                                                  .name)
-                                          : 'Not Applicable',
-                                      style: TextStyle(
-                                          fontFamily: Constants.fontsFamily,
-                                          color: Constants.textColor,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w400),
-                                    ),
+
                                     Text(
                                       'Last Pay : --',
                                       style: TextStyle(
@@ -821,7 +778,7 @@ class _MartHomeState extends State<RentRemainScreen> {
           backgroundColor: Constants.primaryColor,
           systemOverlayStyle: SystemUiOverlayStyle.light,
         ),
-        body: isTenant
+        body: !isTenant
             ? fetchRemainRent()
             : SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -831,8 +788,8 @@ class _MartHomeState extends State<RentRemainScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    loading(),
-                    height(15),
+                        RIEWidgets.getLoader(),
+                    height(0.05),
                     title('Fetching Tenant Data', 18)
                   ],
                 )),

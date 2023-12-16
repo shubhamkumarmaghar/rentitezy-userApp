@@ -5,13 +5,16 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/settings.dart';
 import 'package:rentitezy/model/settings_model.dart';
-import 'package:rentitezy/screen/login_screen.dart';
+import 'package:rentitezy/login/view/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/const/appConfig.dart';
-import 'home_screen.dart';
+import '../home/home_view/home_screen.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({super.key});
@@ -51,9 +54,9 @@ class _SplashPageState extends State<SplashScreenPage> {
         if (serviceStatus) {
           position = await Geolocator.getCurrentPosition(
               desiredAccuracy: LocationAccuracy.high);
-          sharedPreferences.setString(
+          GetStorage().write(
               Constants.latitude, position.latitude.toString());
-          sharedPreferences.setString(
+          GetStorage().write(
               Constants.longitude, position.longitude.toString());
         }
       }
@@ -65,9 +68,9 @@ class _SplashPageState extends State<SplashScreenPage> {
       StreamSubscription<Position> positionStream =
           Geolocator.getPositionStream(locationSettings: locationSettings)
               .listen((Position position) {
-        sharedPreferences.setString(
+            GetStorage().write(
             Constants.latitude, position.latitude.toString());
-        sharedPreferences.setString(
+            GetStorage().write(
             Constants.longitude, position.longitude.toString());
       });
       if (kDebugMode) {
@@ -88,27 +91,25 @@ class _SplashPageState extends State<SplashScreenPage> {
         getBackgroundLatLong();
         SettingsModel settings = await fetchSetting();
         Timer(const Duration(seconds: 3), () async {
-          var sharedPreferences = await _prefs;
-          if (sharedPreferences.containsKey(Constants.isLogin)) {
-            if (sharedPreferences.getBool(Constants.isLogin) != null &&
-                sharedPreferences.getBool(Constants.isLogin) != false) {
+
+            if (GetStorage().read(Constants.isLogin) != null &&
+                GetStorage().read(Constants.isLogin) != false) {
               if (settings.agreement.isNotEmpty) {
-                Settings().init(context, settings);
-                Navigator.pushReplacement(
+               Settings().init(context, settings);
+                Get.offAll(const MyHomePage());
+                /*Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const MyHomePage()));
+                        builder: (context) => const MyHomePage()));*/
               } else {
                 print('errr');
               }
             } else {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()));
+              Get.offAll(const LoginScreen());
+             /* Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const LoginScreen()));*/
             }
-          } else {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()));
-          }
+
         });
       } catch (e) {
         debugPrint(e.toString());

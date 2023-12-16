@@ -55,10 +55,7 @@ class CartListItemState extends State<FavListItem> {
                         ),
                         image: DecorationImage(
                             image: NetworkImage(
-                                widget.product.images.first.contains('https://')
-                                    ? widget.product.images.first
-                                    : AppUrls.imagesRootUrl +
-                                        widget.product.images.first),
+                              widget.product.images.first),
                             fit: BoxFit.cover)),
                   ),
                   Expanded(

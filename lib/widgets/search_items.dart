@@ -1,9 +1,14 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/search_listing_model.dart';
-import 'package:rentitezy/screen/single_properties_screen.dart';
+import 'package:rentitezy/single_property_details/view/single_properties_screen.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
+
+import '../single_property_details/view/single_properties_screen_new.dart';
+import '../utils/const/widgets.dart';
 
 class SearchItem extends StatefulWidget {
   final FlatModel propertyModel;
@@ -31,7 +36,7 @@ class RecommendListItemState extends State<SearchItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         iconWidget(icon, 15, 15),
-        width(3),
+        width(0.001),
         SizedBox(
           width: width1,
           child: Text(
@@ -55,12 +60,9 @@ class RecommendListItemState extends State<SearchItem> {
         padding: const EdgeInsets.only(bottom: 15, top: 0),
         child: GestureDetector(
             onTap: () async {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PropertiesDetailsPage(
-                            propertyId: widget.propertyModel.id.toString(),
-                          )));
+              Get.to(()=>PropertiesDetailsPageNew(
+                propertyId: widget.propertyModel.id.toString(),
+              ),arguments:widget.propertyModel.id.toString() );
             },
             child: Container(
               decoration: BoxDecoration(
@@ -77,7 +79,8 @@ class RecommendListItemState extends State<SearchItem> {
                           'assets/images/app_logo.png',
                           screenHeight * 0.23,
                           screenWidth,
-                          BoxFit.cover),
+                          BoxFit.cover,
+                      ),
                     ],
                   ),
                   Padding(

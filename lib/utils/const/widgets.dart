@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import '../../theme/custom_theme.dart';
 import 'appConfig.dart';
 import 'app_urls.dart';
 
 //height & width
-double screenWidth =
-    MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
-double screenHeight =
-    MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height;
+double screenWidth = Get.width;
+double screenHeight = Get.height;
 
 Widget loading() {
   return Center(
@@ -63,6 +63,10 @@ Widget width(double w) {
   );
 }
 
+double get getScreenHeight => Get.size.height;
+double get getScreenWidth => Get.size.width;
+
+
 void showCustomToast(
   BuildContext context,
   String texts,
@@ -83,7 +87,7 @@ Widget iconWidget(String name, double he, double wi) {
   );
 }
 
-Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit,
+Widget imgLoadWidCircle(String imgUrl, String asset, double h, double w, BoxFit fit,
     double radius) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(radius),
@@ -103,4 +107,22 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit,
           );
         }),
   );
+}
+
+Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
+  return FadeInImage.assetNetwork(
+      fit: fit,
+      height: h,
+      width: w,
+      placeholderFit: fit,
+      placeholder: asset,
+      image: imgUrl,
+      imageErrorBuilder: (context, error, stackTrace) {
+        return Image.asset(
+          asset,
+          fit: fit,
+          height: h,
+          width: w,
+        );
+      });
 }

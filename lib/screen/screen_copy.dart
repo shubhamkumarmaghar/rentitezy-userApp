@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/const/appConfig.dart';
@@ -24,8 +25,8 @@ class _MyProfileState extends State<ProfileScreen> {
   void fetchTenant() async {
     SharedPreferences sharedPreferences = await prefs;
     if (sharedPreferences.containsKey(Constants.isTenant)) {
-      if (sharedPreferences.getBool(Constants.isTenant) != null) {
-        isTenant = sharedPreferences.getBool(Constants.isTenant)!;
+      if (GetStorage().read(Constants.isTenant) != null) {
+        isTenant = GetStorage().read(Constants.isTenant)!;
       } else {
         isTenant = false;
       }

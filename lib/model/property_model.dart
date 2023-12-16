@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:rentitezy/utils/const/appConfig.dart';
-
 import '../utils/const/app_urls.dart';
 
 class PropertyModel {
@@ -22,6 +20,7 @@ class PropertyModel {
   String createdOn;
   String bhkType;
   String availFrom;
+  int wishlist;
   bool isFav = false;
   List<String> images;
   List<FlatNoModel> flatNoList;
@@ -46,7 +45,8 @@ class PropertyModel {
       required this.bhkType,
       required this.flatNoList,
       required this.availFrom,
-      required this.createdOn});
+      required this.createdOn,
+      required this.wishlist});
 
   PropertyModel copyWith() => PropertyModel(
       id: id,
@@ -68,7 +68,9 @@ class PropertyModel {
       bhkType: bhkType,
       flatNoList: flatNoList,
       availFrom: availFrom,
-      createdOn: createdOn);
+      createdOn: createdOn,
+    wishlist: wishlist
+  );
 
   factory PropertyModel.fromJson(Map<String, dynamic> json) {
     //List<String> images = ['https://'];
@@ -101,6 +103,7 @@ class PropertyModel {
         ownerPhone: AppUrls.phone,
         images: li,
         flatNoList: [],
+        wishlist: json['wishlist'],
         createdOn: json['createdOn'].toString());
   }
 }

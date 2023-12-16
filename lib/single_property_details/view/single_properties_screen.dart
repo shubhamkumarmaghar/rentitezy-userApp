@@ -1,26 +1,26 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'dart:convert';
-
-// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/controller.dart';
 import 'package:rentitezy/localDb/db_helper.dart';
 import 'package:rentitezy/localDb/fav_model.dart';
-import 'package:rentitezy/model/checkout_model.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:rentitezy/model/property_model.dart';
 import 'package:scroll_page_view/scroll_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../utils/const/app_urls.dart';
-import 'checkout_screen.dart';
+import '../../theme/custom_theme.dart';
+import '../../utils/const/app_urls.dart';
+import '../../utils/const/widgets.dart';
+import '../../utils/view/rie_widgets.dart';
 import 'package:http/http.dart' as http;
+
+import '../controller/single_property_details_controller.dart';
 
 class PropertiesDetailsPage extends StatefulWidget {
   const PropertiesDetailsPage({super.key, required this.propertyId});
@@ -54,8 +54,6 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   var dropdownValueMonth = '11';
   var selectFlat;
 
-  final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
-  // late Future<List<ReviewModel>> futureReview;
   DateTime currentDate = DateTime.now();
   String userId = 'guest';
   String tenantId = 'guest';
@@ -66,26 +64,25 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   String? availFrom;
   DateTime availFromDate = DateTime.now();
   final dbFavItem = DbHelper.instance;
-  final homeApiController = Get.put(PropertyApiController());
+  SinglePropertyDetailsController singlePropertyDetailsController = Get.put(SinglePropertyDetailsController());
   PropertyModel? singleProPerty;
-  bool singlePage = true;
-  String proFetch = 'Data Fetching...Please wait';
+
 
   @override
   void initState() {
-    fetchSingleProperties(widget.propertyId);
+    //fetchSingleProperties(widget.propertyId);
     super.initState();
   }
 
   void fetchSingleProperties(String id) async {
-    singlePage = true;
 
-    var sharedPreferences = await _pref;
+
     String url = '${AppUrls.listingDetail}?id=$id';
-    final response = await http.get(
+    final response =
+    await http.get(
       Uri.parse(url),
       headers: <String, String>{
-        "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+        "Auth-Token": GetStorage().read(Constants.token).toString()
       },
     );
     if (response.statusCode == 200) {
@@ -98,13 +95,13 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
           if (singleProPerty != null) {
             await fetchUser(singleProPerty!);
             await fetchPropertyDetails(singleProPerty!);
-            singlePage = false;
+            singlePropertyDetailsController.singlePage.value = false;
           } else {
-            proFetch = 'Currently unavailable';
+            singlePropertyDetailsController.proFetch.value = 'Currently unavailable';
           }
         }
       } catch (e) {
-        proFetch = 'Currently unavailable';
+        singlePropertyDetailsController.proFetch.value = 'Currently unavailable';
         debugPrint(e.toString());
       }
     } else {
@@ -114,12 +111,11 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   }
 
   void addToFavItem(PropertyModel propertyModel) async {
-    var sharedPreferences = await _pref;
     FavModel favModel = FavModel(
         id: 0,
         proID: propertyModel.id,
         ownerId: propertyModel.ownerId,
-        userId: sharedPreferences.getString(Constants.userId).toString(),
+        userId: GetStorage().read(Constants.userId).toString(),
         relationShip: 'NA',
         name: propertyModel.name,
         type: propertyModel.type,
@@ -140,7 +136,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
         amenitiesList: [],
         createdOn: propertyModel.createdOn);
     if (!await dbFavItem.isInFav(
-        sharedPreferences.getString(Constants.userId).toString(),
+        GetStorage().read(Constants.userId).toString(),
         propertyModel.id.toString())) {
       propertyModel.isFav = true;
       await dbFavItem.insertFav(favModel);
@@ -155,9 +151,8 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
 
   fetchPropertyDetails(PropertyModel model) async {
     if (mounted) {
-      var sharedPreferences = await _pref;
       FavModel? favData = await dbFavItem.getFavItem(
-          model.id, sharedPreferences.getString(Constants.userId).toString());
+          model.id, GetStorage().read(Constants.userId).toString());
       if (favData != null) {
         model.isFav = true;
       } else {
@@ -172,18 +167,16 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   }
 
   fetchUser(PropertyModel model) async {
-    var sharedPreferences = await _pref;
-    if (sharedPreferences.containsKey(Constants.userId)) {
-      userId = sharedPreferences.getString(Constants.userId).toString();
-      if (sharedPreferences.containsKey(Constants.tenantId)) {
-        tenantId = sharedPreferences.getString(Constants.tenantId).toString();
-      }
+    if (GetStorage().read(Constants.userId).toString() !='guest') {
+      userId = GetStorage().read(Constants.userId).toString();
+        tenantId = GetStorage().read(Constants.tenantId).toString();
+
     } else {
-      sharedPreferences.setString(Constants.userId, 'guest');
-      sharedPreferences.setString(Constants.tenantId, 'guest');
-      sharedPreferences.setBool(Constants.isLogin, false);
-      sharedPreferences.setBool(Constants.isTenant, false);
-      sharedPreferences.setBool(Constants.isAgree, false);
+      GetStorage().write(Constants.userId, 'guest');
+      GetStorage().write(Constants.tenantId, 'guest');
+      GetStorage().write(Constants.isLogin, false);
+      GetStorage().write(Constants.isTenant, false);
+      GetStorage().write(Constants.isAgree, false);
     }
     markers = {
       Marker(
@@ -255,7 +248,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
             size: 15,
             color: Colors.white,
           ),
-          width(3),
+          width(0.025),
           RichText(
             text: TextSpan(
               text: '${index + 1}',
@@ -300,7 +293,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
               fontSize: 13,
               fontWeight: FontWeight.normal),
         ),
-        height(3),
+        height(0.005),
         Text(
           subTitle,
           style: const TextStyle(
@@ -536,20 +529,17 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                 ),
                               ),
                             ),
-                            height(25),
+                            height(0.05),
                             GestureDetector(
                               onTap: () async {
                                 if (userId == 'null' || userId == 'guest') {
-                                  showCustomToast(context,
-                                      'You are not ${AppUrls.appName} user. Please Login/Register');
+                                  RIEWidgets.getToast(message: 'You are not ${AppUrls.appName} user. Please Login/Register', color: CustomTheme.white);
                                 } else if (dropdownValueGuest == null ||
                                     dropdownValueGuest == 'null' ||
                                     dropdownValueGuest.isEmpty) {
-                                  showCustomToast(
-                                      context, 'Select valid month');
+                                  RIEWidgets.getToast(message: 'Select valid month', color: CustomTheme.white);
                                 } else if (dropdownValueMonth.isEmpty) {
-                                  showCustomToast(
-                                      context, 'Select valid month');
+                                  RIEWidgets.getToast(message: 'Select valid month', color: CustomTheme.white);
                                 } else {
                                   if (int.parse(dropdownValueGuest.toString()) >
                                       1) {
@@ -595,7 +585,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                       ),
                               ),
                             ),
-                            height(15),
+                            height(0.05),
                           ],
                         ))),
           );
@@ -603,17 +593,16 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   }
 
   void submitReqBooking(String from) async {
-    var sharedPreferences = await _pref;
     setState(() => loadingLeads = true);
     final f = DateFormat('yyyy-MM-dd');
     String url =
         "${AppUrls.checkout}?checkin=${f.format(currentDate)}&duration=$dropdownValueMonth&guest=$dropdownValueGuest&listingId=$listingDetailsId";
     dynamic result = await getCheckOut(
-        url, sharedPreferences.getString(Constants.token).toString());
+        url, GetStorage().read(Constants.token).toString());
     debugPrint("result");
     debugPrint(result.toString());
     bool success = result["success"];
-    if (success) {
+  /*  if (success) {
       bool isBack = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -629,7 +618,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
       }
     } else {
       setState(() => loadingLeads = false);
-    }
+    }*/
   }
 
   Future<void> alertDialog(
@@ -671,10 +660,10 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   }
 
   void issuesRequest(PropertyModel model) async {
-    var sharedPreferences = await _pref;
+
     try {
       dynamic result = await createIssuesApi(
-        sharedPreferences.getString(Constants.userId).toString(),
+        GetStorage().read(Constants.userId).toString(),
         model.id,
         askQController.text,
       );
@@ -692,7 +681,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: singlePage
+      body: singlePropertyDetailsController.singlePage.value
           ? SizedBox(
               height: screenHeight,
               width: screenHeight,
@@ -715,7 +704,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                       ),
                     ),
                   ),
-                  title(proFetch, 14)
+                  title(singlePropertyDetailsController.proFetch.value, 14)
                 ],
               ))
           : Stack(
@@ -823,14 +812,14 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                                 fontWeight: FontWeight.normal))
                                       ],
                                     ),
-                                    width(10),
+                                    width(0.05),
                                     Container(
                                       margin: const EdgeInsets.only(top: 5),
                                       height: 20,
                                       width: 2,
                                       color: Colors.black,
                                     ),
-                                    width(10),
+                                    width(0.05),
                                     Padding(
                                       padding: const EdgeInsets.only(top: 3),
                                       child: Text(
@@ -903,6 +892,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                               'Contact',
                                               style: TextStyle(
                                                   fontSize: 12,
+
                                                   fontFamily:
                                                       Constants.fontsFamily,
                                                   fontWeight: FontWeight.bold),
@@ -911,13 +901,13 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                     ],
                                   ),
                                 ),
-                                height(15),
+                                height(0.005),
                                 sTitle(
                                     'Property Details',
                                     15,
                                     const Color.fromARGB(255, 73, 72, 72),
                                     FontWeight.w500),
-                                height(5),
+                                height(0.005),
                                 Text(
                                   singleProPerty!.name,
                                   maxLines: 1,
@@ -928,7 +918,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                       fontSize: 15,
                                       fontWeight: FontWeight.normal),
                                 ),
-                                height(15),
+                                height(0.005),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -944,7 +934,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                             'Floor', singleProPerty!.floor))
                                   ],
                                 ),
-                                height(15),
+                                height(0.005),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -960,15 +950,15 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                             '${singleProPerty!.area} Sqft'))
                                   ],
                                 ),
-                                height(15),
+                                height(0.005),
                                 columnTxt('City', singleProPerty!.city),
-                                height(15),
+                                height(0.005),
                                 sTitle(
                                     'Description :',
                                     17,
                                     const Color.fromARGB(255, 73, 72, 72),
                                     FontWeight.w500),
-                                height(5),
+                                width(0.005),
                                 Text(
                                   singleProPerty!.description,
                                   style: TextStyle(
@@ -977,13 +967,13 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                       fontSize: 13,
                                       fontWeight: FontWeight.w500),
                                 ),
-                                height(15),
+                                height(0.005),
                                 sTitle(
                                     'Amenities',
                                     17,
                                     const Color.fromARGB(255, 73, 72, 72),
                                     FontWeight.w500),
-                                height(10),
+                                height(0.005),
                                 // SizedBox(
                                 //   height: 70,
                                 //   child: ListView(
@@ -1000,10 +990,10 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                     15,
                                     const Color.fromARGB(255, 73, 72, 72),
                                     FontWeight.w500),
-                                height(3),
+                                width(0.005),
                                 sTitle('Get a quick answer right here', 11,
                                     Colors.grey, FontWeight.normal),
-                                height(10),
+                                height(0.005),
                                 Container(
                                   height: 45,
                                   decoration: BoxDecoration(
@@ -1060,7 +1050,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                         )
                                       ]),
                                 ),
-                                height(10),
+                                height(0.005),
                                 SizedBox(
                                   height: 50,
                                   child: ListView(
@@ -1074,7 +1064,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                     ],
                                   ),
                                 ),
-                                height(10),
+                                height(0.005),
                                 Container(
                                   height: screenHeight * 0.20,
                                   padding: const EdgeInsets.only(right: 10),
@@ -1100,7 +1090,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                         _controller.complete(controller);
                                       }),
                                 ),
-                                height(20),
+                                height(0.009),
                               ]),
                         ),
                       ),

@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/localDb/db_helper.dart';
 import 'package:rentitezy/model/fav_model.dart';
 import 'package:rentitezy/model/property_model.dart';
 import 'package:rentitezy/model/search_listing_model.dart';
-import 'package:rentitezy/screen/fav/fav_controller.dart';
-import 'package:rentitezy/screen/single_properties_screen.dart';
+
+import 'package:rentitezy/single_property_details/view/single_properties_screen.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:rentitezy/widgets/fav_list_item.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../single_property_details/view/single_properties_screen_new.dart';
 
 class FavWidget extends StatelessWidget {
   FavWidget({super.key, required this.favModel});
   final FavModel favModel;
   final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-  final controller = Get.put(FavController());
+ // final controller = Get.put(FavController());
   final dbFavItem = DbHelper.instance;
   @override
   Widget build(BuildContext context) {
     debugPrint('listingId ${favModel.listingId.toString()}');
     return FutureBuilder<FlatModel?>(
-        future: controller.fetchProperties(favModel.listingId),
+       // future: controller.fetchProperties(favModel.listingId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.none) {
             return loading();
@@ -31,7 +35,7 @@ class FavWidget extends StatelessWidget {
           } else if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               return FutureBuilder<List<PropertyModel>>(
-                  future: controller.fetchListingDetails(favModel.listingId),
+                  //future: controller.fetchListingDetails(favModel.listingId),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.none) {
                       return loading();
@@ -52,8 +56,7 @@ class FavWidget extends StatelessWidget {
                                 String userId = "guest";
                                 if (sharedPreferences
                                     .containsKey(Constants.userId)) {
-                                  userId = sharedPreferences
-                                      .getString(Constants.userId)
+                                  userId = GetStorage().read(Constants.userId)
                                       .toString();
                                 }
                                 dbFavItem.deleteFav(data.id.toString(), userId);
@@ -76,14 +79,11 @@ class FavWidget extends StatelessWidget {
                                 product: data,
                                 onView: (view) {
                                   if (view) {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                PropertiesDetailsPage(
-                                                  propertyId:
-                                                      data.id.toString(),
-                                                )));
+                                    Get.to(()=>  PropertiesDetailsPageNew(
+                                      propertyId:
+                                      data.id.toString(),
+                                    ),arguments: data.id.toString()
+                                    );
                                   }
                                 },
                               )),

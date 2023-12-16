@@ -4,11 +4,16 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/property_model.dart';
-import 'package:rentitezy/screen/single_properties_screen.dart';
+import 'package:rentitezy/single_property_details/view/single_properties_screen.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
 
+import '../home/model/property_list_nodel.dart';
+import '../single_property_details/view/single_properties_screen_new.dart';
+import '../utils/const/api.dart';
+import '../utils/const/widgets.dart';
+
 class RecommendItem extends StatefulWidget {
-  final PropertyModel propertyModel;
+  final PropertySingleData? propertyModel;
 
   const RecommendItem({Key? key, required this.propertyModel})
       : super(key: key);
@@ -34,7 +39,7 @@ class RecommendListItemState extends State<RecommendItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         iconWidget(icon, 15, 15),
-        width(3),
+        width(0.03),
         SizedBox(
           width: width1,
           child: Text(
@@ -55,54 +60,57 @@ class RecommendListItemState extends State<RecommendItem> {
   @override
   Widget build(BuildContext context) {
     ImageProvider imageProvider;
-    if (widget.propertyModel.images.first == '') {
-      imageProvider = AssetImage('assets/images/app_logo.png');
-    } else {
-      imageProvider = NetworkImage(widget.propertyModel.images.first);
+    if (widget.propertyModel != null && widget.propertyModel?.images != null ) {
+      if (widget.propertyModel?.images?.first.url == null ||
+          widget.propertyModel?.images?.first == '') {
+        imageProvider = const AssetImage('assets/images/app_logo.png');
+      } else {
+        imageProvider = NetworkImage('${widget.propertyModel?.images?.first.url}');
+      }
     }
+  else{
+      imageProvider = const AssetImage('assets/images/app_logo.png');
+  }
     return Padding(
         padding: const EdgeInsets.only(bottom: 15, top: 0),
         child: GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PropertiesDetailsPage(
-                            propertyId: widget.propertyModel.id.toString(),
-                          )));
+             Get.to(()=>PropertiesDetailsPageNew(propertyId: '${widget.propertyModel?.id.toString()}',)
+                 ,arguments: '${widget.propertyModel?.id.toString()}' );
+
             },
-            child: Card(
+            child: Stack(children: [Card(
               elevation: 8.0,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
               color: Constants.lightBg,
-
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                /*  Stack(
-                    children: [
-                      imgLoadWid(
-                          widget.propertyModel.images.first,
-                          'assets/images/app_logo.png',
-                          screenHeight * 0.23,
-                          screenWidth,
-                          BoxFit.cover),
-                    ],
-                  ),*/
+                  /*  Stack(
+                      children: [
+                        imgLoadWid(
+                            widget.propertyModel.images.first,
+                            'assets/images/app_logo.png',
+                            screenHeight * 0.23,
+                            screenWidth,
+                            BoxFit.cover),
+                      ],
+                    ),*/
                   Container(
                     height: Get.height*0.23,decoration: BoxDecoration(image:DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
+                    image: imageProvider,
+                    fit: BoxFit.cover,
                   ),
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(15),topRight: Radius.circular(15))
 
                   ),
                   ),
-                  Padding(
-                      padding: const EdgeInsets.all(4.0),
+                  Container(
+                      margin: EdgeInsets.all(8),
+                      //padding: const EdgeInsets.all(4.0),
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,83 +122,85 @@ class RecommendListItemState extends State<RecommendItem> {
                                 Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
-                                          SizedBox(
-                                            width: 200,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  widget.propertyModel.name,
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color:
-                                                          Constants.textColor,
-                                                      fontSize: 13,
-                                                      fontFamily:
-                                                          Constants.fontsFamily,
-                                                      fontWeight:
-                                                          FontWeight.normal),
-                                                ),
-                                                height(3),
-                                                Text(
-                                                  '${Constants.currency}.${widget.propertyModel.price}/ Month',
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontFamily:
-                                                          Constants.fontsFamily,
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                height(3),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    wrapItems(
-                                                        widget
-                                                            .propertyModel.type,
-                                                        'sqr_feet',
-                                                        80),
-                                                    wrapItems(
-                                                        widget.propertyModel
-                                                            .floor,
-                                                        'sofa',
-                                                        80),
-                                                  ],
-                                                ),
-                                                height(3),
-                                                wrapItems(
-                                                    widget
-                                                        .propertyModel.address,
-                                                    'location',
-                                                    150),
-                                              ],
+                                          FittedBox(
+                                            child: Container(
+                                              width: Get.width*0.6,
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    '${widget.propertyModel?.property?.name}',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                    TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color:
+                                                        Constants.textColor,
+                                                        fontSize: 13,
+                                                        fontFamily:
+                                                        Constants.fontsFamily,
+                                                        fontWeight:
+                                                        FontWeight.normal),
+                                                  ),
+                                                  height(0.005),
+                                                  Text(
+                                                    '${Constants.currency}.${widget.propertyModel?.price}/ Month',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                    TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontFamily:
+                                                        Constants.fontsFamily,
+                                                        fontSize: 13,
+                                                        fontWeight:
+                                                        FontWeight.bold),
+                                                  ),
+                                                  height(0.005),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                    crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                    children: [
+                                                      wrapItems(
+                                                          '${widget
+                                                              .propertyModel?.area}',
+                                                          'sqr_feet',
+                                                          80),
+                                                      wrapItems(
+                                                          '${widget.propertyModel?.property
+                                                              ?.floor}',
+                                                          'sofa',
+                                                          80),
+                                                    ],
+                                                  ),
+                                                  height(0.005),
+                                                  wrapItems(
+                                                      '${widget
+                                                          .propertyModel?.property?.address}',
+                                                      'location',
+                                                      150),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                           Column(
                                             mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            MainAxisAlignment.center,
                                             crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                            CrossAxisAlignment.center,
                                             children: [
                                               Row(
                                                 children: [
@@ -199,22 +209,17 @@ class RecommendListItemState extends State<RecommendItem> {
                                                         .symmetric(
                                                         horizontal: 3),
                                                     child: ElevatedButton(
-                                                        onPressed: () {
-                                                          Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          PropertiesDetailsPage(
-                                                                            propertyId:
-                                                                                widget.propertyModel.id.toString(),
-                                                                          )));
+                                                        onPressed: () async{
+                                                          Get.to(() =>PropertiesDetailsPageNew(
+                                                            propertyId:
+                                                            '${widget.propertyModel?.id.toString()}',
+                                                          ),arguments: '${widget.propertyModel?.id.toString()}');
                                                         },
                                                         style: ElevatedButton
                                                             .styleFrom(
                                                           backgroundColor:
-                                                              Constants
-                                                                  .primaryColor,
+                                                          Constants
+                                                              .primaryColor,
                                                         ),
                                                         child: Text(
                                                           'Book',
@@ -223,25 +228,25 @@ class RecommendListItemState extends State<RecommendItem> {
                                                               fontFamily: Constants
                                                                   .fontsFamily,
                                                               fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
+                                                              FontWeight
+                                                                  .bold),
                                                         )),
                                                   ),
                                                   InkWell(
                                                     onTap: () {
-                                                      openDialPad(
+                                                     /* openDialPad(
                                                           widget.propertyModel
-                                                              .ownerPhone,
-                                                          context);
+                                                              ?.ownerPhone,
+                                                          context);*/
                                                     },
                                                     child: Container(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              5),
+                                                      const EdgeInsets.all(
+                                                          5),
                                                       decoration: BoxDecoration(
                                                           borderRadius:
-                                                              BorderRadius
-                                                                  .circular(5),
+                                                          BorderRadius
+                                                              .circular(5),
                                                           shape: BoxShape
                                                               .rectangle,
                                                           color: Constants
@@ -252,17 +257,17 @@ class RecommendListItemState extends State<RecommendItem> {
                                                   ),
                                                 ],
                                               ),
-                                              height(5),
-                                              Text('Posted On',
-                                                  style: TextStyle(
-                                                      color:
-                                                          Constants.textColor,
-                                                      fontSize: 12,
-                                                      fontFamily:
-                                                          Constants.fontsFamily,
-                                                      fontWeight:
-                                                          FontWeight.normal)),
-                                              height(5),
+                                              // height(0.005),
+                                              /*    Text('Posted On',
+                                                    style: TextStyle(
+                                                        color:
+                                                            Constants.textColor,
+                                                        fontSize: 12,
+                                                        fontFamily:
+                                                            Constants.fontsFamily,
+                                                        fontWeight:
+                                                            FontWeight.normal)),*/
+                                              //height(0.005),
                                               // Text(
                                               //     convertToAgo(widget
                                               //         .propertyModel.),
@@ -283,6 +288,33 @@ class RecommendListItemState extends State<RecommendItem> {
                           ]))
                 ],
               ),
+            ),
+              Positioned(
+                  right: 15,
+                  top: 15,
+                  child: circleContainer(
+                      IconButton(
+                          onPressed: () async {
+                          bool response =  await likeProperty(listingId: '${widget.propertyModel?.id}' );
+                          if(response){
+                            setState(() {
+
+                            });
+                          }
+                          },
+                          icon: Icon(
+                            widget.propertyModel!.wishlist == 1
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            size: 18,
+                            color: widget.propertyModel!.wishlist == 1
+                                ? Colors.red
+                                : Colors.black,
+                          )),
+                      Colors.white,
+                      100,
+                      35,
+                      35)),]
             )));
   }
 }

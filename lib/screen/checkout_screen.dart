@@ -2,20 +2,23 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:rentitezy/single_property_details/controller/single_property_details_controller.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/checkout_model.dart';
-import 'package:rentitezy/model/property_model.dart';
-import 'package:rentitezy/screen/my_bookings/my_booking_screen.dart';
-import 'package:rentitezy/widgets/const_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:rentitezy/utils/view/rie_widgets.dart';
+import '../single_property_details/model/single_property_details_model.dart';
+import '../utils/const/widgets.dart';
 
 class CheckOutPage extends StatefulWidget {
-  final CheckoutModel checkoutModel;
+  final CheckoutModel? checkoutModel;
   final String from;
-  final PropertyModel? propertyModel;
+  final SinglePropertyDetails? propertyModel;
   final DateTime? currentDate;
   const CheckOutPage(
       {super.key,
@@ -29,7 +32,7 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  SinglePropertyDetailsController singlePropertyDetailsController =  Get.find();
   Widget textWid(String txt, Color clr, double font, FontWeight fw) {
     return Text(
       txt,
@@ -53,36 +56,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
   }
 
   bool loadingLeads = false;
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController phoneController = TextEditingController();
-
-  void apiReq(StateSetter setState, String cartId, BuildContext context) async {
-    var sharedPreferences = await _prefs;
-    dynamic result = await checkOutUrl(
-      nameController.text,
-      emailController.text,
-      phoneController.text,
-      cartId,
-      sharedPreferences.getString(Constants.token).toString(),
-    );
-    if (result['success']) {
-      debugPrint("longurl ${result['data']}");
-      String longurl = result['data']['longurl'];
-      launchUrlString(longurl);
-      if (widget.from == 'Request') {
-        leadsRequest();
-      } else {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MyBookingsScreen(
-                      from: true,
-                    )));
-      }
-      setState(() => loadingLeads = true);
-    }
-  }
 
   void showBottomDetails(String data, BuildContext context) {
     showModalBottomSheet(
@@ -123,7 +96,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               padding: const EdgeInsets.all(10),
                               child: TextField(
                                 keyboardType: TextInputType.text,
-                                controller: nameController,
+                                controller: singlePropertyDetailsController.nameController,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: "Name",
@@ -134,7 +107,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               padding: const EdgeInsets.all(10),
                               child: TextField(
                                 keyboardType: TextInputType.text,
-                                controller: emailController,
+                                controller: singlePropertyDetailsController.emailController,
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: "Email",
@@ -145,7 +118,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               padding: const EdgeInsets.all(10),
                               child: TextField(
                                 keyboardType: TextInputType.phone,
-                                controller: phoneController,
+                                controller: singlePropertyDetailsController.phoneController,
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r'[0-9]')),
@@ -157,21 +130,24 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 ),
                               ),
                             ),
-                            height(25),
+                            height(0.05),
                             GestureDetector(
                               onTap: () async {
-                                if (nameController.text.isEmpty) {
-                                  showCustomToast(context, 'Enter valid name');
-                                } else if (emailController.text.isEmpty) {
-                                  showCustomToast(context, 'Enter valid email');
-                                } else if (phoneController.text.isEmpty) {
-                                  showCustomToast(context, 'Enter valid phone');
-                                } else if (phoneController.text.length != 10) {
-                                  showCustomToast(
-                                      context, 'Enter valid phone digit');
+                                if (singlePropertyDetailsController.nameController.text.isEmpty) {
+                                  RIEWidgets.getToast(message: 'Enter valid name', color: CustomTheme.white);
+                                 // showCustomToast(context, 'Enter valid name');
+                                } else if (singlePropertyDetailsController.emailController.text.isEmpty) {
+                                  RIEWidgets.getToast(message: 'Enter valid email', color: CustomTheme.white);
+                                //  showCustomToast(context, 'Enter valid email');
+                                } else if (singlePropertyDetailsController.phoneController.text.isEmpty) {
+                                  RIEWidgets.getToast(message: 'Enter valid phone', color: CustomTheme.white);
+                                 // showCustomToast(context, 'Enter valid phone');
+                                } else if (singlePropertyDetailsController.phoneController.text.length != 10) {
+                                  RIEWidgets.getToast(message: 'Enter valid phone digit', color: CustomTheme.white);
+                                //  showCustomToast(context, 'Enter valid phone digit');
                                 } else {
                                   setState(() => loadingLeads = true);
-                                  apiReq(setState, data, context);
+                                  singlePropertyDetailsController.apiReq('${singlePropertyDetailsController.checkoutModel?.cardId}');
                                 }
                               },
                               child: Container(
@@ -206,7 +182,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                       ),
                               ),
                             ),
-                            height(15),
+                            height(0.005),
                           ],
                         ))),
           );
@@ -215,30 +191,35 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   void leadsRequest() async {
     print('create-leads');
-    var sharedPreferences = await _prefs;
+    var data = widget.propertyModel?.data;
+    var propertyData = data?.property;
     if (widget.propertyModel != null) {
       try {
         dynamic result = await createLeadsApi(
-            sharedPreferences.getString(Constants.usernamekey).toString(),
-            sharedPreferences.getString(Constants.phonekey).toString(),
-            widget.propertyModel!.address.isEmpty
+            GetStorage().read(Constants.usernamekey).toString(),
+            GetStorage().read(Constants.phonekey).toString(),
+            propertyData?.address ==''
                 ? 'NA'
-                : widget.propertyModel!.address,
+                : '${propertyData?.address}',
             'NA',
-            widget.propertyModel!.facility,
+            '${propertyData?.facilities}',
             DateFormat.yMMMd().format(widget.currentDate!),
-            widget.propertyModel!.price,
-            sharedPreferences.getString(Constants.userId).toString(),
-            widget.propertyModel!.id,
-            widget.propertyModel!.bhkType);
+            '${data?.price}',
+            GetStorage().read(Constants.userId).toString(),
+            '${propertyData?.id}',
+            '${data?.listingType}',);
         if (result['success']) {
-          showCustomToast(context, result['message']);
+          RIEWidgets.getToast(message: result['message'], color: CustomTheme.white);
+
+         // showCustomToast(context, result['message']);
           Navigator.pop(context, true);
         } else {
-          showCustomToast(context, result['message']);
+          RIEWidgets.getToast(message: result['message'], color: CustomTheme.white);
+          //showCustomToast(context, result['message']);
         }
       } on Exception catch (error) {
-        showCustomToast(context, error.toString());
+        RIEWidgets.getToast(message: error.toString(), color: CustomTheme.white);
+       // showCustomToast(context, error.toString());
       }
     }
   }
@@ -310,10 +291,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 children: [
                                   Expanded(
                                       child: columnTxt(
-                                          "Name", widget.checkoutModel.name)),
+                                          "Name", '${singlePropertyDetailsController.checkoutModel?.name}')),
                                   Expanded(
                                       child: columnTxt("Address",
-                                          widget.checkoutModel.address))
+                                          '${singlePropertyDetailsController.checkoutModel?.address}' ))
                                 ],
                               ),
                             ),
@@ -326,10 +307,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 children: [
                                   Expanded(
                                       child: columnTxt("Move In",
-                                          widget.checkoutModel.moveIn)),
+                                          '${singlePropertyDetailsController.checkoutModel?.moveIn}')),
                                   Expanded(
                                       child: columnTxt("Move Out",
-                                          widget.checkoutModel.moveOut))
+                                          '${widget.checkoutModel?.moveOut}'  ))
                                 ],
                               ),
                             ),
@@ -342,10 +323,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 children: [
                                   Expanded(
                                       child: columnTxt("Duration",
-                                          widget.checkoutModel.duration)),
+                                          '${singlePropertyDetailsController.checkoutModel?.duration}')),
                                   Expanded(
                                       child: columnTxt("Rent",
-                                          '${Constants.currency}.${widget.checkoutModel.rent}'))
+                                         '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.rent}'))
                                 ],
                               ),
                             ),
@@ -358,10 +339,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 children: [
                                   Expanded(
                                       child: columnTxt("Deposit",
-                                          '${Constants.currency}.${widget.checkoutModel.deposit}')),
+                                         '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.deposit}')),
                                   Expanded(
                                     child: columnTxt("OnBoarding",
-                                        widget.checkoutModel.onboarding),
+                                        '${widget.checkoutModel?.onboarding}'     ),
                                   )
                                 ],
                               ),
@@ -375,10 +356,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 children: [
                                   Expanded(
                                       child: columnTxt(
-                                          "Guest", widget.checkoutModel.guest)),
+                                          "Guest",'${singlePropertyDetailsController.checkoutModel?.guest}'  )),
                                   Expanded(
                                       child: columnTxt("Lock In",
-                                          widget.checkoutModel.lockIn))
+                                          '${singlePropertyDetailsController.checkoutModel?.lockIn}'    ))
                                 ],
                               ),
                             ),
@@ -391,10 +372,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 children: [
                                   Expanded(
                                       child: columnTxt("Amount",
-                                          '${Constants.currency}.${widget.checkoutModel.amount}')),
+                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.amount}')),
                                   Expanded(
                                       child: columnTxt("Total",
-                                          '${Constants.currency}.${widget.checkoutModel.total}'))
+                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.total}'))
                                 ],
                               ),
                             ),
@@ -407,28 +388,24 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 children: [
                                   Expanded(
                                       child: columnTxt("Maintenance",
-                                          '${Constants.currency}.${widget.checkoutModel.maintenance}'))
+                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.maintenance}'))
                                 ],
                               ),
                             ),
-                            height(20),
+                            height(0.05),
                             InkWell(
                               onTap: () async {
-                                var sharedPreferences = await _prefs;
-                                nameController = TextEditingController(
-                                    text: sharedPreferences
-                                        .getString(Constants.usernamekey)
+                                singlePropertyDetailsController.nameController = TextEditingController(
+                                    text: GetStorage().read(Constants.usernamekey)
                                         .toString());
-                                phoneController = TextEditingController(
-                                    text: sharedPreferences
-                                        .getString(Constants.phonekey)
+                                singlePropertyDetailsController.phoneController = TextEditingController(
+                                    text: GetStorage().read(Constants.phonekey)
                                         .toString());
-                                emailController = TextEditingController(
-                                    text: sharedPreferences
-                                        .getString(Constants.emailkey)
+                                singlePropertyDetailsController.emailController = TextEditingController(
+                                    text: GetStorage().read(Constants.emailkey)
                                         .toString());
                                 showBottomDetails(
-                                    widget.checkoutModel.cardId, context);
+                                    '${singlePropertyDetailsController.checkoutModel?.cardId}'   , context);
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.70,

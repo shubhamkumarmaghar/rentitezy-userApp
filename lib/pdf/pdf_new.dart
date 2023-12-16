@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:rentitezy/screen/home_screen.dart';
+import 'package:rentitezy/home/home_view/home_screen.dart';
 
 import 'pdf_api.dart';
 

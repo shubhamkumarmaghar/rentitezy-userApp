@@ -5,6 +5,7 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/view/main_view_controller.dart';
 
 import '../utils/const/app_urls.dart';
+import '../utils/const/widgets.dart';
 import 'const_widget.dart';
 
 Widget appBarWidget(String title, String image, Function() function) {
@@ -36,7 +37,7 @@ Widget appBarWidget(String title, String image, Function() function) {
       ),
       GestureDetector(
         onTap: function,
-        child: imgLoadWid(AppUrls.imagesRentIsEasyUrl + image,
+        child: imgLoadWid( image,
             'assets/images/user_vec.png', 40, 40, BoxFit.contain),
       ),
     ],

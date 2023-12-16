@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/search_listing_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,7 +52,7 @@ class SearchPController extends GetxController {
     final response = await http.get(
       Uri.parse(searchQuery.text.isEmpty ? ur : search),
       headers: <String, String>{
-        "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+        "Auth-Token": GetStorage().read(Constants.token).toString()
       },
     );
     if (response.statusCode == 200) {

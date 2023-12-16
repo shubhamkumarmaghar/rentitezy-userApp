@@ -2,8 +2,11 @@
 
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
+import 'package:rentitezy/utils/view/rie_widgets.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:rentitezy/model/asset_model.dart';
 import 'package:scroll_page_view/pager/page_controller.dart';
@@ -11,6 +14,7 @@ import 'package:scroll_page_view/pager/scroll_page_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../utils/const/appConfig.dart';
+import '../utils/const/widgets.dart';
 
 class HouseholdPage extends StatefulWidget {
   @override
@@ -24,18 +28,20 @@ class _HouseState extends State<HouseholdPage> {
     var sharedPreferences = await _prefs;
     try {
       dynamic result = await createAssetsReqApi(
-        sharedPreferences.getString(Constants.userId).toString(),
+        GetStorage().read(Constants.userId).toString(),
         assetId,
       );
       if (result['success']) {
         Navigator.pop(context);
-        showCustomToast(context, result['message']);
+        RIEWidgets.getToast( message:result['message'],color: CustomTheme.white,);
       } else {
-        showCustomToast(context, result['message']);
+        RIEWidgets.getToast( message:result['message'],color: CustomTheme.white,);
+       // showCustomToast(context, result['message']);
       }
     } on Exception catch (error) {
       Navigator.pop(context);
-      showCustomToast(context, error.toString());
+      RIEWidgets.getToast( message:error.toString(),color: CustomTheme.white,);
+     // showCustomToast(context, error.toString());
     }
   }
 
@@ -44,9 +50,7 @@ class _HouseState extends State<HouseholdPage> {
       clipBehavior: Clip.antiAlias,
       borderRadius: BorderRadius.circular(8),
       child: imgLoadWid(
-          image.contains('https://')
-              ? image
-              : AppUrls.imagesRentIsEasyUrl + image,
+         image,
           'assets/images/app_logo.png',
           170,
           300,
@@ -94,7 +98,7 @@ class _HouseState extends State<HouseholdPage> {
                               width: 40,
                               color: Colors.black,
                             )),
-                            height(10),
+                            height(0.025),
                             Center(
                               child: SizedBox(
                                 height: 150,
@@ -124,15 +128,15 @@ class _HouseState extends State<HouseholdPage> {
                                 ),
                               ),
                             ),
-                            height(10),
+                            height(0.025),
                             title(assetsModel.productName, 18),
-                            height(5),
+                            height(0.005),
                             title('Brand - ${assetsModel.brand}', 14),
-                            height(5),
+                            height(0.005),
                             title('Type  - ${assetsModel.type}', 14),
-                            height(5),
+                            height(0.005),
                             title(Constants.currency + assetsModel.price, 14),
-                            height(20),
+                            height(0.05),
                             Center(
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
@@ -153,7 +157,7 @@ class _HouseState extends State<HouseholdPage> {
                                 },
                               ),
                             ),
-                            height(10),
+                            height(0.025),
                           ],
                         ))),
           );
@@ -176,7 +180,7 @@ class _HouseState extends State<HouseholdPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  height(10),
+                  height(0.025),
                   Padding(
                     padding: const EdgeInsets.all(2.0),
                     child: Text(houseHold.productName,
@@ -189,7 +193,7 @@ class _HouseState extends State<HouseholdPage> {
                             fontSize: 15,
                             fontWeight: FontWeight.w500)),
                   ),
-                  height(10),
+                  height(0.025),
                   imgLoadWid(
                       AppUrls.imagesRootUrl + houseHold.imageList.first,
                       'assets/images/app_logo.png',
@@ -285,10 +289,10 @@ class _HouseState extends State<HouseholdPage> {
                       future: getAssetsDetApi(AppUrls.assets),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.none) {
-                          return loading();
+                          return RIEWidgets.getLoader();
                         } else if (snapshot.connectionState ==
                             ConnectionState.waiting) {
-                          return loading();
+                          return RIEWidgets.getLoader();
                         } else if (snapshot.connectionState ==
                             ConnectionState.done) {
                           if (snapshot.hasData) {
@@ -301,7 +305,7 @@ class _HouseState extends State<HouseholdPage> {
                           }
                         }
 
-                        return loading();
+                        return RIEWidgets.getLoader();
                       }))),
         ],
       ),

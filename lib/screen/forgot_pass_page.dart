@@ -8,6 +8,8 @@ import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 
+import '../utils/const/widgets.dart';
+
 class ForgotScreen extends StatefulWidget {
   const ForgotScreen({super.key});
 
@@ -174,7 +176,7 @@ class _MyForgotState extends State<ForgotScreen> {
                                   color: Colors.grey),
                             ),
                           ),
-                          height(15),
+                          height(0.005),
                           TextFieldPin(
                               textController: otpController,
                               autoFocus: true,
@@ -201,8 +203,7 @@ class _MyForgotState extends State<ForgotScreen> {
                         ],
                       ),
                     ),
-                    height(20),
-                    height(20),
+                    height(0.05),
                     Center(
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -266,7 +267,7 @@ class _MyForgotState extends State<ForgotScreen> {
                             ),
                           )),
                     ),
-                    height(10),
+                    height(0.005),
                     Center(
                       child: TextButton(
                         onPressed: () async {
@@ -289,7 +290,7 @@ class _MyForgotState extends State<ForgotScreen> {
                         ),
                       ),
                     ),
-                    height(25),
+                    height(0.025),
                   ],
                 ),
               ),

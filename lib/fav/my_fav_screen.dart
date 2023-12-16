@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/screen/fav/fav_controller.dart';
-import 'package:rentitezy/screen/fav/fav_widget.dart';
-import 'package:rentitezy/widgets/const_widget.dart';
+import '../../utils/const/widgets.dart';
+import 'fav_controller.dart';
+import 'fav_widget.dart';
+class FavScreen  extends StatefulWidget {
+  const FavScreen ({super.key});
 
-class FavScreen extends StatelessWidget {
-  FavScreen({super.key});
-  final controller = Get.put(FavController());
+  @override
+  State<FavScreen > createState() => _FavScreenState();
+}
+
+class _FavScreenState extends State<FavScreen > {
+
+  FavController controller = Get.put(FavController());
 
   @override
   Widget build(BuildContext context) {

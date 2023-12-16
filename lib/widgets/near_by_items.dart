@@ -1,13 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/property_model.dart';
-import 'package:rentitezy/screen/single_properties_screen.dart';
+import 'package:rentitezy/single_property_details/view/single_properties_screen.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
 
+import '../home/model/property_list_nodel.dart';
+import '../single_property_details/view/single_properties_screen_new.dart';
+import '../utils/const/api.dart';
+import '../utils/const/widgets.dart';
+
 class NearByItem extends StatefulWidget {
-  final PropertyModel propertyModel;
+  final PropertySingleData? propertyModel;
 
   const NearByItem({Key? key, required this.propertyModel}) : super(key: key);
 
@@ -30,19 +37,17 @@ class NearListItemState extends State<NearByItem> {
   Widget build(BuildContext context) {
     ImageProvider imageProvider;
 
-    if (widget.propertyModel.images.first == '') {
+    if (widget.propertyModel?.images?.first == '') {
       imageProvider = AssetImage('assets/images/app_logo.png');
     } else {
-      imageProvider = NetworkImage(widget.propertyModel.images.first);
+      imageProvider = NetworkImage('${widget.propertyModel?.images?.first.url}');
     }
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PropertiesDetailsPage(
-                      propertyId: widget.propertyModel.id.toString(),
-                    )));
+    return GestureDetector (
+      onTap: () async{
+        log('property id : ${widget.propertyModel?.id.toString()}');
+        Get.to(() => PropertiesDetailsPageNew(
+          propertyId: '${widget.propertyModel?.id.toString()}',
+        ),arguments:'${widget.propertyModel?.id.toString()}' );
       },
       child: Column(children: [
         FittedBox(
@@ -87,7 +92,7 @@ class NearListItemState extends State<NearByItem> {
                             children: [
                               FittedBox(
                                 child: Text(
-                                  widget.propertyModel.name.capitalizeFirst!,
+                                  '${widget.propertyModel?.property?.name.toString().capitalizeFirst!}',
                                   maxLines: 2,
                                   style: TextStyle(
                                     fontFamily: 'Poppins',
@@ -104,7 +109,7 @@ class NearListItemState extends State<NearByItem> {
                                 CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '₹${widget.propertyModel.price}/Month',
+                                    '₹${widget.propertyModel?.price}/Month',
                                     maxLines: 1,
                                     style: TextStyle(
                                       fontSize: 12,
@@ -113,7 +118,7 @@ class NearListItemState extends State<NearByItem> {
                                     ),
                                   ),
                                   Text(
-                                    'No Of Floor : ${widget.propertyModel.floor}',
+                                    'No Of Floor : ${widget.propertyModel?.property?.floor}',
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
@@ -121,7 +126,7 @@ class NearListItemState extends State<NearByItem> {
                                     ),
                                   ),
                                   Text(
-                                    widget.propertyModel.type,
+                                    '${widget.propertyModel?.property?.type}',
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.black,
@@ -140,11 +145,37 @@ class NearListItemState extends State<NearByItem> {
                       bottom: 15,
                       child: IconButton(
                         onPressed: () {
-                          openDialPad(widget.propertyModel.ownerPhone, context);
+                        //  openDialPad(widget.propertyModel?.ownerPhone, context);
                         },
                         icon: iconWidget('phone', 25, 25),
                       ),
                     ),
+                    Positioned(
+                        right: 15,
+                        top: 15,
+                        child: circleContainer(
+                            IconButton(
+                                onPressed: () async {
+                                  bool response =  await likeProperty(listingId: '${widget.propertyModel?.id}' );
+                                  if(response){
+                                    setState(() {
+
+                                    });
+                                  }
+                                },
+                                icon: Icon(
+                                  widget.propertyModel!.wishlist == 1
+                                      ? Icons.favorite_rounded
+                                      : Icons.favorite_border_rounded,
+                                  size: 16,
+                                  color:  widget.propertyModel!.wishlist == 1
+                                      ? Colors.red
+                                      : Colors.black,
+                                )),
+                            Colors.white,
+                            100,
+                            30,
+                            30)),
                   ]
                     ),
                 ),

@@ -2,32 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 
-double screenWidth =
-    MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.width;
-double screenHeight =
-    MediaQueryData.fromWindow(WidgetsBinding.instance.window).size.height;
-
-Widget height(double height) {
-  return SizedBox(height: height);
-}
-
-Widget width(double w1) {
-  return SizedBox(width: w1);
-}
-
+import '../utils/const/widgets.dart';
 EdgeInsetsGeometry contEdge =
     const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 0);
 
-Widget title(String title, double fSize) {
-  return Text(
-    title,
-    style: TextStyle(
-        color: Constants.black,
-        fontSize: fSize,
-        fontWeight: FontWeight.w500,
-        fontFamily: Constants.fontsFamily),
-  );
-}
 
 Widget arrowBack() {
   return const Icon(
@@ -88,13 +66,13 @@ Widget reloadErr(String error, Function() function) {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          height(10),
+          height(0.005),
           title(error, 15),
-          height(5),
+          height(0.005),
           ElevatedButton(
               onPressed: function,
               child: sTitle('RELOAD', 13, Colors.white, FontWeight.bold)),
-          height(10),
+          height(0.005),
         ]),
   );
 }
@@ -143,29 +121,3 @@ Widget getCustomText(String? text, Color color, int maxLine,
   );
 }
 
-Widget iconWidget(String name, double he, double wi) {
-  return Image.asset(
-    'assets/images/$name.png',
-    fit: BoxFit.fill,
-    height: he,
-    width: wi,
-  );
-}
-
-Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
-  return FadeInImage.assetNetwork(
-      fit: fit,
-      height: h,
-      width: w,
-      placeholderFit: fit,
-      placeholder: asset,
-      image: imgUrl,
-      imageErrorBuilder: (context, error, stackTrace) {
-        return Image.asset(
-          asset,
-          fit: fit,
-          height: h,
-          width: w,
-        );
-      });
-}

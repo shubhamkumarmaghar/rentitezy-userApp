@@ -421,8 +421,7 @@
 //                                       "${AppConfig.checkout}?id=$flatId&checkin=${f.format(currentDate)}&duration=$dropdownValueMonth&guest=$dropdownValueGuest";
 //                                   dynamic result = await getCheckOut(
 //                                       url,
-//                                       sharedPreferences
-//                                           .getString(Constants.token)
+//                                       GetStorage().read(Constants.token)
 //                                           .toString());
 //                                   bool success = result["success"];
 //                                   if (success) {

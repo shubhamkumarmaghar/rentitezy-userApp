@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:rentitezy/const/appConfig.dart';
-// import 'package:rentitezy/controller.dart';
+// import 'package:rentitezy/home_controller.dart';
 // import 'package:rentitezy/model/property_model.dart';
 // import 'package:rentitezy/view/main_view_controller.dart';
 // import 'package:rentitezy/widgets/const_widget.dart';

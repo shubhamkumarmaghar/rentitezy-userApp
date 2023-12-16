@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/localDb/db_helper.dart';
@@ -18,8 +19,9 @@ import 'package:rentitezy/model/ticketModel.dart';
 import 'package:rentitezy/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../services/rie_user_api_service.dart';
 import 'app_urls.dart';
-
+RIEUserApiService _apiService = RIEUserApiService();
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 //user create
 Future<dynamic> createUser(String fName, String lName, String phone,
@@ -45,20 +47,24 @@ Future<dynamic> createUser(String fName, String lName, String phone,
 }
 
 Future<dynamic> userLogin(String phone, String password) async {
-  final response = await http.post(Uri.parse(AppUrls.userLogin),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String>{
-        "phone": phone,
-        "password": password,
-      }));
-  if (response.statusCode == 200) {
-    var body = jsonDecode(response.body);
-
-    return body;
-  } else {
-    throw Exception('Failed to load Rentiseazy User');
+  try {
+    final response = await http.post(Uri.parse(AppUrls.userLogin),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode(<String, String>{
+          "phone": phone,
+          "password": password,
+        }));
+    if (response.statusCode == 200) {
+      var body = jsonDecode(response.body);
+      return body;
+    } else {
+      throw Exception('Failed to load Rentiseazy User');
+    }
+  }
+  catch(e){
+    log('error :: $e');
   }
 }
 
@@ -67,7 +73,7 @@ Future<List<UserModel>> fetchUserApi(String url) async {
   final response = await http.get(
     Uri.parse(url),
     headers: <String, String>{
-      'Auth-Token': sharedPreferences.getString(Constants.token).toString()
+      'Auth-Token': GetStorage().read(Constants.token).toString()
     },
   );
   if (response.statusCode == 200) {
@@ -90,12 +96,10 @@ Future<List<UserModel>> fetchUserApi(String url) async {
 }
 
 Future<dynamic> fetchTenantUserApi(String url) async {
-  final SharedPreferences sharedPreferences = await _prefs;
-
   final response = await http.get(
     Uri.parse(url),
     headers: <String, String>{
-      'Auth-Token': sharedPreferences.getString(Constants.token).toString()
+      'user-auth-token': GetStorage().read(Constants.token).toString()
     },
   );
   if (response.statusCode == 200) {
@@ -111,7 +115,7 @@ Future<List<PropertyModel>> nearPropertyGet(
   final SharedPreferences sharedPreferences = await prefs;
   String userId = "guest";
   if (sharedPreferences.containsKey(Constants.userId)) {
-    userId = sharedPreferences.getString(Constants.userId).toString();
+    userId = GetStorage().read(Constants.userId).toString();
   }
   final response = await http.get(
     Uri.parse(url),
@@ -162,7 +166,7 @@ Future<List<PropertyModel>> allPropertyGet() async {
   final response = await http.get(
     Uri.parse(AppUrls.property),
     headers: <String, String>{
-      "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+      "Auth-Token": GetStorage().read(Constants.token).toString()
     },
   );
 
@@ -190,7 +194,7 @@ Future<List<PropertyModel>> searchProperty() async {
   final response = await http.get(
     Uri.parse(AppUrls.property),
     headers: <String, String>{
-      "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+      "Auth-Token": GetStorage().read(Constants.token).toString()
     },
   );
   if (response.statusCode == 200) {
@@ -227,7 +231,7 @@ Future<dynamic> createLeadsApi(
   final response = await http.post(Uri.parse(AppUrls.leads),
       headers: <String, String>{
         'Content-Type': 'application/json',
-        "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+        "Auth-Token": GetStorage().read(Constants.token).toString()
       },
       body: jsonEncode(<String, String>{
         "name": name,
@@ -552,7 +556,7 @@ Future<List<RentReqModel>> getAllRentReq(String url, String token) async {
     Uri.parse(url),
     headers: <String, String>{
       'Content-Type': 'application/json',
-      "Auth-Token": token
+      "user-auth-token": token
     },
   );
   if (response.statusCode == 200) {
@@ -897,7 +901,7 @@ Future<dynamic> addToFav(
   final response = await http.post(Uri.parse(AppUrls.addFav),
       headers: <String, String>{
         'Content-Type': 'application/json',
-        "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+        "Auth-Token": GetStorage().read(Constants.token).toString()
       },
       body: jsonEncode(<String, String>{
         "listingId": listingId,
@@ -915,7 +919,7 @@ Future<PropertyModel?> singlePropertyGet(String url) async {
   final response = await http.get(
     Uri.parse(url),
     headers: <String, String>{
-      "Auth-Token": sharedPreferences.getString(Constants.token).toString()
+      "Auth-Token": GetStorage().read(Constants.token).toString()
     },
   );
 
@@ -955,4 +959,24 @@ Future<String> uploadImage(String path, String name) async {
     print(responseString);
   }
   return AppUrls.imagesRootUrl + name;
+}
+
+
+Future<bool> likeProperty({required String listingId})
+async {
+  String url = AppUrls.addFav;
+  final response = await _apiService.postApiCall(endPoint: url, bodyParams:
+      {
+        'listingId':listingId
+      }
+  );
+  final data = response as Map<String, dynamic>;
+  if (data['message'].toString()
+      .toLowerCase()
+      .contains('success')) {
+    return true;
+  }
+  else{
+    return false;
+  }
 }
