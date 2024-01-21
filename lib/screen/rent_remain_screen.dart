@@ -46,8 +46,8 @@ class _MartHomeState extends State<RentRemainScreen> {
   void initState() {
     super.initState();
     // futureTenant = fetchTenant();
-    futureRentHistory = fetchRentHistory();
-    futureRentPending = fetchRentPending();
+    //futureRentHistory = fetchRentHistory();
+   // futureRentPending = fetchRentPending();
    // fetchUser();
   }
 
@@ -353,7 +353,7 @@ class _MartHomeState extends State<RentRemainScreen> {
       },
     );
   }
-
+/*
   void payRequest(String id, String payId, String amt) async {
     var response = await http.get(Uri.parse(AppUrls.myBooking), headers: {
       'auth-token': GetStorage().read(Constants.token).toString()
@@ -375,7 +375,7 @@ class _MartHomeState extends State<RentRemainScreen> {
               String longurl = result['data']['longurl'];
               launchUrlString(longurl);
               await Future.delayed(const Duration(seconds: 3));
-              futureRentHistory = fetchRentHistory();
+             // futureRentHistory = fetchRentHistory();
               // futureTenant = fetchTenant();
               showSnackBar(context, result['message']);
               Navigator.push(
@@ -392,7 +392,8 @@ class _MartHomeState extends State<RentRemainScreen> {
       }
     }
   }
-
+*/
+  /*
   Widget rentPending(RentReqModel tenant) {
     return Card(
       elevation: 5,
@@ -474,7 +475,7 @@ class _MartHomeState extends State<RentRemainScreen> {
       ),
     );
   }
-
+*/
   // Future<List<TenantModel>> fetchTenant() async {
   //   var sharedPreferences = await prefs;
   //   if (sharedPreferences.containsKey(Constants.tenantId)) {
@@ -496,7 +497,7 @@ class _MartHomeState extends State<RentRemainScreen> {
   //   }
   //   return [];
   // }
-
+/*
   Future<List<RentReqModel>> fetchRentHistory() async {
     if (controller.myBookingData.isNotEmpty) {
 
@@ -517,7 +518,7 @@ class _MartHomeState extends State<RentRemainScreen> {
     }
     return [];
   }
-
+*/
   Widget fetchMyAssetsReq() {
     return FutureBuilder<List<RentReqModel>>(
         future: futureRentHistory,
@@ -531,7 +532,7 @@ class _MartHomeState extends State<RentRemainScreen> {
               return listRentReq(snapshot.data!);
             } else if (snapshot.hasError) {
               return reloadErr(snapshot.error.toString(), (() {
-                futureRentHistory = fetchRentHistory();
+                //futureRentHistory = fetchRentHistory();
               }));
             }
           }
@@ -539,7 +540,7 @@ class _MartHomeState extends State<RentRemainScreen> {
           return RIEWidgets.getLoader();
         });
   }
-
+/*
   Widget fetchMyRentPending() {
     return FutureBuilder<List<RentReqModel>>(
         future: futureRentPending,
@@ -553,7 +554,7 @@ class _MartHomeState extends State<RentRemainScreen> {
               return listRemainRent(snapshot.data!);
             } else if (snapshot.hasError) {
               return reloadErr(snapshot.error.toString(), (() {
-                futureRentPending = fetchRentPending();
+             //   futureRentPending = fetchRentPending();
               }));
             }
           }
@@ -561,7 +562,7 @@ class _MartHomeState extends State<RentRemainScreen> {
           return RIEWidgets.getLoader();
         });
   }
-
+*/
   Widget listRentReq(List<RentReqModel> rentList) {
     return ListView.builder(
       shrinkWrap: true,
@@ -572,7 +573,7 @@ class _MartHomeState extends State<RentRemainScreen> {
           rentPaid(rentList[index]),
     );
   }
-
+/*
   Widget listRemainRent(List<RentReqModel> rentList) {
     return ListView.builder(
       shrinkWrap: true,
@@ -583,7 +584,7 @@ class _MartHomeState extends State<RentRemainScreen> {
           rentPending(rentList[index]),
     );
   }
-
+*/
   Widget fetchRemainRent() {
     // return FutureBuilder<List<TenantModel>>(
     //     future: futureTenant,
@@ -730,7 +731,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                         .toList(),
                   ),
                 )),
-            Visibility(
+         /*   Visibility(
               visible: tabPos == 0 && isTenant,
               child: Align(
                   alignment: Alignment.bottomCenter,
@@ -738,7 +739,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                       width: MediaQuery.of(context).size.width,
                       height: screenHeight * 0.62,
                       child: fetchMyRentPending())),
-            ),
+            ),*/
             Visibility(
               visible: tabPos == 1 && isTenant,
               child: Align(

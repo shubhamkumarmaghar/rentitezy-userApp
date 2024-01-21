@@ -34,12 +34,12 @@ class _MyProfileState extends State<ProfileScreenNew> {
   final bookingController = Get.put(MyBookingController());
 
   bool isTenant = false;
-  String userId = 'guest';
-  String userName = 'guest';
-  String userEmail = 'guest';
-  String userPhone = 'guest';
-  String vendorId = 'guest';
-  String profileImg = '';
+  String userId = GetStorage().read(Constants.userId);
+  String userName = GetStorage().read(Constants.usernamekey);
+  String userEmail = GetStorage().read(Constants.emailkey);
+  String userPhone = GetStorage().read(Constants.phonekey);
+  String vendorId = GetStorage().read(Constants.userId);
+  String profileImg = GetStorage().read(Constants.profileUrl);
 
   PackageInfo packageInfo = PackageInfo(
     appName: 'Unknown',

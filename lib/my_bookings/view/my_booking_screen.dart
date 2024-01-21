@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/my_bookings/booking_model.dart';
-import 'package:rentitezy/my_bookings/screens/booking_details_screen.dart';
+import 'package:rentitezy/my_bookings/view/booking_details_screen.dart';
+
 import 'package:rentitezy/utils/const/appConfig.dart';
 
-import '../../utils/const/widgets.dart';
-import '../screen/rent_remain_screen.dart';
-import 'appbar_widget.dart';
-import 'my_booking_controller.dart';
+import '../../../utils/const/widgets.dart';
+import '../../screen/rent_remain_screen.dart';
+import '../appbar_widget.dart';
+import '../my_booking_controller.dart';
 
 class MyBookingsScreen extends StatelessWidget {
   MyBookingsScreen({super.key, required this.from});

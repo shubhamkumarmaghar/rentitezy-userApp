@@ -77,7 +77,6 @@ class RecommendListItemState extends State<RecommendItem> {
             onTap: () {
              Get.to(()=>PropertiesDetailsPageNew(propertyId: '${widget.propertyModel?.id.toString()}',)
                  ,arguments: '${widget.propertyModel?.id.toString()}' );
-
             },
             child: Stack(children: [Card(
               elevation: 8.0,

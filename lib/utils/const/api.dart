@@ -531,25 +531,6 @@ Future<List<TicketModel>> getAllTicketReq(String tenantId) async {
   }
 }
 
-Future<dynamic> createRentApi(
-    String id, String tenantId, String status, String paymentId) async {
-  final response = await http.put(Uri.parse(AppUrls.rentReq),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String>{
-        "id": id,
-        "tenantId": tenantId,
-        "status": status,
-        "paymentId": paymentId,
-      }));
-  if (response.statusCode == 200) {
-    var body = jsonDecode(response.body);
-    return body;
-  } else {
-    throw Exception('Failed to load Rent Request');
-  }
-}
 
 Future<List<RentReqModel>> getAllRentReq(String url, String token) async {
   final response = await http.get(
@@ -872,7 +853,7 @@ Future<String> createPaymentLink(
     throw Exception('Failed to create payment link');
   }
 }
-
+/*
 Future<dynamic> createPaymentRequest(String invoiceId, String token) async {
   final url = Uri.parse(AppUrls.rentPay);
   final headers = {'Content-Type': 'application/json', 'auth-token': token};
@@ -892,7 +873,7 @@ Future<dynamic> createPaymentRequest(String invoiceId, String token) async {
     return 'Failed to create payment request';
   }
 }
-
+*/
 //add fav
 Future<dynamic> addToFav(
   String listingId,
@@ -911,38 +892,6 @@ Future<dynamic> addToFav(
     return body;
   } else {
     throw Exception('Failed to load Rentiseazy');
-  }
-}
-
-Future<PropertyModel?> singlePropertyGet(String url) async {
-  var sharedPreferences = await _prefs;
-  final response = await http.get(
-    Uri.parse(url),
-    headers: <String, String>{
-      "Auth-Token": GetStorage().read(Constants.token).toString()
-    },
-  );
-
-  if (response.statusCode == 200) {
-    var body = jsonDecode(response.body);
-    bool success = body["success"];
-    if (success) {
-      try {
-        List<PropertyModel> dataList = (body["data"] as List)
-            .map((stock) => PropertyModel.fromJson(stock))
-            .toList();
-        if (dataList.isNotEmpty) {
-          return dataList.first;
-        }
-        return null;
-      } catch (e) {
-        return null;
-      }
-    } else {
-      throw Exception(body["message"]);
-    }
-  } else {
-    throw Exception('Failed to Pro');
   }
 }
 

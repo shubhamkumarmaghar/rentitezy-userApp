@@ -102,12 +102,15 @@ class Property {
 */
 class Invoices {
   String id;
+  dynamic bookingId;
   String type;
   String fromDate;
   String tillDate;
   String payable;
   String paid;
   String status;
+  dynamic createdOn;
+  dynamic updatedOn;
 
   Invoices(
       {required this.id,
@@ -116,17 +119,25 @@ class Invoices {
       required this.tillDate,
       required this.payable,
       required this.paid,
-      required this.status});
+      required this.status,
+        required this.bookingId,
+        required this.updatedOn,
+        required this.createdOn
+      });
 
   factory Invoices.fromJson(Map<String, dynamic> json) {
     return Invoices(
       id: json['id'].toString(),
+      bookingId: json['bookingId'],
       type: json['type'].toString(),
       fromDate: json['fromDate'].toString(),
       tillDate: json['tillDate'].toString(),
       payable: json['payable'].toString(),
       paid: json['paid'].toString(),
       status: json['status'].toString(),
+      createdOn: json['createdOn'].toString(),
+      updatedOn: json['updatedOn'].toString()
+
     );
   }
   Map<String, dynamic> toJson() {
@@ -138,6 +149,9 @@ class Invoices {
     data['payable'] = payable;
     data['paid'] = paid;
     data['status'] = status;
+    data['bookingId'] = bookingId;
+    data['createdOn'] = createdOn;
+    data['updatedOn'] = updatedOn;
     return data;
   }
 }

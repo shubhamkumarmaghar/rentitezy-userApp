@@ -97,12 +97,10 @@ class _SplashPageState extends State<SplashScreenPage> {
               if (settings.agreement.isNotEmpty) {
                Settings().init(context, settings);
                 Get.offAll(const MyHomePage());
-                /*Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const MyHomePage()));*/
               } else {
-                print('errr');
+                if (kDebugMode) {
+                  print('errr');
+                }
               }
             } else {
               Get.offAll(const LoginScreen());

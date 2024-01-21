@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -8,16 +9,14 @@ import 'package:rentitezy/model/fav_model.dart';
 import 'package:rentitezy/model/property_model.dart';
 import 'package:rentitezy/model/search_listing_model.dart';
 import 'package:rentitezy/utils/services/rie_user_api_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../utils/const/app_urls.dart';
-import '../home/model/property_list_nodel.dart';
 
 class FavController extends GetxController {
-  PropertyListModel? allWishlistData;
+  WishlistModel? allWishlistData;
   RIEUserApiService apiService = RIEUserApiService();
   var loadFav = false.obs;
-  var apiFavPropertyList = <FavModel>[].obs;
+  var apiFavPropertyList = <WishlistModel>[].obs;
   var loadProperty = false.obs;
   //var apiPropertyList = <Property>[].obs;
   var proFetch = 'Data Fetching...Please wait'.obs;
@@ -25,6 +24,7 @@ class FavController extends GetxController {
   void onInit() {
     //fetchFavProperties();
     getWishListProperty();
+    log("userId ::: ${GetStorage().read(Constants.userId)}");
     super.onInit();
   }
 
@@ -43,9 +43,10 @@ class FavController extends GetxController {
       bool success = body["success"];
       try {
         if (success) {
-          apiFavPropertyList.value = (body["data"] as List)
-              .map((stock) => FavModel.fromJson(stock))
-              .toList();
+          allWishlistData = WishlistModel.fromJson(body);
+         /* apiFavPropertyList.value = (body["data"] as List)
+              .map((stock) => WishlistModel.fromJson(stock))
+              .toList();*/
           debugPrint('qqqqq- ${apiFavPropertyList.length}');
         } else {
           proFetch.value = 'Currently unavailable';
@@ -61,20 +62,24 @@ class FavController extends GetxController {
 
   void getWishListProperty()async {
     String url = AppUrls.wishlist;
+     loadFav.value = true;
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
     bool success = response["success"];
-    try {
-      if (success) {
 
-        allWishlistData = PropertyListModel.fromJson(response);
+    try {
+      if (response['message'].toString().toLowerCase() == 'success') {
+        allWishlistData = WishlistModel.fromJson(response);
         /* (response["data"] as List)
               .map((stock) => PropertyModel.fromJson(stock))
               .toList();*/
         //allPropertyData.addAll(apiPropertyList);
       }
+      allWishlistData?.data?.forEach((element) {log('faviourite prop id ::: ${element.listing?.id}'); });
+      loadFav.value = false;
     } catch (e) {
       debugPrint(e.toString());
+      loadFav.value = false;
     }
 
 

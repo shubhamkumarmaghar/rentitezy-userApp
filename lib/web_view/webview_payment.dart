@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -24,7 +26,13 @@ class _WebViewContainerState extends State<WebViewContainer> {
 
 
   // _WebViewContainerState(this._url);
+@override
+  void dispose() {
+    // TODO: implement dispose
 
+    super.dispose();
+    //Get.to();
+  }
   @override
   void initState() {
     super.initState();

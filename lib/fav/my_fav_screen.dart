@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
+import 'package:rentitezy/widgets/recommend_items.dart';
 import '../../utils/const/widgets.dart';
 import 'fav_controller.dart';
 import 'fav_widget.dart';
@@ -69,15 +70,13 @@ class _FavScreenState extends State<FavScreen > {
                       ]),
                 )
               : ListView.builder(
-                  itemCount: controller.apiFavPropertyList.length,
+                  itemCount: controller.allWishlistData?.data?.length,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
                     debugPrint(
-                        'controller.apiFavPropertyList[index] ${controller.apiFavPropertyList[index].listingId}');
-                    return FavWidget(
-                      favModel: controller.apiFavPropertyList[index],
-                    );
+                        'controller.apiFavPropertyList[index] ${controller.allWishlistData?.data?[index].listing?.id}');
+                    return WishListWidget( wishListSingleDataModel: controller.allWishlistData?.data?[index]);
                   },
                 ),
         ));

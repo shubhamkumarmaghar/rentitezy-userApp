@@ -11,7 +11,6 @@ class AppUrls {
   static const imagesRootUrl =
       "https://api.rentiseazy.com/user/images/";
   static const imagesRentIsEasyUrl = "${baseUrl}images/";
-
   // static const rootUrl = "http://192.168.1.233:8136/prisma/rentitezy/";
   // static const imagesRootUrl =
   //     "http://192.168.1.233:8136/prisma/rentitezy/images/";
@@ -19,7 +18,6 @@ class AppUrls {
   // static const rootUrl = "http://192.168.1.204:8136/prisma/rentitezy/";
   // static const imagesRootUrl =
   //     "http://192.168.1.204:8136/prisma/rentitezy/images/";
-
   static const user = baseUrl;
   static const userRegister = "${baseUrl}signUp";
   static const getUser = baseUrl;
@@ -38,9 +36,10 @@ class AppUrls {
       "${baseUrl}userTenant"; //query userTenant?userId=19
   static const tenant = "${baseUrl}tenant";
   static const ticket = "${baseUrl}ticket";
+  static const getTicket = "${baseUrl}tickets";
 
   // static const rentReq = "${rentIsEasyUrl}rent_req";
-  static const rentReq = "${baseUrl}invoices";
+  static const invoice = "${baseUrl}invoices";
   static const review = "${baseUrl}review";
   static const otp = "${baseUrl}user_otp";
   static const resetPass = "${baseUrl}user_reset_password";
@@ -48,7 +47,7 @@ class AppUrls {
   static const orderIdRzy = "https://api.razorpay.com/v1/orders";
   static const checkout = '${baseUrl}checkout';
   static const loginWeb = '${baseUrl}login';
-  static const rentPay = '${baseUrl}user/payment';
+  static const invoicePay = '${baseUrl}payment';
   static const addFav = '${baseUrl}wishlist';
 
   static const urlImgUpload = "${rootUrl}fileUpload";

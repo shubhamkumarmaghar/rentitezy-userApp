@@ -275,7 +275,7 @@ class RIEUserApiService extends GetxController {
     log(error.toString());
     RIEWidgets.getToast(
         message: error['message'] ?? 'failure', color: Color(0xffFF0000));
-    return {'message': 'failure '+ error['msg']};
+    return {'message': 'failure '+ error['message']};
   }
 
   Future<dynamic> getApiCallWithQueryParamsWithHeaders({

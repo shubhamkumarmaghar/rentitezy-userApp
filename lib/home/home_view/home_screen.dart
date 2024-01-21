@@ -28,7 +28,7 @@ import 'package:rentitezy/widgets/recommend_items.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../fav/my_fav_screen.dart';
 import '../../my_bookings/my_booking_controller.dart';
-import '../../my_bookings/my_booking_screen.dart';
+import '../../my_bookings/view/my_booking_screen.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';
@@ -60,7 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
   var commentController = TextEditingController();
   TenantModel? tenantDet;
   final homeApiController = Get.put(HomeController());
-  final bookingController = Get.put(MyBookingController());
+//  final bookingController = Get.put(MyBookingController());
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     userName =  GetStorage().read(Constants.usernamekey);
     userId = GetStorage().read(Constants.userId)??"guest";
     checkNavPos();
-    bookingController.onInit();
+   // bookingController.onInit();
     futureTicketReq = fetchTicketReqApi();
     super.initState();
   }
@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-
+/*
   void ticketRequest(String ticketTxt) async {
     if (bookingController.myBookingData.isNotEmpty) {
       var item = bookingController.myBookingData.first;
@@ -250,7 +250,7 @@ class _MyHomePageState extends State<MyHomePage> {
       showSnackBar(context, 'Property not found');
     }
   }
-
+*/
   List<String> ticketList = [
     'Plumbing',
     'Electrical',
@@ -373,7 +373,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               ),
                             ),
                             height(0.05),
-                            GestureDetector(
+                          /*  GestureDetector(
                               onTap: () {
                                 if (selectedTicket == 'Others') {
                                   if (othersController.text.isEmpty) {
@@ -423,7 +423,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                 ),
                               ),
-                            ),
+                            ),*/
                             height(0.05),
                           ],
                         ))),
@@ -636,7 +636,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
           ),
-          Positioned(
+      /*    Positioned(
             bottom: 70,
             right: 0,
             child: Visibility(
@@ -673,7 +673,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-          )
+          )*/
         ],
       );
     }
@@ -689,11 +689,12 @@ class _MyHomePageState extends State<MyHomePage> {
   //drawer
   Widget drawer() {
     return Drawer(
-      width: 240,
+      width: Get.width*0.6,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topRight: Radius.circular(100), bottomRight: Radius.circular(100)),
+            topRight: Radius.circular(10),
+            bottomRight: Radius.circular(10)),
       ),
       child: ListView(
         padding: const EdgeInsets.all(0),
@@ -702,7 +703,7 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: BoxDecoration(
                   color: Constants.primaryColor,
                   borderRadius: const BorderRadius.only(
-                      topRight: Radius.circular(100),
+                      topRight: Radius.circular(10),
                       bottomLeft: Radius.circular(25),
                       bottomRight: Radius.circular(25))),
               child: Column(
@@ -1014,7 +1015,9 @@ class _MyHomePageState extends State<MyHomePage> {
           } else if (items.id == 5) {
             //Get.to( const RentRemainScreen());
             if (isTenant) {
-               Get.to( const RentRemainScreen());
+               Get.to(
+                   const RentRemainScreen()
+               );
 
             } else {
               selectNavPos = 3;

@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/view/main_view_controller.dart';
 
 import '../utils/const/app_urls.dart';
 import '../utils/const/widgets.dart';
@@ -43,8 +42,6 @@ Widget appBarWidget(String title, String image, Function() function) {
     ],
   );
 }
-
-final mainController = Get.put(MainViewController());
 
 // Widget appBarMainWidget(String title, String image, Function() function) {
 //   return Row(

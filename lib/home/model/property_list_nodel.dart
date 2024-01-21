@@ -9,7 +9,7 @@ class PropertyListModel {
     if (json['data'] != null) {
       data = <PropertySingleData>[];
       json['data'].forEach((v) {
-        data!.add(PropertySingleData.fromJson(v));
+        data!.add(new PropertySingleData.fromJson(v));
       });
     }
     success = json['success'];
@@ -33,6 +33,7 @@ class PropertySingleData {
   String? title;
   String? listingType;
   int? price;
+  int? dailyPrice;
   int? area;
   String? furnishType;
   Property? property;
@@ -48,6 +49,7 @@ class PropertySingleData {
         this.title,
         this.listingType,
         this.price,
+        this.dailyPrice,
         this.area,
         this.furnishType,
         this.property,
@@ -63,6 +65,7 @@ class PropertySingleData {
     title = json['title'];
     listingType = json['listingType'];
     price = json['price'];
+    dailyPrice = json['dailyPrice'];
     area = json['area'];
     furnishType = json['furnishType'];
     property = json['property'] != null
@@ -92,6 +95,7 @@ class PropertySingleData {
     data['title'] = this.title;
     data['listingType'] = this.listingType;
     data['price'] = this.price;
+    data['dailyPrice'] = this.dailyPrice;
     data['area'] = this.area;
     data['furnishType'] = this.furnishType;
     if (this.property != null) {
@@ -114,7 +118,7 @@ class PropertySingleData {
 
 class Property {
   String? name;
-  String? location;
+  Location? location;
   String? latlng;
   String? type;
   String? address;
@@ -132,7 +136,9 @@ class Property {
 
   Property.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    location = json['location'];
+    location = json['location'] != null
+        ? new Location.fromJson(json['location'])
+        : null;
     latlng = json['latlng'];
     type = json['type'];
     address = json['address'];
@@ -143,12 +149,36 @@ class Property {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
-    data['location'] = this.location;
+    if (this.location != null) {
+      data['location'] = this.location!.toJson();
+    }
     data['latlng'] = this.latlng;
     data['type'] = this.type;
     data['address'] = this.address;
     data['plots'] = this.plots;
     data['floor'] = this.floor;
+    return data;
+  }
+}
+
+class Location {
+  int? id;
+  String? name;
+  int? active;
+
+  Location({this.id, this.name, this.active});
+
+  Location.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    active = json['active'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    data['active'] = this.active;
     return data;
   }
 }

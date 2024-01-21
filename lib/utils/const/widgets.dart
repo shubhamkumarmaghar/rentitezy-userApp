@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import '../../theme/custom_theme.dart';
 import 'appConfig.dart';
 import 'app_urls.dart';
@@ -125,4 +128,23 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
           width: w,
         );
       });
+}
+
+String dateConvert(String date){
+  String dateTime;
+  try{
+    if(date.isNotEmpty) {
+      DateTime datee = DateTime.parse(date);
+      dateTime = DateFormat('dd-MM-yyyy').format(datee);
+    }
+    else{
+      dateTime='NA';
+    }
+  }
+  catch (e)
+  {
+    log('error exception ::$e');
+    dateTime='NA';
+  }
+  return dateTime;
 }

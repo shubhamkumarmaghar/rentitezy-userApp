@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:rentitezy/my_bookings/appbar_widget.dart';
 import 'package:rentitezy/my_bookings/booking_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 
 import '../../theme/custom_theme.dart';
+import '../../ticket/view/get_all_ticket.dart';
+import '../../ticket/view/view_ticket_details.dart';
+import '../my_booking_controller.dart';
+import 'invoice_screen.dart';
 
 class BookingDetailsPage extends StatelessWidget {
   final MyBookingModelData bookingModelData;
-
-  const BookingDetailsPage({super.key, required this.bookingModelData});
+  MyBookingController myBookingController = Get.find();
+   BookingDetailsPage({super.key, required this.bookingModelData});
 
   @override
   Widget build(BuildContext context) {
@@ -18,15 +24,6 @@ class BookingDetailsPage extends StatelessWidget {
           context,
           false,
           (() {})),
-      floatingActionButton:ElevatedButton(
-        child: Text('Invoice'),
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(CustomTheme.appTheme),
-
-        ),
-        onPressed: (){}) ,
-
-
       body: Container(
         width: getScreenWidth,
         height: getScreenHeight,
@@ -73,6 +70,31 @@ class BookingDetailsPage extends StatelessWidget {
               height: getScreenHeight*0.01,
             ),
             getPropBookingView(context: context),
+            SizedBox(
+              height: getScreenHeight*0.02,
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(CustomTheme.appTheme),
+
+                ),
+                onPressed: () async {
+                 await  myBookingController.fetchBookingInvoices(bookingID: bookingModelData.id.toString());
+                 Get.to(InvoiceScreen());
+                },
+                child: const Text('Invoice(s)')),
+              ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(CustomTheme.appTheme),
+
+                  ),
+                  onPressed: (){
+                    Get.to(const GetAllTickets());
+                  },
+                  child: const Text('Create Ticket')),
+            ],)
           ],
         ),
       ),
@@ -144,8 +166,6 @@ class BookingDetailsPage extends StatelessWidget {
 
   Widget getPropPaymentView({required BuildContext context}) {
     return Container(
-
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,

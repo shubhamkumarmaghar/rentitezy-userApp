@@ -23,7 +23,13 @@ class SinglePropertyDetailsController extends GetxController{
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
-  RxBool singlePage = false.obs;
+  RxBool singlePage = true.obs;
+  List<bool> list = [true, false];
+  void setChip({required int selectedIndex}) {
+    list = list.map((e) => false).toList();
+    list[selectedIndex] = true;
+    //update();
+  }
   RxString proFetch = 'Data Fetching...Please wait'.obs;
   List<String> guestList = ['1', '2', '3', '4', '5'];
   List<String> monthList = [
@@ -39,8 +45,17 @@ class SinglePropertyDetailsController extends GetxController{
     '10',
     '11'
   ];
+  List<String> getDailyList(){
+    List<String> monthList =[];
+    for(int i =1 ;i<32 ; i++)
+      {
+        monthList.add('$i');
+      }
+    return monthList;
+  }
   var dropdownValueGuest;
   var dropdownValueMonth = '11';
+  var dropdownValueDaily = '1';
   var selectFlat;
   CheckoutModel? checkoutModel;
 
@@ -66,16 +81,17 @@ class SinglePropertyDetailsController extends GetxController{
     await getSinglePropertyDetails();
   }
     Future<void> getSinglePropertyDetails() async {
-    String url = '${AppUrls.listingDetail}?id=5';
+    String url = '${AppUrls.listingDetail}?id=$id';
     singlePage.value = true;
     final response = await homeController.apiService.getApiCallWithURL(endPoint: url);
-    bool success = response["success"];
-    if(success){
+    String success = response["message"];
+    if(success == 'success'){
       singleProPerty = SinglePropertyDetails.fromJson(response);
       update();
     }
     else{
       proFetch.value = 'Currently unavailable';
+      update();
 
     }
     singlePage.value = false;
@@ -84,19 +100,25 @@ class SinglePropertyDetailsController extends GetxController{
 
   void submitReqBooking(String from) async {
     cfrom = from;
+    String duration = '';
    singlePage.value = true;
     final f = DateFormat('yyyy-MM-dd');
+    if(list[0]==true){
+      duration = '${dropdownValueMonth}m';
+    }
+    else{
+      duration = '${dropdownValueDaily}d';
+    }
    String url =
-       "${AppUrls.checkout}?checkin=${f.format(currentDate)}&duration=$dropdownValueMonth&guest=$dropdownValueGuest&listingId=${singleProPerty?.data?.id}";
+       "${AppUrls.checkout}?checkin=${f.format(currentDate)}&duration=$duration&guest=$dropdownValueGuest&listingId=${singleProPerty?.data?.id}";
     final response = await homeController.apiService.getApiCallWithURL(endPoint: url);
 
    /* dynamic result = await getCheckOut(
         url, GetStorage().read(Constants.token).toString());*/
     debugPrint(response.toString());
-    bool success = response["success"];
-    if (success) {
+    String success = response["message"];
+    if (success == 'success') {
       checkoutModel = CheckoutModel.fromJson(response['data']);
-
       singlePage.value =false;
       await  Get.to(CheckOutPage(
         from: from,
@@ -133,7 +155,7 @@ class SinglePropertyDetailsController extends GetxController{
   }
 
 
-  void apiReq( String cartId) async {
+  void paymentRequest( String cartId) async {
     String url = AppUrls.checkout;
    // String a = 'intent://pay?pa=BasisPay1779@icici&pn=Rentiseazy&mc=&tr=ATC2933673&tn=PayTo:6546032&am=11000.00&mam=11000.00&cu=INR&/#Intent;scheme=upi;package=net.one97.paytm;end';
  // String uaa = a.replaceAll('intent', 'upi');
@@ -159,12 +181,13 @@ class SinglePropertyDetailsController extends GetxController{
       if (cfrom == 'Request') {
         leadsRequest();
       } else {
+        singlePage.value = false;
         Get.to(WebViewContainer(url: longurl));
      /*  Get.to(MyBookingsScreen(
           from: true,
         ));*/
       }
-       singlePage.value = false;
+       //singlePage.value = false;
     }
   }
 

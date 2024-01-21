@@ -147,7 +147,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                                 //  showCustomToast(context, 'Enter valid phone digit');
                                 } else {
                                   setState(() => loadingLeads = true);
-                                  singlePropertyDetailsController.apiReq('${singlePropertyDetailsController.checkoutModel?.cardId}');
+                                  singlePropertyDetailsController.paymentRequest('${singlePropertyDetailsController.checkoutModel?.cardId}');
                                 }
                               },
                               child: Container(
