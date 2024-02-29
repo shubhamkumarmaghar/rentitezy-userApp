@@ -63,7 +63,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   String listingDetailsId = 'guest';
   String? availFrom;
   DateTime availFromDate = DateTime.now();
-  final dbFavItem = DbHelper.instance;
+  //final dbFavItem = DbHelper.instance;
   SinglePropertyDetailsController singlePropertyDetailsController = Get.put(SinglePropertyDetailsController());
   PropertyModel? singleProPerty;
 
@@ -135,29 +135,30 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
         images: [],
         amenitiesList: [],
         createdOn: propertyModel.createdOn);
-    if (!await dbFavItem.isInFav(
+ /*   if (!await dbFavItem.isInFav(
         GetStorage().read(Constants.userId).toString(),
         propertyModel.id.toString())) {
       propertyModel.isFav = true;
-      await dbFavItem.insertFav(favModel);
+     // await dbFavItem.insertFav(favModel);
       showSnackBar(context, 'Successfully added to favorites');
     } else {
       propertyModel.isFav = false;
-      await dbFavItem.deleteFav(propertyModel.id, userId);
+    //  await dbFavItem.deleteFav(propertyModel.id, userId);
       showSnackBar(context, 'Successfully removed to favorites');
     }
     setState(() {});
+    */
   }
 
   fetchPropertyDetails(PropertyModel model) async {
     if (mounted) {
-      FavModel? favData = await dbFavItem.getFavItem(
-          model.id, GetStorage().read(Constants.userId).toString());
-      if (favData != null) {
+     /* FavModel? favData = await dbFavItem.getFavItem(
+          model.id, GetStorage().read(Constants.userId).toString());*/
+    /*  if (favData != null) {
         model.isFav = true;
       } else {
         model.isFav = false;
-      }
+      }*/
       if (model.availFrom != 'null') {
         availFrom = model.availFrom;
         availFromDate = DateTime.parse(model.availFrom);

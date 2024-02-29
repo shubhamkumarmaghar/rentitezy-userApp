@@ -76,11 +76,8 @@ class _ViewTicketDetailsState extends State<ViewTicketDetails> {
                       children: [
                         customText(text: 'Ticket Id :  ${data?.id}'),
                         customText(text: 'Status : ${data?.status.toString().capitalizeFirst}'),
-
                       ],
                     ),
-
-
                     SizedBox(height: 15,),
                     customText(text: 'Flat Name :  ${data?.unitId}'),
                     SizedBox(height: 15,),

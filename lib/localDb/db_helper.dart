@@ -1,11 +1,12 @@
+/*
 import 'dart:collection';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 
 import '../utils/const/app_urls.dart';
-import 'fav_model.dart';
+import 'fav_model.dart'; */
 
+/*
 class DbHelper {
   static const _databaseName = "favmodel_database.db";
   static const _databaseVersion = 1;
@@ -277,3 +278,4 @@ class DbHelper {
     );
   }
 }
+*/

@@ -52,7 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget navWidget = const SizedBox();
   String userId = 'guest';
   String userName = '';
-  final dbFavItem = DbHelper.instance;
+ // final dbFavItem = DbHelper.instance;
   bool isTenant = false;
   late Future<List<TicketModel>> futureTicketReq;
   String tenantId = '';
@@ -922,7 +922,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ? RIEWidgets.getLoader()
               : ListView.builder(
                   shrinkWrap: false,
-                  physics: const BouncingScrollPhysics(),
+                 // physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   itemCount: homeApiController.allPropertyData != null &&
                           homeApiController.allPropertyData?.data != null

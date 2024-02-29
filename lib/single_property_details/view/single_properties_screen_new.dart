@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -50,7 +51,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
   String? availFrom;
   String bookingType = 'm';
   DateTime availFromDate = DateTime.now();
-  final dbFavItem = DbHelper.instance;
+  //final dbFavItem = DbHelper.instance;
 
   //PropertyModel? singleProPerty;
 
@@ -111,11 +112,40 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
     );
   }
 
-  Widget containerBtn(String title) {
+  Widget siteVisitBtn(String title ) {
     return GestureDetector(
       onTap: () {
+        showBottomSiteVisit(title);
         // selectBookingTypeAlertDialog(context, 'Select Booking type',);
+      },
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: Constants.primaryColor,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        child: Center(
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontFamily: Constants.fontsFamily,
+                color: Colors.white,
+                fontSize: 14,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget bookNowBtn(String title ) {
+    return GestureDetector(
+      onTap: () {
         showBottomLeads(title);
+        // selectBookingTypeAlertDialog(context, 'Select Booking type',);
       },
       child: Container(
         height: 50,
@@ -630,6 +660,223 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
         });
   }
 
+  void showBottomSiteVisit(String from) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+        ),
+        builder: (context) {
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: StatefulBuilder(
+                builder: (BuildContext context, setState) =>
+                    SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12),
+                              child: Text(
+                                'Site Visit',
+                                style: TextStyle(
+                                    fontFamily: Constants.fontsFamily,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20),
+                              ),
+                            ),
+                            Center(
+                                child: Container(
+                                  height: 1,
+                                  width: 40,
+                                  color: Colors.black,
+                                )),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                FilterChip(
+                                    label: Text('Online'),
+                                    selectedColor: Colors.red.shade900,
+                                    backgroundColor: Colors.grey,
+                                    labelStyle: TextStyle(color: Colors.white),
+                                    selected: singlePropertyDetailsController.sitiVisitTypeList[0],
+                                    onSelected: (value) {
+                                      singlePropertyDetailsController.setSourceChip(
+                                          selectedIndex: 0);
+                                      log('${value}');
+                                      //  _peopleListController.showList = _peopleListController.maleList;
+                                      // navigator?.pop();
+                                      setState(() {});
+                                    }),
+                                FilterChip(
+                                    label: Text('Offline'),
+                                    selectedColor: Colors.red.shade900,
+                                    backgroundColor: Colors.grey,
+                                    labelStyle: TextStyle(color: Colors.white),
+                                    selected:
+                                    singlePropertyDetailsController.sitiVisitTypeList[1],
+                                    onSelected: (value) {
+                                      singlePropertyDetailsController.setSourceChip(
+                                          selectedIndex: 1);
+                                      log('${value}');
+                                      //  _peopleListController.showList = _peopleListController.maleList;
+                                      // navigator?.pop();
+                                      setState(() {});
+                                    }),
+                              ],
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              child: TextField(
+                                keyboardType: TextInputType.phone,
+                                controller: singlePropertyDetailsController.phoneController,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: "Phone",
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            title('Select Date', 15),
+                            Container(
+                              height: 55,
+                              decoration: BoxDecoration(
+                                borderRadius:
+                                const BorderRadius.all(Radius.circular(7)),
+                                color: Constants.lightBg,
+                              ),
+                              margin: contEdge,
+                              padding: const EdgeInsets.all(5),
+                              child: InkWell(
+                                onTap: () async {
+                                  if (availFrom != null) {
+                                    DateTime newDate = availFromDate
+                                        .add(const Duration(days: 7));
+                                    await showDatePicker(
+                                      context: context,
+                                      initialDate:
+                                      singlePropertyDetailsController
+                                          .currentDate,
+                                      firstDate: availFromDate,
+                                      lastDate: newDate,
+                                    ).then((pickedDate) {
+                                      if (pickedDate != null &&
+                                          pickedDate !=
+                                              singlePropertyDetailsController
+                                                  .currentDate) {
+                                        setState(() =>
+                                        singlePropertyDetailsController
+                                            .currentDate = pickedDate);
+                                      }
+                                    });
+                                  } else {
+                                    await showDatePicker(
+                                      context: context,
+                                      initialDate:
+                                      SinglePropertyDetailsController()
+                                          .currentDate,
+                                      firstDate: DateTime.now()
+                                          .subtract(const Duration(days: 0)),
+                                      lastDate: DateTime(2100),
+                                    ).then((pickedDate) {
+                                      if (pickedDate != null &&
+                                          pickedDate !=
+                                              singlePropertyDetailsController
+                                                  .currentDate) {
+                                        setState(() =>
+                                        singlePropertyDetailsController
+                                            .currentDate = pickedDate);
+                                      }
+                                    });
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: getCustomText(
+                                          DateFormat.yMMMd().format(
+                                              singlePropertyDetailsController
+                                                  .currentDate),
+                                          Constants.primaryColor,
+                                          1,
+                                          TextAlign.start,
+                                          FontWeight.w400,
+                                          15),
+                                    ),
+                                    Icon(
+                                      Icons.calendar_today_outlined,
+                                      color: Constants.textColor,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            height(0.05),
+                            GestureDetector(
+                              onTap: () async {
+                                if(singlePropertyDetailsController.phoneController.text.isNotEmpty) {
+                                  singlePropertyDetailsController
+                                      .submitSiteVisit(from);
+                                }
+                                else{
+                                  RIEWidgets.getToast(message: 'Phone number can not be empty', color: Colors.white);
+                                }
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width * 0.70,
+                                height: 50,
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Constants.primaryColor,
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                                child: loadingLeads
+                                    ? const Center(
+                                  child: SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 3,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                )
+                                    : Center(
+                                  child: Text(
+                                    'Submit',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: Constants.fontsFamily,
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            height(0.05),
+                          ],
+                        ))),
+          );
+        });
+  }
+
   void submitReqBooking(String from) async {
     setState(() => loadingLeads = true);
     final f = DateFormat('yyyy-MM-dd');
@@ -698,46 +945,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
     );
   }
 
-  Future<void> selectBookingTypeAlertDialog(
-    BuildContext context,
-    String title,
-  ) {
-    return showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(title,
-              style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-              )),
-          actions: [
-            CupertinoDialogAction(
-                child: Text("Daily Booking",
-                    style: TextStyle(
-                      fontFamily: Constants.fontsFamily,
-                    )),
-                onPressed: () async {
-                  bookingType = 'd';
-                  Navigator.of(context).pop();
-                  showBottomLeads(title);
-                  // singlePropertyDetailsController.submitReqBooking(from);
-                }),
-            CupertinoDialogAction(
-              child: Text("Monthly Booking",
-                  style: TextStyle(
-                    fontFamily: Constants.fontsFamily,
-                  )),
-              onPressed: () {
-                bookingType = 'm';
-                Navigator.of(context).pop();
-                showBottomLeads(title);
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
 
   void issuesRequest({required String id}) async {
     try {
@@ -1334,7 +1541,10 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               children: [
                                 //Expanded(flex: 1, child: containerBtn('Request')),
                                 Expanded(
-                                    flex: 1, child: containerBtn('Book Now')),
+                                    flex: 1, child: bookNowBtn('Book Now') ),
+
+                              Expanded(
+                                  flex: 1, child: siteVisitBtn('Site Visit') ),
                               ],
                             ),
                           ),

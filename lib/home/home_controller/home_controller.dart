@@ -63,6 +63,8 @@ class HomeController extends GetxController {
         if (success) {
 
           allPropertyData = PropertyListModel.fromJson(response);
+          isLoading(false);
+          update();
              /* (response["data"] as List)
               .map((stock) => PropertyModel.fromJson(stock))
               .toList();*/
