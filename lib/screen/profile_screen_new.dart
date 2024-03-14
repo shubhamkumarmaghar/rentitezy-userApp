@@ -14,7 +14,7 @@ import 'package:rentitezy/web_view/webview.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../my_bookings/my_booking_controller.dart';
+import '../my_bookings/controller/my_booking_controller.dart';
 import '../utils/const/app_urls.dart';
 import '../utils/const/widgets.dart';
 import 'faq_screen.dart';

@@ -89,7 +89,7 @@ class Constants {
   static const emailkey = "emailkey";
   static const phonekey = "phonekey";
   static const isTenant = "isTenant";
-  static const currency = 'Rs';
+  static const currency = '₹';
   static const latitude = "latitude";
   static const longitude = "longitude";
 

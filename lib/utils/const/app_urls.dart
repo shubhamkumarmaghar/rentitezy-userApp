@@ -54,6 +54,7 @@ class AppUrls {
   static const urlImgUpload = "${rootUrl}fileUpload";
 
   static const myBooking = '${baseUrl}bookings';
+  static const getSingleBooking = '${baseUrl}booking';
   static const listingDetail = '${baseUrl}listingDetail';
   static const listing = '${baseUrl}listing';
   static const locations = '${baseUrl}locations';

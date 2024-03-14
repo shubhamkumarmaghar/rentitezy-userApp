@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
 import 'screen/splash_screen.dart';
 
@@ -28,8 +30,18 @@ class MyApp extends StatelessWidget {
       builder: (context,child){
         return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 0.9), child: child ?? const Text(''));
       },
-      theme: ThemeData( useMaterial3: false,
-        primarySwatch: Colors.blue,
+      theme: ThemeData(
+        useMaterial3: false,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+     // colorScheme: ColorScheme.fromSwatch(primarySwatch:Colors.blue ),
+        textTheme: GoogleFonts.aBeeZeeTextTheme(),
+        scaffoldBackgroundColor: Colors.white,
+        bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: CustomTheme.white),
+
+
+
+        //primarySwatch: Colors.blue,
+        appBarTheme: AppBarTheme( backgroundColor: CustomTheme.blue, ),
       ),
       //home: const ForgotScreen(),
       home: const SplashScreenPage(),

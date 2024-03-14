@@ -83,10 +83,6 @@ class SinglePropertyDetailsController extends GetxController {
   var selectFlat;
   CheckoutModel? checkoutModel;
 
-  String userId = GetStorage().read(Constants.userId) ?? "Guest";
-  String tenantId = GetStorage().read(Constants.tenantId) ?? 'guest';
-
-
   DateTime currentDate = DateTime.now();
   HomeController homeController = Get.find();
   SinglePropertyDetails? singleProPerty;
@@ -274,7 +270,7 @@ class SinglePropertyDetailsController extends GetxController {
         leadsRequest();
       } else {
         singlePage.value = false;
-        Get.to(WebViewContainer(url: longurl));
+        Get.offAll(WebViewContainer(url: longurl));
         /*  Get.to(MyBookingsScreen(
           from: true,
         ));*/

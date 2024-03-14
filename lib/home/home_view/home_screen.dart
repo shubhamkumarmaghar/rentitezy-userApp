@@ -27,8 +27,8 @@ import 'package:rentitezy/widgets/near_by_items.dart';
 import 'package:rentitezy/widgets/recommend_items.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../fav/my_fav_screen.dart';
-import '../../my_bookings/my_booking_controller.dart';
-import '../../my_bookings/view/my_booking_screen.dart';
+import '../../my_bookings/controller/my_booking_controller.dart';
+import '../../my_bookings/view/my_booking_screen_list.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';
@@ -81,35 +81,35 @@ class _MyHomePageState extends State<MyHomePage> {
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: homeApiController.categories.length,
-            itemBuilder: (ctx, i) {
+            itemBuilder: (ctx, index) {
               return GestureDetector(
                   onTap: () {
-                    homeApiController.selectedIndex.value = i;
+                    homeApiController.selectedIndex.value = index;
                     homeApiController
-                        .locationFunc(homeApiController.categories[i]);
+                        .locationFunc(homeApiController.categories[index]);
                   },
                   child: Obx(
                     () => AnimatedContainer(
-                        margin: EdgeInsets.fromLTRB(i == 0 ? 15 : 5, 0, 5, 0),
+                        margin: EdgeInsets.fromLTRB(index == 0 ? 15 : 5, 0, 5, 0),
                         width: 100,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(
-                              i == homeApiController.selectedIndex.value
+                              index == homeApiController.selectedIndex.value
                                   ? 18
                                   : 15)),
-                          color: i == homeApiController.selectedIndex.value
+                          color: index == homeApiController.selectedIndex.value
                               ? Constants.primaryColor
                               : Colors.grey[200],
                         ),
                         duration: const Duration(milliseconds: 300),
                         child: Center(
                           child: Text(
-                            homeApiController.categories[i],
+                            homeApiController.categories[index],
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 13.0,
                               fontWeight: FontWeight.w500,
-                              color: i == homeApiController.selectedIndex.value
+                              color: index == homeApiController.selectedIndex.value
                                   ? Colors.white
                                   : Colors.black,
                             ),
@@ -119,11 +119,6 @@ class _MyHomePageState extends State<MyHomePage> {
             }));
   }
 
-  Widget nearProperties(PropertySingleData? property) {
-    return NearByItem(
-      propertyModel: property,
-    );
-  }
 
   void goToProfile() {
     Navigator.push(context,
@@ -445,9 +440,11 @@ class _MyHomePageState extends State<MyHomePage> {
     if (selectNavPos == 3) {
       navWidget = ListView(
         shrinkWrap: true,
+
         padding:
             const EdgeInsets.only(top: 50, left: 10, right: 10, bottom: 75),
         children: [
+
           /*  GetStorage().read(Constants.userId).toString() != 'guest'
               ? FutureBuilder<dynamic>(
                   future: fetchTenantUserApi(
@@ -489,9 +486,9 @@ class _MyHomePageState extends State<MyHomePage> {
           SizedBox(height: 45, width: screenWidth, child: buildTabBar()),
           height(0.015),
           title("Near by Properties", 18),
-          height(0.015),
+          height(0.01),
           buildOnGoingList(),
-          height(0.015),
+          height(0.01),
           title("Recommended", 18),
           Obx(
             () => homeApiController.isLoading.value
@@ -505,8 +502,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         itemCount:
                             homeApiController.allPropertyData?.data?.length,
                         itemBuilder: (context, index) {
-                          return recommendWidget(
-                              homeApiController.allPropertyData?.data![0]);
+                          return
+                            RecommendItem(
+                              propertyModel:  homeApiController.allPropertyData?.data![0],
+                            );
+
                         },
                       ),
                       Container(
@@ -774,7 +774,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   fontFamily: Constants.fontsFamily,
                 )),
             onTap: () {
-              Get.to(MyBookingsScreen(
+              Get.to(() =>MyBookingsScreenList(
                 from: false,
               ));
             },
@@ -915,34 +915,34 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildOnGoingList() {
-    return SizedBox(
-        height: screenHeight * 0.30,
-        child: Obx(
-          () => homeApiController.isLoadingLocation.value
-              ? RIEWidgets.getLoader()
-              : ListView.builder(
-                  shrinkWrap: false,
-                 // physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemCount: homeApiController.allPropertyData != null &&
-                          homeApiController.allPropertyData?.data != null
-                      ? homeApiController.allPropertyData!.data!.length > 5
-                          ? 3
-                          : homeApiController.allPropertyData?.data?.length
-                      : 0,
-                  itemBuilder: (context, index) {
-                    return nearProperties(
-                        homeApiController.allPropertyData?.data![index]);
-                  },
-                ),
-        ));
-  }
+    return FittedBox(
+      child: Container(
+          height: Get.height * 0.35,
+          width: Get.width,
+          child: Obx(
+            () => homeApiController.isLoading.value
+                ? RIEWidgets.getLoader()
+                : ListView.builder(
+                    shrinkWrap: false,
+                   // physics: const BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: homeApiController.allPropertyData != null &&
+                            homeApiController.allPropertyData?.data != null
+                        ? homeApiController.allPropertyData!.data!.length > 5
+                            ? 3
+                            : homeApiController.allPropertyData?.data?.length
+                        : 0,
+                    itemBuilder: (context, index) {
+                      return NearByItem(
+                        propertyModel: homeApiController.allPropertyData?.data![index],
+                      );
 
-  Widget recommendWidget(PropertySingleData? property) {
-    return RecommendItem(
-      propertyModel: property,
+                    },
+                  ),
+          )),
     );
   }
+
 
   int selectNavPos = 3;
   List<NavItems> languages = [

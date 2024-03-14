@@ -200,6 +200,8 @@ class MyBookingModelData {
   int? amountPaid;
   String? status;
   PropUnit? propUnit;
+  String? from;
+  String? till;
   List<Invoices>? invoices;
 
   MyBookingModelData(
@@ -216,6 +218,8 @@ class MyBookingModelData {
         this.amountPaid,
         this.status,
         this.propUnit,
+        this.from,
+        this.till,
         this.invoices});
 
   MyBookingModelData.fromJson(Map<String, dynamic> json) {
@@ -231,6 +235,8 @@ class MyBookingModelData {
     onboarding = json['onboarding'];
     amountPaid = json['amountPaid'];
     status = json['status'];
+    from = json['from'];
+    till = json['till'];
     propUnit = json['propUnit'] != null
         ? new PropUnit.fromJson(json['propUnit'])
         : null;
@@ -256,6 +262,8 @@ class MyBookingModelData {
     data['onboarding'] = this.onboarding;
     data['amountPaid'] = this.amountPaid;
     data['status'] = this.status;
+    data['from'] = this.from;
+    data['till'] = this.till;
     if (this.propUnit != null) {
       data['propUnit'] = this.propUnit!.toJson();
     }

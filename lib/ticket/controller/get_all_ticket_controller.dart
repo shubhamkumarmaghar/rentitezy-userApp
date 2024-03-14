@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:get/state_manager.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -13,6 +14,7 @@ import '../model/ticket_config_model.dart';
 
 class AllTicketController extends GetxController{
   TextEditingController ticketDescription = TextEditingController();
+  String? bookingId;
   bool isLoading = false;
   String? selectFlat = 'Select Flat';
   final RIEUserApiService _apiService = RIEUserApiService();
@@ -32,6 +34,7 @@ class AllTicketController extends GetxController{
   @override
   void onInit() {
     super.onInit();
+    bookingId = Get.arguments ??'';
     getData();
     //fetchTicketListDetails();
   }
@@ -103,15 +106,14 @@ class AllTicketController extends GetxController{
 
   Future<int> createTicket({
     //location="+location+"&prop_type="+prop_type+"&added_on="+added_on+"&assign_to="+assign_to+"&contact_details="+contact_details+"&lead_status=Active"+"&origin="+area;
-    required String flatId,
+    required String bookingId,
     required String ticketCate,
     required String ticketDesc,
     required String ticketStat,
   }) async {
     String url = AppUrls.ticket;
     final response = await _apiService.postApiCall(endPoint: url, bodyParams: {
-      "unitId": flatId,
-      "tenantId":GetStorage().read(Constants.userId),
+      "bookingId":bookingId,
       "category": ticketCate,
       "description": ticketDesc,
       "status": ticketStat,

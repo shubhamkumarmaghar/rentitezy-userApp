@@ -38,8 +38,7 @@ class PropertiesDetailsPageNew extends StatefulWidget {
 }
 
 class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
-  SinglePropertyDetailsController singlePropertyDetailsController =
-      Get.put(SinglePropertyDetailsController(), permanent: false);
+  SinglePropertyDetailsController singlePropertyDetailsController = Get.put(SinglePropertyDetailsController());
   final Completer<GoogleMapController> _controller = Completer();
   TextEditingController askQController = TextEditingController();
   TextEditingController reviewController = TextEditingController();
@@ -47,7 +46,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
   TextEditingController zipcodeController = TextEditingController();
 
   Set<Marker> markers = {};
-  String listingDetailsId = 'guest';
   String? availFrom;
   String bookingType = 'm';
   DateTime availFromDate = DateTime.now();
@@ -331,7 +329,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               children: [
                                 FilterChip(
                                     label: Text('Monthly Booking'),
-                                    selectedColor: Colors.red.shade900,
+                                    selectedColor: CustomTheme.peach,
                                     backgroundColor: Colors.grey,
                                     labelStyle: TextStyle(color: Colors.white),
                                     selected:
@@ -346,7 +344,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                     }),
                                 FilterChip(
                                     label: Text('Daily Booking'),
-                                    selectedColor: Colors.red.shade900,
+                                    selectedColor: CustomTheme.peach,
                                     backgroundColor: Colors.grey,
                                     labelStyle: TextStyle(color: Colors.white),
                                     selected:
@@ -363,7 +361,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                             ),
                             Container(
                               padding: const EdgeInsets.all(3),
-                              margin: contEdge,
+                              margin: EdgeInsets.all(20),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(7),
                                 color: Constants.lightBg,
@@ -374,6 +372,8 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               child: DropdownButton(
                                 underline: const SizedBox(),
                                 isExpanded: true,
+                                padding:
+                                EdgeInsets.only(left: 10),
                                 hint: Text(
                                   'Select Guest',
                                   style: TextStyle(
@@ -422,6 +422,8 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                     ),
                                     child: DropdownButton(
                                       underline: const SizedBox(),
+                                      padding:
+                                      EdgeInsets.only(left: 10),
                                       isExpanded: true,
                                       hint: Text(
                                         'Select Days',
@@ -467,6 +469,8 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                     ),
                                     child: DropdownButton(
                                       underline: const SizedBox(),
+                                      padding:
+                                      EdgeInsets.only(left: 10),
                                       isExpanded: true,
                                       hint: Text(
                                         'Select Months',
@@ -581,15 +585,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                             height(0.05),
                             GestureDetector(
                               onTap: () async {
-                                if (singlePropertyDetailsController.userId ==
-                                        'null' ||
-                                    singlePropertyDetailsController.userId ==
-                                        'guest') {
-                                  RIEWidgets.getToast(
-                                      message:
-                                          'You are not ${AppUrls.appName} user. Please Login/Register',
-                                      color: CustomTheme.white);
-                                } else if (singlePropertyDetailsController
+                               if (singlePropertyDetailsController
                                             .dropdownValueGuest ==
                                         null ||
                                     singlePropertyDetailsController
@@ -700,7 +696,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               children: [
                                 FilterChip(
                                     label: Text('Online'),
-                                    selectedColor: Colors.red.shade900,
+                                    selectedColor: CustomTheme.peach,
                                     backgroundColor: Colors.grey,
                                     labelStyle: TextStyle(color: Colors.white),
                                     selected: singlePropertyDetailsController.sitiVisitTypeList[0],
@@ -714,7 +710,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                     }),
                                 FilterChip(
                                     label: Text('Offline'),
-                                    selectedColor: Colors.red.shade900,
+                                    selectedColor: CustomTheme.peach,
                                     backgroundColor: Colors.grey,
                                     labelStyle: TextStyle(color: Colors.white),
                                     selected:
@@ -1052,7 +1048,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               scrollDirection: Axis.vertical,
                               child: Container(
                                 padding:
-                                    const EdgeInsets.only(left: 10, top: 20),
+                                    const EdgeInsets.only(left: 10, top: 20,right: 10),
                                 decoration: BoxDecoration(
                                 /*  borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(20),
@@ -1068,6 +1064,31 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [Column(children: [
+                                          Text('Long Term Rent',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
+                                          Text('${Constants.currency} ${data?.price}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: CustomTheme.peach),)
+                                        ],),
+                                          Column(children: [
+                                            Text('Deposit',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
+                                            Text('${Constants.currency} ${data?.deposit}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: CustomTheme.peach),)
+                                          ],)
+                                        ],
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [Column(children: [
+                                          Text('Short Term Rent',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
+                                          Text('${Constants.currency} ${data?.stPrice}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: CustomTheme.peach),)
+                                        ],),
+                                          SizedBox(height: Get.height*.08,),
+                                          Column(children: [
+                                            Text('Deposit',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
+                                            Text('${Constants.currency} ${data?.stDeposit}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: CustomTheme.peach),)
+                                          ],)
+                                        ],
+                                      ),
+                                   /*   Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         crossAxisAlignment:
@@ -1101,8 +1122,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                                           style: TextStyle(
                                                               fontFamily: Constants
                                                                   .fontsFamily,
-                                                              color: Constants
-                                                                  .black,
+                                                              color: CustomTheme.peach,
                                                               fontSize: 20,
                                                               fontWeight:
                                                                   FontWeight
@@ -1137,6 +1157,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                             crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                             children: [
+
                                               RichText(
                                                 text: TextSpan(
                                                   children: [
@@ -1206,7 +1227,8 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                             ),
                                           ),
                                         ],
-                                      ),
+                                      ),*/
+
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 15, right: 10),
