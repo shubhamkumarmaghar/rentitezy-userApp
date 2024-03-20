@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/my_bookings/booking_model.dart';
+import 'package:rentitezy/my_bookings/model/booking_model.dart';
 import 'package:rentitezy/my_bookings/view/booking_details_screen.dart';
 
 import 'package:rentitezy/utils/const/appConfig.dart';
@@ -8,10 +8,10 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import '../../../utils/const/widgets.dart';
 import '../../screen/rent_remain_screen.dart';
 import '../appbar_widget.dart';
-import '../my_booking_controller.dart';
+import '../controller/my_booking_controller.dart';
 
-class MyBookingsScreen extends StatelessWidget {
-  MyBookingsScreen({super.key, required this.from});
+class MyBookingsScreenList extends StatelessWidget {
+  MyBookingsScreenList({super.key, required this.from});
   final bool from;
   final MyBookingController bookingController = Get.put(MyBookingController());
   @override
@@ -76,8 +76,9 @@ class MyBookingsScreen extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var item = bookingController.myBookingData[index];
                     return GestureDetector(
-                      onTap: (){
-                        Get.to(BookingDetailsPage(bookingModelData: item));
+                      onTap: ()async{
+                        await bookingController.getSingleBookingDetails(bookingId: '${item.id}');
+                        Get.to(BookingDetailsPage());
                       },
                       child: Card(
                         elevation: 2,
@@ -92,9 +93,9 @@ class MyBookingsScreen extends StatelessWidget {
                               children: [
                                 rowTxt('Booking id', item.id.toString()),
                                 rowTxt(
-                                    'Movie In date', '${item.moveIn?.split('T')[0]}'),
+                                    'From', '${item.from?.split('T')[0]}'),
                                 rowTxt(
-                                    'Move out date', '${item.moveOut?.split('T')[0]}'),
+                                    'Till', '${item.till?.split('T')[0]}'),
                                 Visibility(
                                   visible: item.propUnit?.listing?.property != null,
                                   child: rowTxt(

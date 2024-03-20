@@ -110,6 +110,7 @@ Future<dynamic> fetchTenantUserApi(String url) async {
   }
 }
 
+/*
 Future<List<PropertyModel>> nearPropertyGet(
     String url, DbHelper favDb, Future<SharedPreferences> prefs) async {
   final SharedPreferences sharedPreferences = await prefs;
@@ -143,6 +144,7 @@ Future<List<PropertyModel>> nearPropertyGet(
   }
 }
 
+*/
 Future<List<PropertyModel>> fetchAllProductsById(List<int> ids) async {
   final response = await http.post(Uri.parse(AppUrls.fetchAllFavByIds),
       headers: <String, String>{

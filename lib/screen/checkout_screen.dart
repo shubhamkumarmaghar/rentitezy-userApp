@@ -225,6 +225,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
   }
 
   @override
+  void initState() {
+
+
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -395,15 +401,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             height(0.05),
                             InkWell(
                               onTap: () async {
-                                singlePropertyDetailsController.nameController = TextEditingController(
-                                    text: GetStorage().read(Constants.usernamekey)
-                                        .toString());
-                                singlePropertyDetailsController.phoneController = TextEditingController(
-                                    text: GetStorage().read(Constants.phonekey)
-                                        .toString());
-                                singlePropertyDetailsController.emailController = TextEditingController(
-                                    text: GetStorage().read(Constants.emailkey)
-                                        .toString());
+
                                 showBottomDetails(
                                     '${singlePropertyDetailsController.checkoutModel?.cardId}'   , context);
                               },

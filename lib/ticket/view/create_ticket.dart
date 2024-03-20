@@ -289,13 +289,12 @@ class _CreateTicketState extends State<CreateTicket> {
               const SizedBox(height: 16),
               GestureDetector(
                 onTap: () async {
-                /*  if (controller.selectedProperty?.value == null) {
+                  if (controller.bookingId == "") {
                     RIEWidgets.getToast(
-                        message: 'Please Select Flat',
+                        message: 'No booking Found so we can not Create ticket.',
                         color: CustomTheme.white);
-
                     return;
-                  }*/
+                  }
 
                   if (controller.selectedCategory == null  ) {
                     RIEWidgets.getToast(
@@ -323,8 +322,7 @@ class _CreateTicketState extends State<CreateTicket> {
                   }
 
                   await controller.createTicket(
-                      flatId:
-                          '55',
+                      bookingId: controller.bookingId.toString(),
                       ticketCate: controller.selectedCategory.toString(),
                       ticketDesc: controller.ticketDescription.text,
                       ticketStat: controller.selectedStatus.toString());

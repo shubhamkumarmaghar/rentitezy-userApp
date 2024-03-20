@@ -46,6 +46,7 @@ class AppUrls {
   static const bookNow = "${baseUrl}leadsBooking";
   static const orderIdRzy = "https://api.razorpay.com/v1/orders";
   static const checkout = '${baseUrl}checkout';
+  static const siteVisit = '${baseUrl}siteVisit';
   static const loginWeb = '${baseUrl}login';
   static const invoicePay = '${baseUrl}payment';
   static const addFav = '${baseUrl}wishlist';
@@ -53,6 +54,7 @@ class AppUrls {
   static const urlImgUpload = "${rootUrl}fileUpload";
 
   static const myBooking = '${baseUrl}bookings';
+  static const getSingleBooking = '${baseUrl}booking';
   static const listingDetail = '${baseUrl}listingDetail';
   static const listing = '${baseUrl}listing';
   static const locations = '${baseUrl}locations';
