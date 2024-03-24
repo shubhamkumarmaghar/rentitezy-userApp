@@ -135,16 +135,15 @@ class _CheckOutPageState extends State<CheckOutPage> {
                               onTap: () async {
                                 if (singlePropertyDetailsController.nameController.text.isEmpty) {
                                   RIEWidgets.getToast(message: 'Enter valid name', color: CustomTheme.white);
-                                 // showCustomToast(context, 'Enter valid name');
+
                                 } else if (singlePropertyDetailsController.emailController.text.isEmpty) {
                                   RIEWidgets.getToast(message: 'Enter valid email', color: CustomTheme.white);
-                                //  showCustomToast(context, 'Enter valid email');
+
                                 } else if (singlePropertyDetailsController.phoneController.text.isEmpty) {
                                   RIEWidgets.getToast(message: 'Enter valid phone', color: CustomTheme.white);
-                                 // showCustomToast(context, 'Enter valid phone');
+
                                 } else if (singlePropertyDetailsController.phoneController.text.length != 10) {
                                   RIEWidgets.getToast(message: 'Enter valid phone digit', color: CustomTheme.white);
-                                //  showCustomToast(context, 'Enter valid phone digit');
                                 } else {
                                   setState(() => loadingLeads = true);
                                   singlePropertyDetailsController.paymentRequest('${singlePropertyDetailsController.checkoutModel?.cardId}');
@@ -189,40 +188,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
         });
   }
 
-  void leadsRequest() async {
-    print('create-leads');
-    var data = widget.propertyModel?.data;
-    var propertyData = data?.property;
-    if (widget.propertyModel != null) {
-      try {
-        dynamic result = await createLeadsApi(
-            GetStorage().read(Constants.usernamekey).toString(),
-            GetStorage().read(Constants.phonekey).toString(),
-            propertyData?.address ==''
-                ? 'NA'
-                : '${propertyData?.address}',
-            'NA',
-            '${propertyData?.facilities}',
-            DateFormat.yMMMd().format(widget.currentDate!),
-            '${data?.price}',
-            GetStorage().read(Constants.userId).toString(),
-            '${propertyData?.id}',
-            '${data?.listingType}',);
-        if (result['success']) {
-          RIEWidgets.getToast(message: result['message'], color: CustomTheme.white);
-
-         // showCustomToast(context, result['message']);
-          Navigator.pop(context, true);
-        } else {
-          RIEWidgets.getToast(message: result['message'], color: CustomTheme.white);
-          //showCustomToast(context, result['message']);
-        }
-      } on Exception catch (error) {
-        RIEWidgets.getToast(message: error.toString(), color: CustomTheme.white);
-       // showCustomToast(context, error.toString());
-      }
-    }
-  }
 
   @override
   void initState() {
@@ -401,7 +366,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             height(0.05),
                             InkWell(
                               onTap: () async {
-
                                 showBottomDetails(
                                     '${singlePropertyDetailsController.checkoutModel?.cardId}'   , context);
                               },

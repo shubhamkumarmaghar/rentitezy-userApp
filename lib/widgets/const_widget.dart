@@ -110,11 +110,10 @@ Widget getCustomText(String? text, Color color, int maxLine,
   return Text(
     text!,
     overflow: TextOverflow.ellipsis,
-    style: TextStyle(
+    style: poppinsStyle(
         decoration: TextDecoration.none,
         fontSize: textSizes,
         color: color,
-        fontFamily: Constants.fontsFamily,
         fontWeight: fontWeight),
     maxLines: maxLine,
     textAlign: textAlign,

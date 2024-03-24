@@ -75,61 +75,77 @@ class NearListItemState extends State<NearByItem> {
                   child: Align(
                     alignment: Alignment.bottomCenter,
                     child: Container(
+                      constraints: BoxConstraints(
+                        maxHeight: Get.height*0.14,
+                        minHeight: Get.width * 0.2,
+                      ),
                       width: double.maxFinite,
                       padding: EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 5),
-                      height: Get.width * 0.2,
+                          horizontal: 10,),
+                     // height: Get.width * 0.2,
                       decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.9),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Column(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FittedBox(
-                            child: Container(width: Get.width*0.45,
-                              child: Text(
-                                '${widget.propertyModel?.title.toString().capitalizeFirst!}',
-                                maxLines: 2,
-                                style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                      child: FittedBox(
+                        child: Column(
+                         // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FittedBox(
+                              child: Container(
+                                constraints: BoxConstraints(),
+                                margin: EdgeInsets.only(top: 5),
+                                width: Get.width*0.45,
+                                child: Text(
+                                  '${widget.propertyModel?.title.toString().capitalizeFirst!}',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Container(width: Get.width*0.44,
-                            child: Text(
-                              '₹${widget.propertyModel?.property?.address}',
-                              maxLines: 2,
+                            Container(width: Get.width*0.44,
+                              constraints: BoxConstraints(
+                                //maxHeight: Get.width*0.1
+                              ),
+                              margin: EdgeInsets.only(top: 5,bottom: 5),
+                                child:
+                                Text(
+                                  '${widget.propertyModel?.property?.address}',
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.black87,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        
+                            ),
+                            Text(
+                              '₹${widget.propertyModel?.price}/Month',
+                              maxLines: 1,
                               style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.black87,
+                                color: CustomTheme.peach,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                          Text(
-                            '₹${widget.propertyModel?.price}/Month',
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: CustomTheme.peach,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
                 Positioned(
-                  right: 10,
-                  bottom: 10,
+                  right: 5,
+                  bottom: 4,
                   child: IconButton(
                     onPressed: () {
                     //  openDialPad(widget.propertyModel?.ownerPhone, context);

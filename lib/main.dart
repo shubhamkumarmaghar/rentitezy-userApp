@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: false,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
      // colorScheme: ColorScheme.fromSwatch(primarySwatch:Colors.blue ),
-        textTheme: GoogleFonts.aBeeZeeTextTheme(),
+        textTheme: GoogleFonts.poppinsTextTheme(),
         scaffoldBackgroundColor: Colors.white,
         bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: CustomTheme.white),
 
