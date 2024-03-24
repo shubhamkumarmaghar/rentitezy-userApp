@@ -28,9 +28,9 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>This app needs to access camera to capture live profile.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background to show near by rooms/appartments.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs access to location when in the background to show near by rooms/appartments.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to location when in the background to show near by rooms/appartments.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs access to location when open to show near by rooms/appartments.</string>
@@ -41,6 +41,8 @@
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
+		<string>location</string>
+		<string>nearby-interaction</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
