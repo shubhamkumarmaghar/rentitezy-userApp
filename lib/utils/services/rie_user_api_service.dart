@@ -248,7 +248,6 @@ class RIEUserApiService extends GetxController {
           return _getErrorResponse(json.decode(response.body));
         }
         */
-
       case 402:
         return _getErrorResponse(json.decode(response.body));
       case 403:

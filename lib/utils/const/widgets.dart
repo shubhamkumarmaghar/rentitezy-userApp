@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/custom_theme.dart';
 import 'appConfig.dart';
@@ -26,19 +27,21 @@ Widget loading() {
 Widget title(
   String title,
   double fSize,
+{FontWeight fontWeight=FontWeight.w500}
 ) {
   return Text(
     title,
     maxLines: 1,
     overflow: TextOverflow.ellipsis,
     textAlign: TextAlign.center,
-    style: TextStyle(
-        fontFamily: Constants.fontsFamily,
+    style: poppinsStyle(
         color: Colors.black,
         fontSize: fSize,
-        fontWeight: FontWeight.bold),
+        fontWeight:fontWeight ),
   );
 }
+
+const poppinsStyle = GoogleFonts.poppins;
 
 Widget titleClr(String title, double fSize, Color clr, FontWeight fw) {
   return Text(

@@ -80,6 +80,7 @@ class SinglePropertyDetailsController extends GetxController {
   var dropdownValueMonth = '11';
   var dropdownValueSource = 'Source';
   var dropdownValueDaily = '1';
+  Units? unitId ;
   var selectFlat;
   CheckoutModel? checkoutModel;
 
@@ -129,7 +130,7 @@ class SinglePropertyDetailsController extends GetxController {
     update();
   }
 
-  void submitReqBooking(String from) async {
+  void submitReqBooking(String from,{required String unitId}) async {
     cfrom = from;
     String duration = '';
     singlePage.value = true;
@@ -143,7 +144,7 @@ class SinglePropertyDetailsController extends GetxController {
     String url =
         "${AppUrls.checkout}?checkin=${f.format(
         currentDate)}&duration=$duration&guest=$dropdownValueGuest&listingId=${singleProPerty
-        ?.data?.id}";
+        ?.data?.id}&unitId=$unitId}";
     final response = await homeController.apiService.getApiCallWithURL(
         endPoint: url);
 
@@ -266,16 +267,13 @@ class SinglePropertyDetailsController extends GetxController {
       log('abced $longurl');
 
       //await launchUrlString(longurl);
-      if (cfrom == 'Request') {
-        leadsRequest();
-      } else {
+
         singlePage.value = false;
         Get.offAll(WebViewContainer(url: longurl));
         /*  Get.to(MyBookingsScreen(
           from: true,
         ));*/
-      }
-      //singlePage.value = false;
+
     }
   }
 

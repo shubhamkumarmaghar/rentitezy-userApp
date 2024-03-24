@@ -305,352 +305,410 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                 builder: (BuildContext context, setState) =>
                     SingleChildScrollView(
                         scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
                                 'Please Fill Your Details',
-                                style: TextStyle(
-                                    fontFamily: Constants.fontsFamily,
+                                style: poppinsStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                     fontSize: 20),
                               ),
-                            ),
-                            Center(
-                                child: Container(
-                              height: 1,
-                              width: 40,
-                              color: Colors.black,
-                            )),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                FilterChip(
-                                    label: Text('Monthly Booking'),
-                                    selectedColor: CustomTheme.peach,
-                                    backgroundColor: Colors.grey,
-                                    labelStyle: TextStyle(color: Colors.white),
-                                    selected:
-                                        singlePropertyDetailsController.list[0],
-                                    onSelected: (value) {
-                                      singlePropertyDetailsController.setChip(
-                                          selectedIndex: 0);
-                                      log('${value}');
-                                      //  _peopleListController.showList = _peopleListController.maleList;
-                                      // navigator?.pop();
-                                      setState(() {});
-                                    }),
-                                FilterChip(
-                                    label: Text('Daily Booking'),
-                                    selectedColor: CustomTheme.peach,
-                                    backgroundColor: Colors.grey,
-                                    labelStyle: TextStyle(color: Colors.white),
-                                    selected:
-                                        singlePropertyDetailsController.list[1],
-                                    onSelected: (value) {
-                                      singlePropertyDetailsController.setChip(
-                                          selectedIndex: 1);
-                                      log('${value}');
-                                      //  _peopleListController.showList = _peopleListController.maleList;
-                                      // navigator?.pop();
-                                      setState(() {});
-                                    }),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(3),
-                              margin: EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7),
-                                color: Constants.lightBg,
-                                border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 227, 225, 225)),
+                              Center(
+                                  child: Container(
+                                height: 1,
+                                width: 40,
+                                color: Colors.black,
+                              )),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  FilterChip(
+                                      label: Text('Monthly Booking'),
+                                      selectedColor: CustomTheme.peach,
+                                      backgroundColor: Colors.grey,
+                                      labelStyle: TextStyle(color: Colors.white),
+                                      selected:
+                                          singlePropertyDetailsController.list[0],
+                                      onSelected: (value) {
+                                        singlePropertyDetailsController.setChip(
+                                            selectedIndex: 0);
+                                        log('${value}');
+                                        //  _peopleListController.showList = _peopleListController.maleList;
+                                        // navigator?.pop();
+                                        setState(() {});
+                                      }),
+                                  FilterChip(
+                                      label: Text('Daily Booking'),
+                                      selectedColor: CustomTheme.peach,
+                                      backgroundColor: Colors.grey,
+                                      labelStyle: TextStyle(color: Colors.white),
+                                      selected:
+                                          singlePropertyDetailsController.list[1],
+                                      onSelected: (value) {
+                                        singlePropertyDetailsController.setChip(
+                                            selectedIndex: 1);
+                                        log('${value}');
+                                        //  _peopleListController.showList = _peopleListController.maleList;
+                                        // navigator?.pop();
+                                        setState(() {});
+                                      }),
+                                ],
                               ),
-                              child: DropdownButton(
-                                underline: const SizedBox(),
-                                isExpanded: true,
-                                padding:
-                                EdgeInsets.only(left: 10),
-                                hint: Text(
-                                  'Select Guest',
-                                  style: TextStyle(
-                                      color:
-                                          Constants.getColorFromHex('CDCDCD'),
-                                      fontFamily: Constants.fontsFamily),
-                                ),
-                                iconEnabledColor:
-                                    Constants.getColorFromHex('CDCDCD'),
-                                items: singlePropertyDetailsController.guestList
-                                    .map((item) {
-                                  return DropdownMenuItem(
-                                    value: item.toString(),
-                                    child: Text(
-                                      item.toString(),
-                                      style: TextStyle(
-                                        fontFamily: Constants.fontsFamily,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (newVal) {
-                                  setState(() => singlePropertyDetailsController
-                                      .dropdownValueGuest = newVal);
-                                },
-                                value: singlePropertyDetailsController
-                                    .dropdownValueGuest,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            singlePropertyDetailsController.list[1] == true
-                                ? title('Select Days', 15)
-                                : title('Select Months', 15),
-                            singlePropertyDetailsController.list[1] == true
-                                ? Container(
-                                    padding: const EdgeInsets.all(3),
-                                    margin: contEdge,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(7),
-                                      color: Constants.lightBg,
-                                      border: Border.all(
-                                          color: const Color.fromARGB(
-                                              255, 227, 225, 225)),
-                                    ),
-                                    child: DropdownButton(
-                                      underline: const SizedBox(),
-                                      padding:
-                                      EdgeInsets.only(left: 10),
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select Days',
-                                        style: TextStyle(
-                                            color: Constants.getColorFromHex(
-                                                'CDCDCD'),
-                                            fontFamily: Constants.fontsFamily),
-                                      ),
-                                      iconEnabledColor:
-                                          Constants.getColorFromHex('CDCDCD'),
-                                      items: singlePropertyDetailsController
-                                          .getDailyList()
-                                          .map((item) {
-                                        return DropdownMenuItem(
-                                          value: item.toString(),
-                                          child: Text(
-                                            item.toString(),
-                                            style: TextStyle(
-                                              fontFamily: Constants.fontsFamily,
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (newVal) {
-                                        setState(() =>
-                                            singlePropertyDetailsController
-                                                    .dropdownValueDaily =
-                                                newVal.toString());
-                                      },
-                                      value: singlePropertyDetailsController
-                                          .dropdownValueDaily,
-                                    ),
-                                  )
-                                : Container(
-                                    padding: const EdgeInsets.all(3),
-                                    margin: contEdge,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(7),
-                                      color: Constants.lightBg,
-                                      border: Border.all(
-                                          color: const Color.fromARGB(
-                                              255, 227, 225, 225)),
-                                    ),
-                                    child: DropdownButton(
-                                      underline: const SizedBox(),
-                                      padding:
-                                      EdgeInsets.only(left: 10),
-                                      isExpanded: true,
-                                      hint: Text(
-                                        'Select Months',
-                                        style: TextStyle(
-                                            color: Constants.getColorFromHex(
-                                                'CDCDCD'),
-                                            fontFamily: Constants.fontsFamily),
-                                      ),
-                                      iconEnabledColor:
-                                          Constants.getColorFromHex('CDCDCD'),
-                                      items: singlePropertyDetailsController
-                                          .monthList
-                                          .map((item) {
-                                        return DropdownMenuItem(
-                                          value: item.toString(),
-                                          child: Text(
-                                            item.toString(),
-                                            style: TextStyle(
-                                              fontFamily: Constants.fontsFamily,
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                      onChanged: (newVal) {
-                                        setState(() =>
-                                            singlePropertyDetailsController
-                                                    .dropdownValueMonth =
-                                                newVal.toString());
-                                      },
-                                      value: singlePropertyDetailsController
-                                          .dropdownValueMonth,
-                                    ),
-                                  ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            title('Select Date', 15),
-                            Container(
-                              height: 55,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(7)),
-                                color: Constants.lightBg,
-                              ),
-                              margin: contEdge,
-                              padding: const EdgeInsets.all(5),
-                              child: InkWell(
-                                onTap: () async {
-                                  if (availFrom != null) {
-                                    DateTime newDate = availFromDate
-                                        .add(const Duration(days: 7));
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate:
-                                          singlePropertyDetailsController
-                                              .currentDate,
-                                      firstDate: availFromDate,
-                                      lastDate: newDate,
-                                    ).then((pickedDate) {
-                                      if (pickedDate != null &&
-                                          pickedDate !=
-                                              singlePropertyDetailsController
-                                                  .currentDate) {
-                                        setState(() =>
-                                            singlePropertyDetailsController
-                                                .currentDate = pickedDate);
-                                      }
-                                    });
-                                  } else {
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate:
-                                          SinglePropertyDetailsController()
-                                              .currentDate,
-                                      firstDate: DateTime.now()
-                                          .subtract(const Duration(days: 0)),
-                                      lastDate: DateTime(2100),
-                                    ).then((pickedDate) {
-                                      if (pickedDate != null &&
-                                          pickedDate !=
-                                              singlePropertyDetailsController
-                                                  .currentDate) {
-                                        setState(() =>
-                                            singlePropertyDetailsController
-                                                .currentDate = pickedDate);
-                                      }
-                                    });
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: getCustomText(
-                                          DateFormat.yMMMd().format(
-                                              singlePropertyDetailsController
-                                                  .currentDate),
-                                          Constants.primaryColor,
-                                          1,
-                                          TextAlign.start,
-                                          FontWeight.w400,
-                                          15),
-                                    ),
-                                    Icon(
-                                      Icons.calendar_today_outlined,
-                                      color: Constants.textColor,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            height(0.05),
-                            GestureDetector(
-                              onTap: () async {
-                               if (singlePropertyDetailsController
-                                            .dropdownValueGuest ==
-                                        null ||
-                                    singlePropertyDetailsController
-                                            .dropdownValueGuest ==
-                                        'null' ||
-                                    singlePropertyDetailsController
-                                        .dropdownValueGuest.isEmpty) {
-                                  RIEWidgets.getToast(
-                                      message: 'Select valid month',
-                                      color: CustomTheme.white);
-                                } else if (singlePropertyDetailsController
-                                    .dropdownValueMonth.isEmpty) {
-                                  RIEWidgets.getToast(
-                                      message: 'Select valid month',
-                                      color: CustomTheme.white);
-                                } else {
-                                  if (int.parse(singlePropertyDetailsController
-                                          .dropdownValueGuest
-                                          .toString()) >
-                                      1) {
-                                    alertDialog(
-                                        context,
-                                        'Booking Alert',
-                                        'Valid ID /KYC should be provided at the time on check in',
-                                        from);
-                                  } else {
-                                    singlePropertyDetailsController
-                                        .submitReqBooking(from);
-                                  }
-                                }
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.70,
-                                height: 50,
-                                padding: const EdgeInsets.all(10),
+                              Container(
+                                padding: const EdgeInsets.all(3),
+                                margin: EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: Constants.primaryColor,
-                                  borderRadius: BorderRadius.circular(40),
+                                  borderRadius: BorderRadius.circular(8),
+                                  color: Constants.lightBg,
+                                  border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 227, 225, 225)),
                                 ),
-                                child: loadingLeads
-                                    ? const Center(
-                                        child: SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 3,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          'Submit',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: Constants.fontsFamily,
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
+                                child: DropdownButton(
+                                  underline: const SizedBox(),
+                                  isExpanded: true,
+                                  padding:
+                                  EdgeInsets.only(left: 10),
+                                  hint: Text(
+                                    'Select Guest',
+                                    style: TextStyle(
+                                        color:
+                                            Constants.getColorFromHex('CDCDCD'),
+                                        fontFamily: Constants.fontsFamily),
+                                  ),
+                                  iconEnabledColor:
+                                      Constants.getColorFromHex('CDCDCD'),
+                                  items: singlePropertyDetailsController.guestList
+                                      .map((item) {
+                                    return DropdownMenuItem(
+                                      value: item.toString(),
+                                      child: Text(
+                                        item.toString(),
+                                        style: TextStyle(
+                                          fontFamily: Constants.fontsFamily,
                                         ),
                                       ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newVal) {
+                                    setState(() => singlePropertyDetailsController
+                                        .dropdownValueGuest = newVal);
+                                  },
+                                  value: singlePropertyDetailsController
+                                      .dropdownValueGuest,
+                                ),
                               ),
-                            ),
-                            height(0.05),
-                          ],
+                              SizedBox(
+                                height: 10,
+                              ),
+                              singlePropertyDetailsController.list[1] == true
+                                  ? title('Select Days', 15)
+                                  : title('Select Months', 15),
+                              singlePropertyDetailsController.list[1] == true
+                                  ? Container(
+                                      padding: const EdgeInsets.all(3),
+                                    margin: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(7),
+                                        color: Constants.lightBg,
+                                        border: Border.all(
+                                            color: const Color.fromARGB(
+                                                255, 227, 225, 225)),
+                                      ),
+                                      child: DropdownButton(
+                                        underline: const SizedBox(),
+                                        padding: const EdgeInsets.only(left: 10),
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select Days',
+                                          style: TextStyle(
+                                              color: Constants.getColorFromHex(
+                                                  'CDCDCD'),
+                                              fontFamily: Constants.fontsFamily),
+                                        ),
+                                        iconEnabledColor:
+                                            Constants.getColorFromHex('CDCDCD'),
+                                        items: singlePropertyDetailsController
+                                            .getDailyList()
+                                            .map((item) {
+                                          return DropdownMenuItem(
+                                            value: item.toString(),
+                                            child: Text(
+                                              item.toString(),
+                                              style: TextStyle(
+                                                fontFamily: Constants.fontsFamily,
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (newVal) {
+                                          setState(() =>
+                                              singlePropertyDetailsController
+                                                      .dropdownValueDaily =
+                                                  newVal.toString());
+                                        },
+                                        value: singlePropertyDetailsController
+                                            .dropdownValueDaily,
+                                      ),
+                                    )
+                                  : Container(
+                                      padding: const EdgeInsets.all(3),
+                                       margin: EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(7),
+                                        color: Constants.lightBg,
+                                        border: Border.all(
+                                            color: const Color.fromARGB(
+                                                255, 227, 225, 225)),
+                                      ),
+                                      child: DropdownButton(
+                                        underline: const SizedBox(),
+                                        padding:
+                                        EdgeInsets.only(left: 10),
+                                        isExpanded: true,
+                                        hint: Text(
+                                          'Select Months',
+                                          style: TextStyle(
+                                              color: Constants.getColorFromHex(
+                                                  'CDCDCD'),
+                                              fontFamily: Constants.fontsFamily),
+                                        ),
+                                        iconEnabledColor:
+                                            Constants.getColorFromHex('CDCDCD'),
+                                        items: singlePropertyDetailsController
+                                            .monthList
+                                            .map((item) {
+                                          return DropdownMenuItem(
+                                            value: item.toString(),
+                                            child: Text(
+                                              item.toString(),
+                                              style: TextStyle(
+                                                fontFamily: Constants.fontsFamily,
+                                              ),
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (newVal) {
+                                          setState(() =>
+                                              singlePropertyDetailsController
+                                                      .dropdownValueMonth =
+                                                  newVal.toString());
+                                        },
+                                        value: singlePropertyDetailsController
+                                            .dropdownValueMonth,
+                                      ),
+                                    ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              title('Select Unit', 15),
+                              Container(
+                                padding: const EdgeInsets.all(3),
+                                margin: EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(7),
+                                  color: Constants.lightBg,
+                                  border: Border.all(
+                                      color: const Color.fromARGB(
+                                          255, 227, 225, 225)),
+                                ),
+                                child: DropdownButton(
+                                  underline: const SizedBox(),
+                                  padding:
+                                  EdgeInsets.only(left: 10),
+                                  isExpanded: true,
+                                  hint: Text(
+                                    'Select Unit',
+                                    style: TextStyle(
+                                        color: Constants.getColorFromHex(
+                                            'CDCDCD'),
+                                        fontFamily: Constants.fontsFamily),
+                                  ),
+                                  iconEnabledColor:
+                                  Constants.getColorFromHex('CDCDCD'),
+                                  items: singlePropertyDetailsController
+                                      .singleProPerty?.data?.units
+                                      ?.map((item) {
+                                    return
+                                     DropdownMenuItem(
+                                      value: item,
+                                      child: Text(item.flatNo.toString(),
+                                        style: TextStyle(
+                                          fontFamily: Constants.fontsFamily,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
+                                  onChanged: (newVal) {
+                                    setState(() =>
+                                    singlePropertyDetailsController
+                                        .unitId =
+                                        newVal!);
+                                  },
+                                  value: singlePropertyDetailsController
+                                      .unitId,
+                                ),
+                              ),
+                              title('Select Date', 15),
+                              Container(
+                                height: 55,
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      const BorderRadius.all(Radius.circular(7)),
+                                  color: Constants.lightBg,
+                                ),
+                                margin: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(5),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (availFrom != null) {
+                                      DateTime newDate = availFromDate
+                                          .add(const Duration(days: 7));
+                                      await showDatePicker(
+                                        context: context,
+                                        initialDate:
+                                            singlePropertyDetailsController
+                                                .currentDate,
+                                        firstDate: availFromDate,
+                                        lastDate: newDate,
+                                      ).then((pickedDate) {
+                                        if (pickedDate != null &&
+                                            pickedDate !=
+                                                singlePropertyDetailsController
+                                                    .currentDate) {
+                                          setState(() =>
+                                              singlePropertyDetailsController
+                                                  .currentDate = pickedDate);
+                                        }
+                                      });
+                                    } else {
+                                      await showDatePicker(
+                                        context: context,
+                                        initialDate:
+                                            SinglePropertyDetailsController()
+                                                .currentDate,
+                                        firstDate: DateTime.now()
+                                            .subtract(const Duration(days: 0)),
+                                        lastDate: DateTime(2100),
+                                      ).then((pickedDate) {
+                                        if (pickedDate != null &&
+                                            pickedDate !=
+                                                singlePropertyDetailsController
+                                                    .currentDate) {
+                                          setState(() =>
+                                              singlePropertyDetailsController
+                                                  .currentDate = pickedDate);
+                                        }
+                                      });
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(left: 10.0),
+                                          child: getCustomText(
+                                              DateFormat.yMMMd().format(
+                                                  singlePropertyDetailsController
+                                                      .currentDate),
+                                              Constants.primaryColor,
+                                              1,
+                                              TextAlign.start,
+                                              FontWeight.w400,
+                                              15),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.calendar_today_outlined,
+                                        color: Constants.textColor,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Center(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                   if (singlePropertyDetailsController
+                                                .dropdownValueGuest ==
+                                            null ||
+                                        singlePropertyDetailsController
+                                                .dropdownValueGuest ==
+                                            'null' ||
+                                        singlePropertyDetailsController
+                                            .dropdownValueGuest.isEmpty) {
+                                      RIEWidgets.getToast(
+                                          message: 'Select valid month',
+                                          color: CustomTheme.white);
+                                    } else if (singlePropertyDetailsController
+                                        .dropdownValueMonth.isEmpty) {
+                                      RIEWidgets.getToast(
+                                          message: 'Select valid month',
+                                          color: CustomTheme.white);
+                                    }
+                                   else if (singlePropertyDetailsController.unitId?.id == null) {
+                                     log('${singlePropertyDetailsController.unitId?.id}');
+                                     RIEWidgets.getToast(
+                                         message: 'Select unit Id ${singlePropertyDetailsController.unitId?.id}',
+                                         color: CustomTheme.white);
+                                   }
+                                   else {
+                                      if (int.parse(singlePropertyDetailsController
+                                              .dropdownValueGuest
+                                              .toString()) >
+                                          1) {
+                                        alertDialog(
+                                            context,
+                                            'Booking Alert',
+                                            'Valid ID /KYC should be provided at the time on check in',
+                                            from);
+                                      } else {
+                                        singlePropertyDetailsController
+                                            .submitReqBooking(from,unitId: singlePropertyDetailsController.unitId!.id.toString());
+                                      }
+                                    }
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width * 0.70,
+                                    height: 50,
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Constants.primaryColor,
+                                      borderRadius: BorderRadius.circular(40),
+                                    ),
+                                    child: loadingLeads
+                                        ? const Center(
+                                            child: SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 3,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          )
+                                        : Center(
+                                            child: Text(
+                                              'Submit',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontFamily: Constants.fontsFamily,
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                  ),
+                                ),
+                              ),
+
+                            ],
+                          ),
                         ))),
           );
         });
@@ -678,10 +736,9 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               padding: const EdgeInsets.all(12),
                               child: Text(
                                 'Site Visit',
-                                style: TextStyle(
-                                    fontFamily: Constants.fontsFamily,
+                                style: poppinsStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                     fontSize: 20),
                               ),
                             ),
@@ -743,7 +800,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                             ),
                             SizedBox(
                               height: 10,
-
                             ),
                             SizedBox(
                               height: 10,
@@ -873,35 +929,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
         });
   }
 
-  void submitReqBooking(String from) async {
-    setState(() => loadingLeads = true);
-    final f = DateFormat('yyyy-MM-dd');
-    String url =
-        "${AppUrls.checkout}?checkin=${f.format(singlePropertyDetailsController.currentDate)}&duration=$singlePropertyDetailsController.dropdownValueMonth&guest=$singlePropertyDetailsController.dropdownValueGuest&listingId=${singlePropertyDetailsController.singleProPerty?.data?.id}";
-    dynamic result =
-        await getCheckOut(url, GetStorage().read(Constants.token).toString());
-    debugPrint("result");
-    debugPrint(result.toString());
-    bool success = result["success"];
-    if (success) {
-      bool isBack = await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CheckOutPage(
-                    from: from,
-                    currentDate: singlePropertyDetailsController.currentDate,
-                    propertyModel:
-                        singlePropertyDetailsController.singleProPerty,
-                    checkoutModel: CheckoutModel.fromJson(result['data']),
-                  )));
-      if (isBack) {
-        setState(() => loadingLeads = false);
-        Navigator.pop(context);
-      }
-    } else {
-      setState(() => loadingLeads = false);
-    }
-  }
 
   Future<void> alertDialog(
       BuildContext context, String title, String subttitle, String from) {
@@ -924,7 +951,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                       fontFamily: Constants.fontsFamily,
                     )),
                 onPressed: () async {
-                  singlePropertyDetailsController.submitReqBooking(from);
+                  singlePropertyDetailsController.submitReqBooking(from,unitId: singlePropertyDetailsController.unitId!.id.toString());
                 }),
             CupertinoDialogAction(
               child: Text("NO",

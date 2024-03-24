@@ -110,20 +110,16 @@ class LoginController extends GetxController {
         },
         fromLogin: true);
     final data = response as Map<String, dynamic>;
+    isLoading = false;
+    userModel = LoginModel.fromJson(data);
 
-    if (data['message']
-        .toString()
-        .toLowerCase()
-        .contains('welcome to rentiseazy.')) {
-      isLoading = false;
-      userModel = LoginModel.fromJson(data);
       if (userModel?.success == true) {
+        if (data['message'].toString().toLowerCase().contains('user successfully registered.')) {
         if (userModel?.data != null) {
           // userModel = LoginModel.fromJson(result);
           RIEWidgets.getToast(
               message: '${userModel?.message}', color: CustomTheme.white);
           GetStorage().write(Constants.isLogin, true);
-
           if (userModel?.isTenant == true) {
             // tenantModel = TenantModel.fromJson(result['tenantDet']);
             GetStorage().write(Constants.isTenant, true);
@@ -148,19 +144,35 @@ class LoginController extends GetxController {
           isLoading = false;
           Get.offAll(const MyHomePage());
         } else {
+          isLoading = false;
           RIEWidgets.getToast(
               message: '${userModel?.message}', color: CustomTheme.white);
+        update();
         }
-      } else {
+      }
+      else {
+        isLoading = false;
         RIEWidgets.getToast(
             message: '${userModel?.message}', color: CustomTheme.white);
+      update();
       }
-    } else {
+
+    }
+    else if (userModel?.message ==
+        "Phone Number already taken. Existing Account") {
       isLoading = false;
+      RIEWidgets.getToast(
+          message: '${userModel?.message}', color: CustomTheme.white);
+      update();
+    }
+    else {
       userModel = LoginModel(message: 'failure');
       RIEWidgets.getToast(
           message: '${userModel?.message}', color: CustomTheme.white);
+      isLoading = false;
+      update();
     }
+    update();
   }
 
   void userRequest({bool loginORSignup = true}) async {
