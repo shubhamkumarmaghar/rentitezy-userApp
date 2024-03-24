@@ -245,9 +245,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.teal,
-                        onSurface: Colors.grey,
+                        foregroundColor: Colors.white, backgroundColor: Colors.teal, disabledForegroundColor: Colors.grey.withOpacity(0.38),
                       ),
                       onPressed: () async {
                         remin.userName = GetStorage().read(Constants.usernamekey)
