@@ -44,18 +44,23 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Obx(
                     () => AnimatedContainer(
                         margin: EdgeInsets.fromLTRB(index == 0 ? 15 : 5, 0, 5, 0),
-                        width: 100,
+                        width: screenWidth * 0.3,
                         decoration: BoxDecoration(
                           borderRadius:
                               BorderRadius.all(Radius.circular(index == homeController.selectedIndex.value ? 18 : 15)),
-                          color:
-                              index == homeController.selectedIndex.value ? Constants.primaryColor : Colors.grey[200],
+                          color: index == homeController.selectedIndex.value
+                              ? Constants.primaryColor
+                              : Constants.primaryColor.withOpacity(0.1),
                         ),
                         duration: const Duration(milliseconds: 300),
-                        child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          alignment: Alignment.center,
                           child: Text(
                             homeController.categories[index],
                             textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 13.0,
                               fontWeight: FontWeight.w500,
@@ -68,23 +73,48 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget searchWidget() {
-    return Container(
-      height: 50,
-      margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(color: Constants.lightSearch, borderRadius: BorderRadius.circular(30)),
-      child: ListTile(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => AllPropertiesPage()));
-        },
-        leading: const Icon(Icons.search),
-        title: const TextField(
-          enabled: false,
-          decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: 'Search by property name',
-          ),
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => const AllPropertiesPage());
+      },
+      child: SizedBox(
+        height: screenHeight * 0.08,
+        child: Column(
+          children: [
+            SizedBox(
+              height: screenHeight * 0.01,
+            ),
+            Container(
+                height: screenHeight * 0.065,
+                decoration: BoxDecoration(
+                    color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(30)),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: screenWidth * 0.04,
+                    ),
+                    Icon(
+                      Icons.search,
+                      color: Constants.primaryColor,
+                    ),
+                    Container(
+                      width: screenWidth * 0.8,
+                      padding: EdgeInsets.only(left: screenWidth * 0.03),
+                      child: TextField(
+                        enabled: false,
+                        style: TextStyle(color: Constants.primaryColor, fontWeight: FontWeight.w500, fontSize: 16),
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Search by property name',
+                            hintStyle:
+                                TextStyle(color: Constants.primaryColor, fontWeight: FontWeight.w500, fontSize: 16)),
+                      ),
+                    ),
+                  ],
+                )),
+          ],
         ),
-        horizontalTitleGap: 0,
       ),
     );
   }

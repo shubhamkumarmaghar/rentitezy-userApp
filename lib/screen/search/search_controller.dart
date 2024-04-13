@@ -11,31 +11,18 @@ import 'package:http/http.dart' as http;
 
 import '../../utils/const/app_urls.dart';
 
-class SearchPController extends GetxController {
-  var isLoading = false.obs;
-  var userId = 'guest'.obs;
-  var isSearching = false.obs;
-  var searchText = "".obs;
+class SearchPropertiesController extends GetxController {
+  var isLoading = false;
   var offset = 10.obs;
-  final key = GlobalKey<ScaffoldState>();
+  bool suggestion = false;
   final searchQuery = TextEditingController();
   var apiPropertyList = <PropertySingleData>[].obs;
-  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+  List<String> searchedLocation = [];
 
   @override
   void onInit() {
-    searchQuery.addListener(
-      () => fetchProperties(true),
-    );
-    fetchProperties(false);
     super.onInit();
-  }
-
-  void scrollListener(bool isNext) {
-    if (offset.value >= 10) {
-      offset(isNext ? (offset.value + 10) : (offset.value - 10));
-    }
-    fetchProperties(true);
+    fetchProperties();
   }
 
   @override
@@ -44,14 +31,28 @@ class SearchPController extends GetxController {
     super.onClose();
   }
 
-  void fetchProperties(bool isNext) async {
-    if (!isNext) {
-      isLoading(true);
+  set showSuggestion(bool show) {
+    suggestion = show;
+    update();
+  }
+
+  void onLocationTextChanged(String text) {
+    searchedLocation.add('BTM Layout,Bangalore');
+    showSuggestion = true;
+    if (text.isEmpty) {
+      searchedLocation.clear();
+      showSuggestion = false;
     }
-    String ur = '${AppUrls.listing}?limit=10&offset=$offset';
-    String search = '${AppUrls.listing}?limit=10&offset=$offset&location=${searchQuery.text}';
+    update();
+  }
+
+  void fetchProperties() async {
+    isLoading = true;
+    update();
+    String searchUrl = '${AppUrls.listing}?location=${searchQuery.text}';
+    log('param :: $searchUrl');
     final response = await http.get(
-      Uri.parse(searchQuery.text.isEmpty ? ur : search),
+      Uri.parse(searchUrl),
       headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
     );
     if (response.statusCode == 200) {
@@ -63,11 +64,11 @@ class SearchPController extends GetxController {
           apiPropertyList.value = iterable.map((flat) => PropertySingleData.fromJson(flat)).toList();
           log('apiPropertyList ${apiPropertyList.length}  ');
         }
-        if (!isNext) {
-          isLoading(false);
-        }
+        isLoading = false;
+        showSuggestion = false;
+        update();
       } catch (e) {
-        log('error ::'+e.toString());
+        log('error ::$e');
       }
     } else {
       Get.snackbar("Error", 'Error during fetch api data');

@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ import '../../fav/my_fav_screen.dart';
 import '../../utils/const/appConfig.dart';
 
 class DashboardView extends StatelessWidget {
-  DashboardView({super.key});
+  const DashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +22,7 @@ class DashboardView extends StatelessWidget {
         return Scaffold(
           body: getDashboardBody(context, controller.selectedIndex),
           bottomNavigationBar: BottomNavigationBar(
+            elevation: 0,
             onTap: (value) => controller.setIndex(value),
             currentIndex: controller.selectedIndex,
             selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),

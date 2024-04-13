@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
+import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
 import 'dashboard/controller/dashboard_controller.dart';
 import 'screen/splash_screen.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MediaQuery(data: MediaQuery.of(context).copyWith(textScaleFactor: 0.9), child: child ?? const Text(''));
       },
+
       theme: ThemeData(
         useMaterial3: false,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -40,7 +42,9 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.poppinsTextTheme(),
         scaffoldBackgroundColor: Colors.white,
         bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: CustomTheme.white),
-
+        progressIndicatorTheme:  ProgressIndicatorThemeData(
+          color: Constants.primaryColor,
+        ),
         //primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
           backgroundColor: CustomTheme.blue,

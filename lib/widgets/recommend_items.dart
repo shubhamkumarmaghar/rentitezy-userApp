@@ -89,16 +89,6 @@ class RecommendListItemState extends State<RecommendItem> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /*  Stack(
-                  children: [
-                    imgLoadWid(
-                        widget.propertyModel.images.first,
-                        'assets/images/app_logo.png',
-                        screenHeight * 0.23,
-                        screenWidth,
-                        BoxFit.cover),
-                  ],
-                ),*/
                 Container(
                   height: Get.height * 0.23,
                   decoration: BoxDecoration(
