@@ -18,25 +18,22 @@ class FavController extends GetxController {
   var loadFav = false.obs;
   var apiFavPropertyList = <WishlistModel>[].obs;
   var loadProperty = false.obs;
+
   //var apiPropertyList = <Property>[].obs;
   var proFetch = 'Data Fetching...Please wait'.obs;
+
   @override
   void onInit() {
-    //fetchFavProperties();
     getWishListProperty();
-    log("userId ::: ${GetStorage().read(Constants.userId)}");
     super.onInit();
   }
 
   void fetchFavProperties() async {
     loadFav(true);
-    debugPrint(
-        'WISH: ${AppUrls.wishlist} -- ${GetStorage().read(Constants.token).toString()}');
+    debugPrint('WISH: ${AppUrls.wishlist} -- ${GetStorage().read(Constants.token).toString()}');
     final response = await http.get(
       Uri.parse(AppUrls.wishlist),
-      headers: <String, String>{
-        "Auth-Token": GetStorage().read(Constants.token).toString()
-      },
+      headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
     );
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
@@ -44,7 +41,7 @@ class FavController extends GetxController {
       try {
         if (success) {
           allWishlistData = WishlistModel.fromJson(body);
-         /* apiFavPropertyList.value = (body["data"] as List)
+          /* apiFavPropertyList.value = (body["data"] as List)
               .map((stock) => WishlistModel.fromJson(stock))
               .toList();*/
           debugPrint('qqqqq- ${apiFavPropertyList.length}');
@@ -60,9 +57,9 @@ class FavController extends GetxController {
     }
   }
 
-  void getWishListProperty()async {
+  void getWishListProperty() async {
     String url = AppUrls.wishlist;
-     loadFav.value = true;
+    loadFav.value = true;
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
     bool success = response["success"];
@@ -75,14 +72,14 @@ class FavController extends GetxController {
               .toList();*/
         //allPropertyData.addAll(apiPropertyList);
       }
-      allWishlistData?.data?.forEach((element) {log('faviourite prop id ::: ${element.listing?.id}'); });
+      allWishlistData?.data?.forEach((element) {
+        log('faviourite prop id ::: ${element.listing?.id}');
+      });
       loadFav.value = false;
     } catch (e) {
       debugPrint(e.toString());
       loadFav.value = false;
     }
-
-
   }
 
   Future<FlatModel?> fetchProperties(String id) async {
@@ -90,9 +87,7 @@ class FavController extends GetxController {
     loadProperty(true);
     final response = await http.get(
       Uri.parse('${AppUrls.listingDetail}?id=$id'),
-      headers: <String, String>{
-        "Auth-Token": GetStorage().read(Constants.token).toString()
-      },
+      headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
     );
 
     if (response.statusCode == 200) {
@@ -119,18 +114,14 @@ class FavController extends GetxController {
   Future<List<PropertyModel>> fetchListingDetails(String id) async {
     final response = await http.get(
       Uri.parse('${AppUrls.property}?id=$id'),
-      headers: <String, String>{
-        "Auth-Token": GetStorage().read(Constants.token).toString()
-      },
+      headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
     );
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
       bool success = body["success"];
       try {
         if (success) {
-          return (body["data"] as List)
-              .map((stock) => PropertyModel.fromJson(stock))
-              .toList();
+          return (body["data"] as List).map((stock) => PropertyModel.fromJson(stock)).toList();
         }
         loadProperty(false);
       } catch (e) {

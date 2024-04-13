@@ -21,11 +21,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../services/rie_user_api_service.dart';
 import 'app_urls.dart';
+
 RIEUserApiService _apiService = RIEUserApiService();
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 //user create
-Future<dynamic> createUser(String fName, String lName, String phone,
-    String password, String email, String image) async {
+Future<dynamic> createUser(
+    String fName, String lName, String phone, String password, String email, String image) async {
   final response = await http.post(Uri.parse(AppUrls.userRegister),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -62,8 +63,7 @@ Future<dynamic> userLogin(String phone, String password) async {
     } else {
       throw Exception('Failed to load Rentiseazy User');
     }
-  }
-  catch(e){
+  } catch (e) {
     log('error :: $e');
   }
 }
@@ -72,18 +72,14 @@ Future<List<UserModel>> fetchUserApi(String url) async {
   final SharedPreferences sharedPreferences = await _prefs;
   final response = await http.get(
     Uri.parse(url),
-    headers: <String, String>{
-      'Auth-Token': GetStorage().read(Constants.token).toString()
-    },
+    headers: <String, String>{'Auth-Token': GetStorage().read(Constants.token).toString()},
   );
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
     bool success = body["success"];
     if (success) {
       try {
-        return (body["data"] as List)
-            .map((stock) => UserModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => UserModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -98,9 +94,7 @@ Future<List<UserModel>> fetchUserApi(String url) async {
 Future<dynamic> fetchTenantUserApi(String url) async {
   final response = await http.get(
     Uri.parse(url),
-    headers: <String, String>{
-      'user-auth-token': GetStorage().read(Constants.token).toString()
-    },
+    headers: <String, String>{'user-auth-token': GetStorage().read(Constants.token).toString()},
   );
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
@@ -155,8 +149,7 @@ Future<List<PropertyModel>> fetchAllProductsById(List<int> ids) async {
       }));
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
-    var result =
-        (body["data"] as List).map((i) => PropertyModel.fromJson(i)).toList();
+    var result = (body["data"] as List).map((i) => PropertyModel.fromJson(i)).toList();
     return result;
   } else {
     throw Exception('Failed to load Fav Products');
@@ -167,9 +160,7 @@ Future<List<PropertyModel>> allPropertyGet() async {
   var sharedPreferences = await _prefs;
   final response = await http.get(
     Uri.parse(AppUrls.property),
-    headers: <String, String>{
-      "Auth-Token": GetStorage().read(Constants.token).toString()
-    },
+    headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
   );
 
   if (response.statusCode == 200) {
@@ -177,9 +168,7 @@ Future<List<PropertyModel>> allPropertyGet() async {
     bool success = body["success"];
     if (success) {
       try {
-        return (body["data"] as List)
-            .map((stock) => PropertyModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => PropertyModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -195,18 +184,14 @@ Future<List<PropertyModel>> searchProperty() async {
   var sharedPreferences = await _prefs;
   final response = await http.get(
     Uri.parse(AppUrls.property),
-    headers: <String, String>{
-      "Auth-Token": GetStorage().read(Constants.token).toString()
-    },
+    headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
   );
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
     bool success = body["success"];
     if (success) {
       try {
-        return (body["data"] as List)
-            .map((stock) => PropertyModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => PropertyModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -218,17 +203,8 @@ Future<List<PropertyModel>> searchProperty() async {
   }
 }
 
-Future<dynamic> createLeadsApi(
-    String name,
-    String phone,
-    String address,
-    String zipcode,
-    String facility,
-    String moveIn,
-    String priceRange,
-    String userId,
-    String propertyId,
-    String bhkType) async {
+Future<dynamic> createLeadsApi(String name, String phone, String address, String zipcode, String facility,
+    String moveIn, String priceRange, String userId, String propertyId, String bhkType) async {
   var sharedPreferences = await _prefs;
   final response = await http.post(Uri.parse(AppUrls.leads),
       headers: <String, String>{
@@ -255,8 +231,7 @@ Future<dynamic> createLeadsApi(
   }
 }
 
-Future<dynamic> createIssuesApi(
-    String userId, String propertyId, String question) async {
+Future<dynamic> createIssuesApi(String userId, String propertyId, String question) async {
   final response = await http.post(Uri.parse(AppUrls.issues),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -274,8 +249,7 @@ Future<dynamic> createIssuesApi(
   }
 }
 
-Future<dynamic> updateUser(String name, String uLName, String phone,
-    String email, String image, String userId) async {
+Future<dynamic> updateUser(String name, String uLName, String phone, String email, String image, String userId) async {
   final response = await http.put(Uri.parse(AppUrls.user),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -322,9 +296,7 @@ Future<List<AssetsModel>> getAssetsDetApi(String url) async {
     bool success = body["success"];
     if (success) {
       try {
-        return (body["data"] as List)
-            .map((stock) => AssetsModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => AssetsModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -361,8 +333,7 @@ Future<SettingsModel> fetchSetting() async {
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
     if (body['success']) {
-      return SettingsModel.fromJson(
-          jsonDecode((body["data"] as List)[0]['value']));
+      return SettingsModel.fromJson(jsonDecode((body["data"] as List)[0]['value']));
     } else {
       return SettingsModel(
         agreement: Constants.tempAgree,
@@ -426,9 +397,7 @@ Future<List<TenantModel>> fetchTenantApi(
     int success = body["success"];
     if (success == 1) {
       try {
-        return (body["data"] as List)
-            .map((stock) => TenantModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => TenantModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -440,8 +409,8 @@ Future<List<TenantModel>> fetchTenantApi(
   }
 }
 
-Future<dynamic> createTicketApi(String tenantId, String ticket, String comments,
-    String houseId, String propertyId) async {
+Future<dynamic> createTicketApi(
+    String tenantId, String ticket, String comments, String houseId, String propertyId) async {
   final response = await http.post(Uri.parse(AppUrls.ticket),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -471,9 +440,7 @@ Future<List<IssuesModel>> allIssuesGet(String userId) async {
     bool success = body["success"];
     if (success) {
       try {
-        return (body["data"] as List)
-            .map((stock) => IssuesModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => IssuesModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -495,9 +462,7 @@ Future<List<AssetReqModel>> getAllAssetsReq(String userId) async {
     int success = body["success"];
     if (success == 1) {
       try {
-        return (body["data"] as List)
-            .map((stock) => AssetReqModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => AssetReqModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -512,16 +477,17 @@ Future<List<AssetReqModel>> getAllAssetsReq(String userId) async {
 Future<List<TicketModel>> getAllTicketReq(String tenantId) async {
   final response = await http.get(
     Uri.parse('${AppUrls.ticket}?tenantId=$tenantId'),
-    headers: <String, String>{},
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+      "Auth-Token": GetStorage().read(Constants.token).toString()
+    },
   );
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
     int success = body["success"];
     if (success == 1) {
       try {
-        return (body["data"] as List)
-            .map((stock) => TicketModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => TicketModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -533,23 +499,17 @@ Future<List<TicketModel>> getAllTicketReq(String tenantId) async {
   }
 }
 
-
 Future<List<RentReqModel>> getAllRentReq(String url, String token) async {
   final response = await http.get(
     Uri.parse(url),
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-      "user-auth-token": token
-    },
+    headers: <String, String>{'Content-Type': 'application/json', "user-auth-token": token},
   );
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
     // bool success = body["success"];
     // if (success) {
     try {
-      return (body["data"] as List)
-          .map((stock) => RentReqModel.fromJson(stock))
-          .toList();
+      return (body["data"] as List).map((stock) => RentReqModel.fromJson(stock)).toList();
     } catch (e) {
       return [];
     }
@@ -571,9 +531,7 @@ Future<List<LeadsModel>> getAllLeadReq(String url) async {
     bool success = body["success"];
     if (success) {
       try {
-        return (body["data"] as List)
-            .map((stock) => LeadsModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => LeadsModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -585,8 +543,7 @@ Future<List<LeadsModel>> getAllLeadReq(String url) async {
   }
 }
 
-Future<dynamic> createReviewApi(
-    String userId, String tenantId, String propertyId, String review) async {
+Future<dynamic> createReviewApi(String userId, String tenantId, String propertyId, String review) async {
   final response = await http.post(Uri.parse(AppUrls.review),
       headers: <String, String>{
         'Content-Type': 'application/json',
@@ -615,9 +572,7 @@ Future<List<ReviewModel>> fetchReviewApi(String url) async {
     int success = body["success"];
     if (success == 1) {
       try {
-        return (body["data"] as List)
-            .map((stock) => ReviewModel.fromJson(stock))
-            .toList();
+        return (body["data"] as List).map((stock) => ReviewModel.fromJson(stock)).toList();
       } catch (e) {
         return [];
       }
@@ -669,19 +624,14 @@ Future<dynamic> reqResetPass(String otp, String mobile, String newPass) async {
 
 //cashfree tocken
 Future<dynamic> createTocken(String orderId, String amount) async {
-  final response = await http.post(
-      Uri.parse('https://api.cashfree.com/api/v2/cftoken/order'),
+  final response = await http.post(Uri.parse('https://api.cashfree.com/api/v2/cftoken/order'),
       headers: <String, String>{
         'x-client-secret': '186eae94262d9b424b4924ecdb835f5ee6abd52f',
         'x-client-id': '109131d02ec2392634d5bf1c45131901',
         'x-api-version': '2022-01-01',
         'Content-Type': 'application/json'
       },
-      body: jsonEncode(<String, String>{
-        'orderId': orderId,
-        'orderAmount': amount,
-        'orderCurrency': 'INR'
-      }));
+      body: jsonEncode(<String, String>{'orderId': orderId, 'orderAmount': amount, 'orderCurrency': 'INR'}));
   var body = jsonDecode(response.body);
   if (response.statusCode == 200) {
     return body;
@@ -690,15 +640,10 @@ Future<dynamic> createTocken(String orderId, String amount) async {
   }
 }
 
-Future<String> getOrderId(
-    String amount, String recipt, String authorization) async {
+Future<String> getOrderId(String amount, String recipt, String authorization) async {
   final response = await http.post(Uri.parse(AppUrls.orderIdRzy),
-      headers: <String, String>{
-        'Authorization': authorization,
-        "Content-Type": "application/json"
-      },
-      body: jsonEncode(
-          {"amount": int.parse(amount), "currency": "INR", "receipt": recipt}));
+      headers: <String, String>{'Authorization': authorization, "Content-Type": "application/json"},
+      body: jsonEncode({"amount": int.parse(amount), "currency": "INR", "receipt": recipt}));
   var body = jsonDecode(response.body);
   if (response.statusCode == 200) {
     return body["id"];
@@ -753,8 +698,7 @@ Future<dynamic> webAdminLogin() async {
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
-      body: jsonEncode(
-          <String, String>{"phone": "9787665850", "password": "12344321"}));
+      body: jsonEncode(<String, String>{"phone": "9787665850", "password": "12344321"}));
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
     return body;
@@ -777,21 +721,15 @@ Future<dynamic> getCheckOut(String url, String token) async {
   }
 }
 
-Future<dynamic> checkOutUrl(String name, String email, String phone,
-    String cartId, String token) async {
-  var headers = {
-    "Content-Type": "application/x-www-form-urlencoded",
-    'User-Auth-Token': token
-  };
-  final response = await http.post(Uri.parse(AppUrls.checkout),
-      headers: headers,
-      encoding: Encoding.getByName('utf-8'),
-      body: {
-        "name": name,
-        "email": email,
-        "phone": phone,
-        "cartId": cartId,
-      });
+Future<dynamic> checkOutUrl(String name, String email, String phone, String cartId, String token) async {
+  var headers = {"Content-Type": "application/x-www-form-urlencoded", 'User-Auth-Token': token};
+  final response =
+      await http.post(Uri.parse(AppUrls.checkout), headers: headers, encoding: Encoding.getByName('utf-8'), body: {
+    "name": name,
+    "email": email,
+    "phone": phone,
+    "cartId": cartId,
+  });
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
 
@@ -823,8 +761,7 @@ Future<dynamic> generateToken() async {
   }
 }
 
-Future<String> createPaymentLink(
-    String token, PaymentModel paymentModel) async {
+Future<String> createPaymentLink(String token, PaymentModel paymentModel) async {
   final response = await http.post(
     Uri.parse('https://www.instamojo.com/api/1.1/payment-requests/'),
     headers: {
@@ -855,6 +792,7 @@ Future<String> createPaymentLink(
     throw Exception('Failed to create payment link');
   }
 }
+
 /*
 Future<dynamic> createPaymentRequest(String invoiceId, String token) async {
   final url = Uri.parse(AppUrls.rentPay);
@@ -899,8 +837,7 @@ Future<dynamic> addToFav(
 
 //UploadImage
 Future<String> uploadImage(String path, String name) async {
-  var request =
-      http.MultipartRequest("POST", Uri.parse(AppUrls.urlImgUpload));
+  var request = http.MultipartRequest("POST", Uri.parse(AppUrls.urlImgUpload));
   var pic = await http.MultipartFile.fromPath("image", path);
   request.files.add(pic);
   var response = await request.send();
@@ -912,22 +849,13 @@ Future<String> uploadImage(String path, String name) async {
   return AppUrls.imagesRootUrl + name;
 }
 
-
-Future<bool> likeProperty({required String listingId})
-async {
+Future<bool> likeProperty({required String listingId}) async {
   String url = AppUrls.addFav;
-  final response = await _apiService.postApiCall(endPoint: url, bodyParams:
-      {
-        'listingId':listingId
-      }
-  );
+  final response = await _apiService.postApiCall(endPoint: url, bodyParams: {'listingId': listingId});
   final data = response as Map<String, dynamic>;
-  if (data['message'].toString()
-      .toLowerCase()
-      .contains('success')) {
+  if (data['message'].toString().toLowerCase().contains('success')) {
     return true;
-  }
-  else{
+  } else {
     return false;
   }
 }

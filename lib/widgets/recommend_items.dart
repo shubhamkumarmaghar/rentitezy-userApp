@@ -16,8 +16,7 @@ import '../utils/const/widgets.dart';
 class RecommendItem extends StatefulWidget {
   final PropertySingleData? propertyModel;
 
-  const RecommendItem({Key? key, required this.propertyModel})
-      : super(key: key);
+  const RecommendItem({Key? key, required this.propertyModel}) : super(key: key);
 
   @override
   State<RecommendItem> createState() => RecommendListItemState();
@@ -62,12 +61,10 @@ class RecommendListItemState extends State<RecommendItem> {
   Widget build(BuildContext context) {
     ImageProvider imageProvider;
     if (widget.propertyModel != null && widget.propertyModel?.images != null) {
-      if (widget.propertyModel?.images?.first.url == null ||
-          widget.propertyModel?.images?.first == '') {
+      if (widget.propertyModel?.images?.first.url == null || widget.propertyModel?.images?.first == '') {
         imageProvider = const AssetImage('assets/images/app_logo.png');
       } else {
-        imageProvider =
-            NetworkImage('${widget.propertyModel?.images?.first.url}');
+        imageProvider = NetworkImage('${widget.propertyModel?.images?.first.url}');
       }
     } else {
       imageProvider = const AssetImage('assets/images/app_logo.png');
@@ -80,10 +77,9 @@ class RecommendListItemState extends State<RecommendItem> {
                   ),
               arguments: '${widget.propertyModel?.id.toString()}');
         },
-        child: Stack(
-            children: [
+        child: Stack(children: [
           Card(
-            margin: EdgeInsets.only(left:8,right:8,bottom: 15),
+            margin: EdgeInsets.only(left: 8, right: 8, bottom: 15),
             elevation: 8.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15),
@@ -110,16 +106,14 @@ class RecommendListItemState extends State<RecommendItem> {
                         image: imageProvider,
                         fit: BoxFit.cover,
                       ),
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          topRight: Radius.circular(15))),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
                 ),
                 Container(
                     padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration( color: CustomTheme.white,
-                        borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(15),
-                        bottomRight: Radius.circular(15))),
+                    decoration: BoxDecoration(
+                        color: CustomTheme.white,
+                        borderRadius:
+                            BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15))),
 
                     //padding: const EdgeInsets.all(4.0),
                     child: Row(
@@ -156,26 +150,17 @@ class RecommendListItemState extends State<RecommendItem> {
                                 ),
                                 height(0.005),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.start,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    wrapItems(
-                                        '${widget.propertyModel?.area}',
-                                        'sqr_feet',
-                                        80),
-                                    wrapItems(
-                                        '${widget.propertyModel?.property?.floor}',
-                                        'sofa',
-                                        80),
+                                    wrapItems('${widget.propertyModel?.area}', 'sqr_feet', 80),
+                                    wrapItems('${widget.propertyModel?.property?.floor}', 'sofa', 80),
                                   ],
                                 ),
                                 height(0.005),
-                                wrapItems(
-                                    '${widget.propertyModel?.property?.address}',
-                                    'location',
-                                    150),
+
+                                wrapItems('${widget.propertyModel?.property?.address}', 'location', 150),
+                                height(0.005),
                               ],
                             ),
                           ),
@@ -183,23 +168,20 @@ class RecommendListItemState extends State<RecommendItem> {
                         Row(
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 3),
+                              padding: const EdgeInsets.symmetric(horizontal: 3),
                               child: ElevatedButton(
                                   onPressed: () async {
                                     Get.to(
                                         () => PropertiesDetailsPageNew(
-                                              propertyId:
-                                                  '${widget.propertyModel?.id.toString()}',
+                                              propertyId: '${widget.propertyModel?.id.toString()}',
                                             ),
-                                        arguments:
-                                            '${widget.propertyModel?.id.toString()}');
+                                        arguments: '${widget.propertyModel?.id.toString()}');
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Constants.primaryColor,
                                     shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
                                   ),
                                   child: Text(
                                     'Book',
@@ -239,20 +221,15 @@ class RecommendListItemState extends State<RecommendItem> {
               child: circleContainer(
                   IconButton(
                       onPressed: () async {
-                        bool response = await likeProperty(
-                            listingId: '${widget.propertyModel?.id}');
+                        bool response = await likeProperty(listingId: '${widget.propertyModel?.id}');
                         if (response) {
                           setState(() {});
                         }
                       },
                       icon: Icon(
-                        widget.propertyModel!.wishlist == 1
-                            ? Icons.favorite_rounded
-                            : Icons.favorite_border_rounded,
+                        widget.propertyModel!.wishlist == 1 ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                         size: 18,
-                        color: widget.propertyModel!.wishlist == 1
-                            ? Colors.red
-                            : Colors.black,
+                        color: widget.propertyModel!.wishlist == 1 ? Colors.red : Colors.black,
                       )),
                   Colors.white,
                   100,

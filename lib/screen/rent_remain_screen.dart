@@ -22,6 +22,7 @@ import '../my_bookings/controller/my_booking_controller.dart';
 import '../utils/const/app_urls.dart';
 import '../utils/const/widgets.dart';
 import '../utils/view/rie_widgets.dart';
+
 class RentRemainScreen extends StatefulWidget {
   const RentRemainScreen({super.key});
 
@@ -33,6 +34,7 @@ class _MartHomeState extends State<RentRemainScreen> {
   bool isTenant = false;
   String userId = '';
   String tenantId = '';
+
   // late Future<List<TenantModel>> futureTenant;
   late Future<List<RentReqModel>> futureRentHistory;
   late Future<List<RentReqModel>> futureRentPending;
@@ -47,15 +49,14 @@ class _MartHomeState extends State<RentRemainScreen> {
     super.initState();
     // futureTenant = fetchTenant();
     //futureRentHistory = fetchRentHistory();
-   // futureRentPending = fetchRentPending();
-   // fetchUser();
+    // futureRentPending = fetchRentPending();
+    // fetchUser();
   }
 
   void fetchUser() async {
-
     if (GetStorage().read(Constants.userId) != null) {
-      dynamic result = await fetchTenantUserApi(
-          '${AppUrls.getUser}?id=${GetStorage().read(Constants.userId).toString()}');
+      dynamic result =
+          await fetchTenantUserApi('${AppUrls.getUser}?id=${GetStorage().read(Constants.userId).toString()}');
       if (result["success"]) {
         UserModel userModel = UserModel.fromJson(result["data"][0]);
         GetStorage().write(Constants.userId, userModel.id);
@@ -64,8 +65,7 @@ class _MartHomeState extends State<RentRemainScreen> {
         // TenantModel tempTenant = TenantModel.fromJson(result['tenantDet']);
         if (GetStorage().read(Constants.isTenant)!) {
           tenantId = userModel.id.toString();
-          GetStorage().write(
-              Constants.tenantId, userModel.id.toString());
+          GetStorage().write(Constants.tenantId, userModel.id.toString());
           isTenant = GetStorage().read(Constants.isTenant)!;
         }
         // GetStorage().write(Constants.isTenant, true);
@@ -104,8 +104,7 @@ class _MartHomeState extends State<RentRemainScreen> {
     setState(() {});
   }
 
-  Future<void> alertDialog(
-      BuildContext context, String title, String subttitle, String amount) {
+  Future<void> alertDialog(BuildContext context, String title, String subttitle, String amount) {
     return showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -154,10 +153,7 @@ class _MartHomeState extends State<RentRemainScreen> {
       child: Center(
         child: Text(
           day,
-          style: TextStyle(
-              fontFamily: Constants.fontsFamily,
-              fontSize: 17,
-              fontWeight: FontWeight.bold),
+          style: TextStyle(fontFamily: Constants.fontsFamily, fontSize: 17, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -177,10 +173,7 @@ class _MartHomeState extends State<RentRemainScreen> {
         children: [
           Text(
             title,
-            style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-                fontSize: 18,
-                fontWeight: FontWeight.bold),
+            style: TextStyle(fontFamily: Constants.fontsFamily, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           height(0.005),
           Container(
@@ -245,13 +238,13 @@ class _MartHomeState extends State<RentRemainScreen> {
                     ),
                     TextButton(
                       style: TextButton.styleFrom(
-                        foregroundColor: Colors.white, backgroundColor: Colors.teal, disabledForegroundColor: Colors.grey.withOpacity(0.38),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.teal,
+                        disabledForegroundColor: Colors.grey.withOpacity(0.38),
                       ),
                       onPressed: () async {
-                        remin.userName = GetStorage().read(Constants.usernamekey)
-                            .toString();
-                        remin.userPhone = GetStorage().read(Constants.phonekey)
-                            .toString();
+                        remin.userName = GetStorage().read(Constants.usernamekey).toString();
+                        remin.userPhone = GetStorage().read(Constants.phonekey).toString();
                         showInvoice(remin);
                       },
                       child: Text(
@@ -276,10 +269,8 @@ class _MartHomeState extends State<RentRemainScreen> {
                 child: Center(
                   child: Text(
                     'Paid',
-                    style: TextStyle(
-                        fontFamily: Constants.fontsFamily,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontFamily: Constants.fontsFamily, color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -296,8 +287,7 @@ class _MartHomeState extends State<RentRemainScreen> {
       context: context,
       builder: (BuildContext context) {
         int selectedRadio = 0;
-        return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
+        return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return AlertDialog(
               content: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -351,6 +341,7 @@ class _MartHomeState extends State<RentRemainScreen> {
       },
     );
   }
+
 /*
   void payRequest(String id, String payId, String amt) async {
     var response = await http.get(Uri.parse(AppUrls.myBooking), headers: {
@@ -538,6 +529,7 @@ class _MartHomeState extends State<RentRemainScreen> {
           return RIEWidgets.getLoader();
         });
   }
+
 /*
   Widget fetchMyRentPending() {
     return FutureBuilder<List<RentReqModel>>(
@@ -567,10 +559,10 @@ class _MartHomeState extends State<RentRemainScreen> {
       physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
       itemCount: rentList.length,
-      itemBuilder: (BuildContext context, int index) =>
-          rentPaid(rentList[index]),
+      itemBuilder: (BuildContext context, int index) => rentPaid(rentList[index]),
     );
   }
+
 /*
   Widget listRemainRent(List<RentReqModel> rentList) {
     return ListView.builder(
@@ -612,9 +604,8 @@ class _MartHomeState extends State<RentRemainScreen> {
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   color: Constants.primaryColor,
-                  borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
+                  borderRadius:
+                      const BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30))),
               child: Stack(children: [
                 Align(
                   alignment: Alignment.centerLeft,
@@ -646,8 +637,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                 child: Align(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(
-                          top: MediaQuery.of(context).size.height * 0.12),
+                      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.12),
                       child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.16,
                         width: MediaQuery.of(context).size.height * 0.41,
@@ -668,7 +658,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                                   children: [
                                     height(0.005),
                                     Text(
-                                     '${controller.myBookingData.first.propUnit?.listing?.property?.name}',
+                                      '${controller.myBookingData.first.propUnit?.listing?.property?.name}',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
@@ -677,7 +667,6 @@ class _MartHomeState extends State<RentRemainScreen> {
                                           fontSize: 17,
                                           fontWeight: FontWeight.w700),
                                     ),
-
                                     Text(
                                       'Last Pay : --',
                                       style: TextStyle(
@@ -691,7 +680,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                     Row(
+                                    Row(
                                       children: [
                                         // boxText(getDayCount(
                                         //     snapshot.data!.first.payDate)[0]),
@@ -715,21 +704,16 @@ class _MartHomeState extends State<RentRemainScreen> {
                       ),
                     ))),
             Positioned(
-                top: isTenant
-                    ? MediaQuery.of(context).size.height * 0.29
-                    : MediaQuery.of(context).size.height * 0.20,
+                top: isTenant ? MediaQuery.of(context).size.height * 0.29 : MediaQuery.of(context).size.height * 0.20,
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: listTab
-                        .map((e) => tabItem(
-                            e.split('/')[0], int.parse(e.split('/')[1])))
-                        .toList(),
+                    children: listTab.map((e) => tabItem(e.split('/')[0], int.parse(e.split('/')[1]))).toList(),
                   ),
                 )),
-         /*   Visibility(
+            /*   Visibility(
               visible: tabPos == 0 && isTenant,
               child: Align(
                   alignment: Alignment.bottomCenter,
@@ -786,11 +770,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                        RIEWidgets.getLoader(),
-                    height(0.05),
-                    title('Fetching Tenant Data', 18)
-                  ],
+                  children: [RIEWidgets.getLoader(), height(0.05), title('Fetching Tenant Data', 18)],
                 )),
               ),
       ),

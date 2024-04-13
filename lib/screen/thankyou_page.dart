@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:rentitezy/home/home_view/home_screen.dart';
 import 'package:rentitezy/widgets/home_button.dart';
+
+import '../dashboard/controller/dashboard_controller.dart';
+import '../dashboard/view/dashboard_view.dart';
 
 class ThankYouPage extends StatefulWidget {
   const ThankYouPage({
@@ -74,10 +79,11 @@ class _ThankYouPageState extends State<ThankYouPage> {
               child: HomeButton(
                 title: 'Home',
                 onTap: () {
+                  Get.find<DashboardController>().setIndex(0);
                   Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const MyHomePage()),
+                          builder: (context) => DashboardView()),
                       (route) => false);
                 },
               ),

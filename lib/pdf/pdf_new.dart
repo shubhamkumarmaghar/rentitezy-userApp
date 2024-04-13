@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart';
-import 'package:rentitezy/home/home_view/home_screen.dart';
 
+import '../utils/model/agreement_det.dart';
 import 'pdf_api.dart';
 
 class PdfInvoice {

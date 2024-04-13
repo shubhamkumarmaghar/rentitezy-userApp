@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rentitezy/home/model/property_list_nodel.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/search_listing_model.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
@@ -9,14 +10,14 @@ import 'search_controller.dart';
 
 class AllPropertiesPage extends StatelessWidget {
   AllPropertiesPage({super.key});
+
   final searchController = Get.put(SearchPController());
+
   Widget searchWidget(BuildContext context) {
     return Container(
       height: 50,
       margin: const EdgeInsets.only(top: 10),
-      decoration: BoxDecoration(
-          color: Constants.lightSearch,
-          borderRadius: BorderRadius.circular(30)),
+      decoration: BoxDecoration(color: Constants.lightSearch, borderRadius: BorderRadius.circular(30)),
       child: ListTile(
         leading: const Icon(Icons.search),
         horizontalTitleGap: 0,
@@ -31,7 +32,7 @@ class AllPropertiesPage extends StatelessWidget {
     );
   }
 
-  Widget recommendWidget(FlatModel propertyModel) {
+  Widget recommendWidget(PropertySingleData propertyModel) {
     return SearchItem(
       propertyModel: propertyModel,
     );
@@ -52,10 +53,7 @@ class AllPropertiesPage extends StatelessWidget {
           title: Text(
             'Search Properties',
             style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-                color: Colors.white,
-                fontSize: 23,
-                fontWeight: FontWeight.bold),
+                fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
           ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -82,10 +80,7 @@ class AllPropertiesPage extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: searchController.apiPropertyList.length,
                           itemBuilder: (context, index) {
-                            print(
-                                'searchController.apiPropertyList.length ${searchController.apiPropertyList.length}');
-                            return recommendWidget(
-                                searchController.apiPropertyList[index]);
+                           return recommendWidget(searchController.apiPropertyList[index]);
                           },
                         ),
                 ),

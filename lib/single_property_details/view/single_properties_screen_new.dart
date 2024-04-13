@@ -17,6 +17,7 @@ import 'package:rentitezy/localDb/db_helper.dart';
 
 import 'package:rentitezy/model/checkout_model.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
+import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 
 import 'package:scroll_page_view/scroll_page.dart';
 
@@ -49,6 +50,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
   String? availFrom;
   String bookingType = 'm';
   DateTime availFromDate = DateTime.now();
+
   //final dbFavItem = DbHelper.instance;
 
   //PropertyModel? singleProPerty;
@@ -60,43 +62,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
     super.initState();
   }
 
-/*
-  void fetchSingleProperties(String id) async {
-
-
-    String url = '${AppUrls.listingDetail}?id=$id';
-    final response =
-    await http.get(
-      Uri.parse(url),
-      headers: <String, String>{
-        "Auth-Token": GetStorage().read(Constants.token).toString()
-      },
-    );
-    if (response.statusCode == 200) {
-      var body = jsonDecode(response.body);
-      bool success = body["success"];
-      try {
-        if (success) {
-          singleProPerty = PropertyModel.fromJson(body["data"]);
-          Future.delayed(const Duration(seconds: 3));
-          if (singleProPerty != null) {
-            await fetchUser(singleProPerty!);
-            await fetchPropertyDetails(singleProPerty!);
-            singlePropertyDetailsController.singlePage.value = false;
-          } else {
-            singlePropertyDetailsController.proFetch.value = 'Currently unavailable';
-          }
-        }
-      } catch (e) {
-        singlePropertyDetailsController.proFetch.value = 'Currently unavailable';
-        debugPrint(e.toString());
-      }
-    } else {
-      Get.snackbar("Error", 'Error during fetch api data');
-    }
-    setState(() {});
-  }
-*/
   Widget _imageView(String image) {
     return ClipRRect(
       clipBehavior: Clip.antiAlias,
@@ -104,13 +69,12 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
       child: ClipRRect(
         clipBehavior: Clip.antiAlias,
         borderRadius: BorderRadius.circular(8),
-        child: imgLoadWid(image, 'assets/images/user_vec.png', 320, screenWidth,
-            BoxFit.cover),
+        child: imgLoadWid(image, 'assets/images/user_vec.png', 320, screenWidth, BoxFit.cover),
       ),
     );
   }
 
-  Widget siteVisitBtn(String title ) {
+  Widget siteVisitBtn(String title) {
     return GestureDetector(
       onTap: () {
         showBottomSiteVisit(title);
@@ -129,17 +93,14 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
+                fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
           ),
         ),
       ),
     );
   }
 
-  Widget bookNowBtn(String title ) {
+  Widget bookNowBtn(String title) {
     return GestureDetector(
       onTap: () {
         showBottomLeads(title);
@@ -158,10 +119,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
+                fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -190,17 +148,11 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
             text: TextSpan(
               text: '${index + 1}',
               style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: Constants.fontsFamily,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500),
+                  fontSize: 12, fontFamily: Constants.fontsFamily, color: Colors.white, fontWeight: FontWeight.w500),
               children: [
                 TextSpan(
                   text: '/',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: Constants.fontsFamily,
-                      color: Colors.white),
+                  style: TextStyle(fontSize: 12, fontFamily: Constants.fontsFamily, color: Colors.white),
                 ),
                 TextSpan(
                   text: '$length',
@@ -225,16 +177,12 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
       children: [
         Text(
           title,
-          style: TextStyle(
-              color: Constants.textColor,
-              fontSize: 13,
-              fontWeight: FontWeight.normal),
+          style: TextStyle(color: Constants.textColor, fontSize: 13, fontWeight: FontWeight.normal),
         ),
         height(0.005),
         Text(
           subTitle,
-          style: const TextStyle(
-              color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500),
+          style: const TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500),
         ),
       ],
     );
@@ -278,9 +226,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
             child: Text(
           val,
           style: TextStyle(
-              fontFamily: Constants.fontsFamily,
-              fontSize: 13,
-              color: const Color.fromARGB(255, 110, 109, 109)),
+              fontFamily: Constants.fontsFamily, fontSize: 13, color: const Color.fromARGB(255, 110, 109, 109)),
         )),
       ),
     );
@@ -295,599 +241,309 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
         context: context,
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
         ),
         builder: (context) {
           return Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: StatefulBuilder(
-                builder: (BuildContext context, setState) =>
-                    SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                builder: (BuildContext context, setState) => SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Please Fill Your Details',
+                            style: poppinsStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
+                          ),
+                          Center(
+                              child: Container(
+                            height: 1,
+                            width: 40,
+                            color: Colors.black,
+                          )),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(
-                                'Please Fill Your Details',
-                                style: poppinsStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20),
-                              ),
-                              Center(
-                                  child: Container(
-                                height: 1,
-                                width: 40,
-                                color: Colors.black,
-                              )),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  FilterChip(
-                                      label: Text('Monthly Booking'),
-                                      selectedColor: CustomTheme.peach,
-                                      backgroundColor: Colors.grey,
-                                      labelStyle: TextStyle(color: Colors.white),
-                                      selected:
-                                          singlePropertyDetailsController.list[0],
-                                      onSelected: (value) {
-                                        singlePropertyDetailsController.setChip(
-                                            selectedIndex: 0);
-                                        log('${value}');
-                                        //  _peopleListController.showList = _peopleListController.maleList;
-                                        // navigator?.pop();
-                                        setState(() {});
-                                      }),
-                                  FilterChip(
-                                      label: Text('Daily Booking'),
-                                      selectedColor: CustomTheme.peach,
-                                      backgroundColor: Colors.grey,
-                                      labelStyle: TextStyle(color: Colors.white),
-                                      selected:
-                                          singlePropertyDetailsController.list[1],
-                                      onSelected: (value) {
-                                        singlePropertyDetailsController.setChip(
-                                            selectedIndex: 1);
-                                        log('${value}');
-                                        //  _peopleListController.showList = _peopleListController.maleList;
-                                        // navigator?.pop();
-                                        setState(() {});
-                                      }),
-                                ],
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(3),
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: Constants.lightBg,
-                                  border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 227, 225, 225)),
-                                ),
-                                child: DropdownButton(
-                                  underline: const SizedBox(),
-                                  isExpanded: true,
-                                  padding:
-                                  EdgeInsets.only(left: 10),
-                                  hint: Text(
-                                    'Select Guest',
-                                    style: TextStyle(
-                                        color:
-                                            Constants.getColorFromHex('CDCDCD'),
-                                        fontFamily: Constants.fontsFamily),
-                                  ),
-                                  iconEnabledColor:
-                                      Constants.getColorFromHex('CDCDCD'),
-                                  items: singlePropertyDetailsController.guestList
-                                      .map((item) {
-                                    return DropdownMenuItem(
-                                      value: item.toString(),
-                                      child: Text(
-                                        item.toString(),
-                                        style: TextStyle(
-                                          fontFamily: Constants.fontsFamily,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newVal) {
-                                    setState(() => singlePropertyDetailsController
-                                        .dropdownValueGuest = newVal);
-                                  },
-                                  value: singlePropertyDetailsController
-                                      .dropdownValueGuest,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              singlePropertyDetailsController.list[1] == true
-                                  ? title('Select Days', 15)
-                                  : title('Select Months', 15),
-                              singlePropertyDetailsController.list[1] == true
-                                  ? Container(
-                                      padding: const EdgeInsets.all(3),
-                                    margin: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(7),
-                                        color: Constants.lightBg,
-                                        border: Border.all(
-                                            color: const Color.fromARGB(
-                                                255, 227, 225, 225)),
-                                      ),
-                                      child: DropdownButton(
-                                        underline: const SizedBox(),
-                                        padding: const EdgeInsets.only(left: 10),
-                                        isExpanded: true,
-                                        hint: Text(
-                                          'Select Days',
-                                          style: TextStyle(
-                                              color: Constants.getColorFromHex(
-                                                  'CDCDCD'),
-                                              fontFamily: Constants.fontsFamily),
-                                        ),
-                                        iconEnabledColor:
-                                            Constants.getColorFromHex('CDCDCD'),
-                                        items: singlePropertyDetailsController
-                                            .getDailyList()
-                                            .map((item) {
-                                          return DropdownMenuItem(
-                                            value: item.toString(),
-                                            child: Text(
-                                              item.toString(),
-                                              style: TextStyle(
-                                                fontFamily: Constants.fontsFamily,
-                                              ),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        onChanged: (newVal) {
-                                          setState(() =>
-                                              singlePropertyDetailsController
-                                                      .dropdownValueDaily =
-                                                  newVal.toString());
-                                        },
-                                        value: singlePropertyDetailsController
-                                            .dropdownValueDaily,
-                                      ),
-                                    )
-                                  : Container(
-                                      padding: const EdgeInsets.all(3),
-                                       margin: EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(7),
-                                        color: Constants.lightBg,
-                                        border: Border.all(
-                                            color: const Color.fromARGB(
-                                                255, 227, 225, 225)),
-                                      ),
-                                      child: DropdownButton(
-                                        underline: const SizedBox(),
-                                        padding:
-                                        EdgeInsets.only(left: 10),
-                                        isExpanded: true,
-                                        hint: Text(
-                                          'Select Months',
-                                          style: TextStyle(
-                                              color: Constants.getColorFromHex(
-                                                  'CDCDCD'),
-                                              fontFamily: Constants.fontsFamily),
-                                        ),
-                                        iconEnabledColor:
-                                            Constants.getColorFromHex('CDCDCD'),
-                                        items: singlePropertyDetailsController
-                                            .monthList
-                                            .map((item) {
-                                          return DropdownMenuItem(
-                                            value: item.toString(),
-                                            child: Text(
-                                              item.toString(),
-                                              style: TextStyle(
-                                                fontFamily: Constants.fontsFamily,
-                                              ),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        onChanged: (newVal) {
-                                          setState(() =>
-                                              singlePropertyDetailsController
-                                                      .dropdownValueMonth =
-                                                  newVal.toString());
-                                        },
-                                        value: singlePropertyDetailsController
-                                            .dropdownValueMonth,
-                                      ),
-                                    ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              title('Select Unit', 15),
-                              Container(
-                                padding: const EdgeInsets.all(3),
-                                margin: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(7),
-                                  color: Constants.lightBg,
-                                  border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 227, 225, 225)),
-                                ),
-                                child: DropdownButton(
-                                  underline: const SizedBox(),
-                                  padding:
-                                  EdgeInsets.only(left: 10),
-                                  isExpanded: true,
-                                  hint: Text(
-                                    'Select Unit',
-                                    style: TextStyle(
-                                        color: Constants.getColorFromHex(
-                                            'CDCDCD'),
-                                        fontFamily: Constants.fontsFamily),
-                                  ),
-                                  iconEnabledColor:
-                                  Constants.getColorFromHex('CDCDCD'),
-                                  items: singlePropertyDetailsController
-                                      .singleProPerty?.data?.units
-                                      ?.map((item) {
-                                    return
-                                     DropdownMenuItem(
-                                      value: item,
-                                      child: Text(item.flatNo.toString(),
-                                        style: TextStyle(
-                                          fontFamily: Constants.fontsFamily,
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (newVal) {
-                                    setState(() =>
-                                    singlePropertyDetailsController
-                                        .unitId =
-                                        newVal!);
-                                  },
-                                  value: singlePropertyDetailsController
-                                      .unitId,
-                                ),
-                              ),
-                              title('Select Date', 15),
-                              Container(
-                                height: 55,
-                                decoration: BoxDecoration(
-                                  borderRadius:
-                                      const BorderRadius.all(Radius.circular(7)),
-                                  color: Constants.lightBg,
-                                ),
-                                margin: EdgeInsets.all(10),
-                                padding: const EdgeInsets.all(5),
-                                child: InkWell(
-                                  onTap: () async {
-                                    if (availFrom != null) {
-                                      DateTime newDate = availFromDate
-                                          .add(const Duration(days: 7));
-                                      await showDatePicker(
-                                        context: context,
-                                        initialDate:
-                                            singlePropertyDetailsController
-                                                .currentDate,
-                                        firstDate: availFromDate,
-                                        lastDate: newDate,
-                                      ).then((pickedDate) {
-                                        if (pickedDate != null &&
-                                            pickedDate !=
-                                                singlePropertyDetailsController
-                                                    .currentDate) {
-                                          setState(() =>
-                                              singlePropertyDetailsController
-                                                  .currentDate = pickedDate);
-                                        }
-                                      });
-                                    } else {
-                                      await showDatePicker(
-                                        context: context,
-                                        initialDate:
-                                            SinglePropertyDetailsController()
-                                                .currentDate,
-                                        firstDate: DateTime.now()
-                                            .subtract(const Duration(days: 0)),
-                                        lastDate: DateTime(2100),
-                                      ).then((pickedDate) {
-                                        if (pickedDate != null &&
-                                            pickedDate !=
-                                                singlePropertyDetailsController
-                                                    .currentDate) {
-                                          setState(() =>
-                                              singlePropertyDetailsController
-                                                  .currentDate = pickedDate);
-                                        }
-                                      });
-                                    }
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 10.0),
-                                          child: getCustomText(
-                                              DateFormat.yMMMd().format(
-                                                  singlePropertyDetailsController
-                                                      .currentDate),
-                                              Constants.primaryColor,
-                                              1,
-                                              TextAlign.start,
-                                              FontWeight.w400,
-                                              15),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.calendar_today_outlined,
-                                        color: Constants.textColor,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Center(
-                                child: GestureDetector(
-                                  onTap: () async {
-                                   if (singlePropertyDetailsController
-                                                .dropdownValueGuest ==
-                                            null ||
-                                        singlePropertyDetailsController
-                                                .dropdownValueGuest ==
-                                            'null' ||
-                                        singlePropertyDetailsController
-                                            .dropdownValueGuest.isEmpty) {
-                                      RIEWidgets.getToast(
-                                          message: 'Select valid month',
-                                          color: CustomTheme.white);
-                                    } else if (singlePropertyDetailsController
-                                        .dropdownValueMonth.isEmpty) {
-                                      RIEWidgets.getToast(
-                                          message: 'Select valid month',
-                                          color: CustomTheme.white);
-                                    }
-                                   else if (singlePropertyDetailsController.unitId?.id == null) {
-                                     log('${singlePropertyDetailsController.unitId?.id}');
-                                     RIEWidgets.getToast(
-                                         message: 'Select unit Id ${singlePropertyDetailsController.unitId?.id}',
-                                         color: CustomTheme.white);
-                                   }
-                                   else {
-                                      if (int.parse(singlePropertyDetailsController
-                                              .dropdownValueGuest
-                                              .toString()) >
-                                          1) {
-                                        alertDialog(
-                                            context,
-                                            'Booking Alert',
-                                            'Valid ID /KYC should be provided at the time on check in',
-                                            from);
-                                      } else {
-                                        singlePropertyDetailsController
-                                            .submitReqBooking(from,unitId: singlePropertyDetailsController.unitId!.id.toString());
-                                      }
-                                    }
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width * 0.70,
-                                    height: 50,
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: Constants.primaryColor,
-                                      borderRadius: BorderRadius.circular(40),
-                                    ),
-                                    child: loadingLeads
-                                        ? const Center(
-                                            child: SizedBox(
-                                              height: 20,
-                                              width: 20,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 3,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )
-                                        : Center(
-                                            child: Text(
-                                              'Submit',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  fontFamily: Constants.fontsFamily,
-                                                  color: Colors.white,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                              ),
-
+                              FilterChip(
+                                  label: const Text('Monthly Booking'),
+                                  selectedColor: CustomTheme.peach,
+                                  backgroundColor: Colors.grey,
+                                  checkmarkColor: Colors.white,
+                                  labelStyle: const TextStyle(color: Colors.white),
+                                  selected: singlePropertyDetailsController.list[0],
+                                  onSelected: (value) {
+                                    singlePropertyDetailsController.setChip(selectedIndex: 0);
+                                    //  _peopleListController.showList = _peopleListController.maleList;
+                                    // navigator?.pop();
+                                    setState(() {});
+                                  }),
+                              FilterChip(
+                                  label: const Text('Daily Booking'),
+                                  selectedColor: CustomTheme.peach,
+                                  backgroundColor: Colors.grey,
+                                  checkmarkColor: Colors.white,
+                                  labelStyle: TextStyle(color: Colors.white),
+                                  selected: singlePropertyDetailsController.list[1],
+                                  onSelected: (value) {
+                                    singlePropertyDetailsController.setChip(selectedIndex: 1);
+                                    log('${value}');
+                                    //  _peopleListController.showList = _peopleListController.maleList;
+                                    // navigator?.pop();
+                                    setState(() {});
+                                  }),
                             ],
                           ),
-                        ))),
-          );
-        });
-  }
-
-  void showBottomSiteVisit(String from) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
-        ),
-        builder: (context) {
-          return Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: StatefulBuilder(
-                builder: (BuildContext context, setState) =>
-                    SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
-                                'Site Visit',
-                                style: poppinsStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20),
+                          Container(
+                            padding: const EdgeInsets.all(3),
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: Constants.lightBg,
+                              border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
+                            ),
+                            child: DropdownButton(
+                              underline: const SizedBox(),
+                              isExpanded: true,
+                              padding: EdgeInsets.only(left: 10),
+                              hint: Text(
+                                'Select Guest',
+                                style: TextStyle(
+                                    color: Constants.getColorFromHex('CDCDCD'), fontFamily: Constants.fontsFamily),
                               ),
+                              iconEnabledColor: Constants.getColorFromHex('CDCDCD'),
+                              items: singlePropertyDetailsController.guestList.map((item) {
+                                return DropdownMenuItem(
+                                  value: item.toString(),
+                                  child: Text(
+                                    item.toString(),
+                                    style: TextStyle(
+                                      fontFamily: Constants.fontsFamily,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (newVal) {
+                                setState(() => singlePropertyDetailsController.dropdownValueGuest = newVal);
+                              },
+                              value: singlePropertyDetailsController.dropdownValueGuest,
                             ),
-                            Center(
-                                child: Container(
-                                  height: 1,
-                                  width: 40,
-                                  color: Colors.black,
-                                )),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                FilterChip(
-                                    label: Text('Online'),
-                                    selectedColor: CustomTheme.peach,
-                                    backgroundColor: Colors.grey,
-                                    labelStyle: TextStyle(color: Colors.white),
-                                    selected: singlePropertyDetailsController.sitiVisitTypeList[0],
-                                    onSelected: (value) {
-                                      singlePropertyDetailsController.setSourceChip(
-                                          selectedIndex: 0);
-                                      log('${value}');
-                                      //  _peopleListController.showList = _peopleListController.maleList;
-                                      // navigator?.pop();
-                                      setState(() {});
-                                    }),
-                                FilterChip(
-                                    label: Text('Offline'),
-                                    selectedColor: CustomTheme.peach,
-                                    backgroundColor: Colors.grey,
-                                    labelStyle: TextStyle(color: Colors.white),
-                                    selected:
-                                    singlePropertyDetailsController.sitiVisitTypeList[1],
-                                    onSelected: (value) {
-                                      singlePropertyDetailsController.setSourceChip(
-                                          selectedIndex: 1);
-                                      log('${value}');
-                                      //  _peopleListController.showList = _peopleListController.maleList;
-                                      // navigator?.pop();
-                                      setState(() {});
-                                    }),
-                              ],
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              child: TextField(
-                                keyboardType: TextInputType.phone,
-                                controller: singlePropertyDetailsController.phoneController,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: "Phone",
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          singlePropertyDetailsController.list[1] == true
+                              ? title('Select Days', 15)
+                              : title('Select Months', 15),
+                          singlePropertyDetailsController.list[1] == true
+                              ? Container(
+                                  padding: const EdgeInsets.all(3),
+                                  margin: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(7),
+                                    color: Constants.lightBg,
+                                    border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
+                                  ),
+                                  child: DropdownButton(
+                                    underline: const SizedBox(),
+                                    padding: const EdgeInsets.only(left: 10),
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Select Days',
+                                      style: TextStyle(
+                                          color: Constants.getColorFromHex('CDCDCD'),
+                                          fontFamily: Constants.fontsFamily),
+                                    ),
+                                    iconEnabledColor: Constants.getColorFromHex('CDCDCD'),
+                                    items: singlePropertyDetailsController.getDailyList().map((item) {
+                                      return DropdownMenuItem(
+                                        value: item.toString(),
+                                        child: Text(
+                                          item.toString(),
+                                          style: TextStyle(
+                                            fontFamily: Constants.fontsFamily,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newVal) {
+                                      setState(
+                                          () => singlePropertyDetailsController.dropdownValueDaily = newVal.toString());
+                                    },
+                                    value: singlePropertyDetailsController.dropdownValueDaily,
+                                  ),
+                                )
+                              : Container(
+                                  padding: const EdgeInsets.all(3),
+                                  margin: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(7),
+                                    color: Constants.lightBg,
+                                    border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
+                                  ),
+                                  child: DropdownButton(
+                                    underline: const SizedBox(),
+                                    padding: EdgeInsets.only(left: 10),
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Select Months',
+                                      style: TextStyle(
+                                          color: Constants.getColorFromHex('CDCDCD'),
+                                          fontFamily: Constants.fontsFamily),
+                                    ),
+                                    iconEnabledColor: Constants.getColorFromHex('CDCDCD'),
+                                    items: singlePropertyDetailsController.monthList.map((item) {
+                                      return DropdownMenuItem(
+                                        value: item.toString(),
+                                        child: Text(
+                                          item.toString(),
+                                          style: TextStyle(
+                                            fontFamily: Constants.fontsFamily,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newVal) {
+                                      setState(
+                                          () => singlePropertyDetailsController.dropdownValueMonth = newVal.toString());
+                                    },
+                                    value: singlePropertyDetailsController.dropdownValueMonth,
+                                  ),
                                 ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          title('Select Unit', 15),
+                          Container(
+                            padding: const EdgeInsets.all(3),
+                            margin: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7),
+                              color: Constants.lightBg,
+                              border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
+                            ),
+                            child: DropdownButton(
+                              underline: const SizedBox(),
+                              padding: EdgeInsets.only(left: 10),
+                              isExpanded: true,
+                              hint: Text(
+                                'Select Unit',
+                                style: TextStyle(
+                                    color: Constants.getColorFromHex('CDCDCD'), fontFamily: Constants.fontsFamily),
                               ),
+                              iconEnabledColor: Constants.getColorFromHex('CDCDCD'),
+                              items: singlePropertyDetailsController.singleProPerty?.data?.units?.map((item) {
+                                return DropdownMenuItem(
+                                  value: item,
+                                  child: Text(
+                                    item.flatNo.toString(),
+                                    style: TextStyle(
+                                      fontFamily: Constants.fontsFamily,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (newVal) {
+                                setState(() => singlePropertyDetailsController.unitId = newVal!);
+                              },
+                              value: singlePropertyDetailsController.unitId,
                             ),
-                            SizedBox(
-                              height: 10,
+                          ),
+                          title('Select Date', 15),
+                          Container(
+                            height: 55,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(Radius.circular(7)),
+                              color: Constants.lightBg,
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            title('Select Date', 15),
-                            Container(
-                              height: 55,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                const BorderRadius.all(Radius.circular(7)),
-                                color: Constants.lightBg,
-                              ),
-                              margin: contEdge,
-                              padding: const EdgeInsets.all(5),
-                              child: InkWell(
-                                onTap: () async {
-                                  if (availFrom != null) {
-                                    DateTime newDate = availFromDate
-                                        .add(const Duration(days: 7));
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate:
-                                      singlePropertyDetailsController
-                                          .currentDate,
-                                      firstDate: availFromDate,
-                                      lastDate: newDate,
-                                    ).then((pickedDate) {
-                                      if (pickedDate != null &&
-                                          pickedDate !=
-                                              singlePropertyDetailsController
-                                                  .currentDate) {
-                                        setState(() =>
-                                        singlePropertyDetailsController
-                                            .currentDate = pickedDate);
-                                      }
-                                    });
-                                  } else {
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate:
-                                      SinglePropertyDetailsController()
-                                          .currentDate,
-                                      firstDate: DateTime.now()
-                                          .subtract(const Duration(days: 0)),
-                                      lastDate: DateTime(2100),
-                                    ).then((pickedDate) {
-                                      if (pickedDate != null &&
-                                          pickedDate !=
-                                              singlePropertyDetailsController
-                                                  .currentDate) {
-                                        setState(() =>
-                                        singlePropertyDetailsController
-                                            .currentDate = pickedDate);
-                                      }
-                                    });
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
+                            margin: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(5),
+                            child: InkWell(
+                              onTap: () async {
+                                if (availFrom != null) {
+                                  DateTime newDate = availFromDate.add(const Duration(days: 7));
+                                  await showDatePicker(
+                                    context: context,
+                                    initialDate: singlePropertyDetailsController.currentDate,
+                                    firstDate: availFromDate,
+                                    lastDate: newDate,
+                                  ).then((pickedDate) {
+                                    if (pickedDate != null &&
+                                        pickedDate != singlePropertyDetailsController.currentDate) {
+                                      setState(() => singlePropertyDetailsController.currentDate = pickedDate);
+                                    }
+                                  });
+                                } else {
+                                  await showDatePicker(
+                                    context: context,
+                                    initialDate: SinglePropertyDetailsController().currentDate,
+                                    firstDate: DateTime.now().subtract(const Duration(days: 0)),
+                                    lastDate: DateTime(2100),
+                                  ).then((pickedDate) {
+                                    if (pickedDate != null &&
+                                        pickedDate != singlePropertyDetailsController.currentDate) {
+                                      setState(() => singlePropertyDetailsController.currentDate = pickedDate);
+                                    }
+                                  });
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 10.0),
                                       child: getCustomText(
-                                          DateFormat.yMMMd().format(
-                                              singlePropertyDetailsController
-                                                  .currentDate),
+                                          DateFormat.yMMMd().format(singlePropertyDetailsController.currentDate),
                                           Constants.primaryColor,
                                           1,
                                           TextAlign.start,
                                           FontWeight.w400,
                                           15),
                                     ),
-                                    Icon(
-                                      Icons.calendar_today_outlined,
-                                      color: Constants.textColor,
-                                    )
-                                  ],
-                                ),
+                                  ),
+                                  Icon(
+                                    Icons.calendar_today_outlined,
+                                    color: Constants.textColor,
+                                  )
+                                ],
                               ),
                             ),
-                            height(0.05),
-                            GestureDetector(
+                          ),
+                          Center(
+                            child: GestureDetector(
                               onTap: () async {
-                                if(singlePropertyDetailsController.phoneController.text.isNotEmpty) {
-                                  singlePropertyDetailsController
-                                      .submitSiteVisit(from);
-                                }
-                                else{
-                                  RIEWidgets.getToast(message: 'Phone number can not be empty', color: Colors.white);
+                                if (singlePropertyDetailsController.dropdownValueGuest == null ||
+                                    singlePropertyDetailsController.dropdownValueGuest == 'null' ||
+                                    singlePropertyDetailsController.dropdownValueGuest.isEmpty) {
+                                  RIEWidgets.getToast(message: 'Select valid month', color: CustomTheme.white);
+                                } else if (singlePropertyDetailsController.dropdownValueMonth.isEmpty) {
+                                  RIEWidgets.getToast(message: 'Select valid month', color: CustomTheme.white);
+                                } else if (singlePropertyDetailsController.unitId?.id == null) {
+                                  log('${singlePropertyDetailsController.unitId?.id}');
+                                  RIEWidgets.getToast(
+                                      message: 'Select unit Id ${singlePropertyDetailsController.unitId?.id}',
+                                      color: CustomTheme.white);
+                                } else {
+                                  if (int.parse(singlePropertyDetailsController.dropdownValueGuest.toString()) > 1) {
+                                    showTextAlertDialog(
+                                        context: context,
+                                        onYesTap: () {
+                                          Get.back();
+                                          Get.back();
+                                          singlePropertyDetailsController.submitReqBooking(from,
+                                              unitId: singlePropertyDetailsController.unitId!.id.toString());
+
+                                        },
+                                        title: 'Booking Alert',
+                                        subTitle: 'Valid ID /KYC should be provided at the time on check in');
+                                  } else {
+                                    Get.back();
+                                    singlePropertyDetailsController.submitReqBooking(from,
+                                        unitId: singlePropertyDetailsController.unitId!.id.toString());
+                                  }
                                 }
                               },
                               child: Container(
@@ -900,74 +556,220 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                 ),
                                 child: loadingLeads
                                     ? const Center(
-                                  child: SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 3,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                )
+                                        child: SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 3,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      )
                                     : Center(
-                                  child: Text(
-                                    'Submit',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontFamily: Constants.fontsFamily,
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
+                                        child: Text(
+                                          'Submit',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontFamily: Constants.fontsFamily,
+                                              color: Colors.white,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
                               ),
                             ),
-                            height(0.05),
-                          ],
-                        ))),
+                          ),
+                        ],
+                      ),
+                    ))),
           );
         });
   }
 
-
-  Future<void> alertDialog(
-      BuildContext context, String title, String subttitle, String from) {
-    return showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(title,
-              style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-              )),
-          content: Text(subttitle,
-              style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-              )),
-          actions: [
-            CupertinoDialogAction(
-                child: Text("YES",
-                    style: TextStyle(
-                      fontFamily: Constants.fontsFamily,
-                    )),
-                onPressed: () async {
-                  singlePropertyDetailsController.submitReqBooking(from,unitId: singlePropertyDetailsController.unitId!.id.toString());
-                }),
-            CupertinoDialogAction(
-              child: Text("NO",
-                  style: TextStyle(
-                    fontFamily: Constants.fontsFamily,
-                  )),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      },
-    );
+  void showBottomSiteVisit(String from) {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        backgroundColor: Colors.white,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+        ),
+        builder: (context) {
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: StatefulBuilder(
+                builder: (BuildContext context, setState) => SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            'Site Visit',
+                            style: poppinsStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
+                          ),
+                        ),
+                        Center(
+                            child: Container(
+                          height: 1,
+                          width: 40,
+                          color: Colors.black,
+                        )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            FilterChip(
+                                label: Text('Online'),
+                                selectedColor: CustomTheme.peach,
+                                backgroundColor: Colors.grey,
+                                labelStyle: TextStyle(color: Colors.white),
+                                selected: singlePropertyDetailsController.sitiVisitTypeList[0],
+                                onSelected: (value) {
+                                  singlePropertyDetailsController.setSourceChip(selectedIndex: 0);
+                                  log('${value}');
+                                  //  _peopleListController.showList = _peopleListController.maleList;
+                                  // navigator?.pop();
+                                  setState(() {});
+                                }),
+                            FilterChip(
+                                label: Text('Offline'),
+                                selectedColor: CustomTheme.peach,
+                                backgroundColor: Colors.grey,
+                                labelStyle: TextStyle(color: Colors.white),
+                                selected: singlePropertyDetailsController.sitiVisitTypeList[1],
+                                onSelected: (value) {
+                                  singlePropertyDetailsController.setSourceChip(selectedIndex: 1);
+                                  log('${value}');
+                                  //  _peopleListController.showList = _peopleListController.maleList;
+                                  // navigator?.pop();
+                                  setState(() {});
+                                }),
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          child: TextField(
+                            keyboardType: TextInputType.phone,
+                            controller: singlePropertyDetailsController.phoneController,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Phone",
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        title('Select Date', 15),
+                        Container(
+                          height: 55,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(7)),
+                            color: Constants.lightBg,
+                          ),
+                          margin: contEdge,
+                          padding: const EdgeInsets.all(5),
+                          child: InkWell(
+                            onTap: () async {
+                              if (availFrom != null) {
+                                DateTime newDate = availFromDate.add(const Duration(days: 7));
+                                await showDatePicker(
+                                  context: context,
+                                  initialDate: singlePropertyDetailsController.currentDate,
+                                  firstDate: availFromDate,
+                                  lastDate: newDate,
+                                ).then((pickedDate) {
+                                  if (pickedDate != null && pickedDate != singlePropertyDetailsController.currentDate) {
+                                    setState(() => singlePropertyDetailsController.currentDate = pickedDate);
+                                  }
+                                });
+                              } else {
+                                await showDatePicker(
+                                  context: context,
+                                  initialDate: SinglePropertyDetailsController().currentDate,
+                                  firstDate: DateTime.now().subtract(const Duration(days: 0)),
+                                  lastDate: DateTime(2100),
+                                ).then((pickedDate) {
+                                  if (pickedDate != null && pickedDate != singlePropertyDetailsController.currentDate) {
+                                    setState(() => singlePropertyDetailsController.currentDate = pickedDate);
+                                  }
+                                });
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: getCustomText(
+                                      DateFormat.yMMMd().format(singlePropertyDetailsController.currentDate),
+                                      Constants.primaryColor,
+                                      1,
+                                      TextAlign.start,
+                                      FontWeight.w400,
+                                      15),
+                                ),
+                                Icon(
+                                  Icons.calendar_today_outlined,
+                                  color: Constants.textColor,
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        height(0.05),
+                        GestureDetector(
+                          onTap: () async {
+                            if (singlePropertyDetailsController.phoneController.text.isNotEmpty) {
+                              singlePropertyDetailsController.submitSiteVisit(from);
+                            } else {
+                              RIEWidgets.getToast(message: 'Phone number can not be empty', color: Colors.white);
+                            }
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.70,
+                            height: 50,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Constants.primaryColor,
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            child: loadingLeads
+                                ? const Center(
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : Center(
+                                    child: Text(
+                                      'Submit',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: Constants.fontsFamily,
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        height(0.05),
+                      ],
+                    ))),
+          );
+        });
   }
-
 
   void issuesRequest({required String id}) async {
     try {
@@ -1004,8 +806,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100)),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                           child: Padding(
                             padding: const EdgeInsets.all(8),
                             child: SizedBox(
@@ -1023,7 +824,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                     ))
                 : Stack(
                     children: [
-                    /*  SizedBox(
+                      /*  SizedBox(
                         height: MediaQuery.of(context).size.height,
                         width: MediaQuery.of(context).size.width,
                       ),*/
@@ -1034,31 +835,18 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                             padding: const EdgeInsets.all(0),
                             sliver: SliverToBoxAdapter(
                               child: SizedBox(
-                                height: Get.height*0.36,
-                                child: controller.singleProPerty?.data !=
-                                            null &&
-                                        controller.singleProPerty?.data
-                                                ?.images !=
-                                            null &&
-                                        controller.singleProPerty!.data!
-                                                .images!.length >
-                                            1
+                                height: Get.height * 0.36,
+                                child: controller.singleProPerty?.data != null &&
+                                        controller.singleProPerty?.data?.images != null &&
+                                        controller.singleProPerty!.data!.images!.length > 1
                                     ? ScrollPageView(
                                         controller: ScrollPageController(),
                                         delay: const Duration(seconds: 4),
                                         indicatorAlign: Alignment.bottomLeft,
-                                        indicatorPadding: EdgeInsets.only(
-                                            bottom: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.10,
-                                            left: 5),
-                                        indicatorWidgetBuilder:
-                                            _indicatorBuilder,
-                                        children: images!
-                                            .map((image) =>
-                                                _imageView('${image.url}'))
-                                            .toList(),
+                                        indicatorPadding:
+                                            EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.10, left: 5),
+                                        indicatorWidgetBuilder: _indicatorBuilder,
+                                        children: images!.map((image) => _imageView('${image.url}')).toList(),
                                       )
                                     : _imageView('${images?.first.url}'),
                               ),
@@ -1070,52 +858,96 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                           bottom: 0,
                           child: SizedBox(
                             width: MediaQuery.of(context).size.width,
-                            height: Get.height*0.64,
+                            height: Get.height * 0.64,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.vertical,
                               child: Container(
-                                padding:
-                                    const EdgeInsets.only(left: 10, top: 20,right: 10),
+                                padding: const EdgeInsets.only(left: 10, top: 20, right: 10),
                                 decoration: BoxDecoration(
-                                /*  borderRadius: const BorderRadius.only(
+                                  /*  borderRadius: const BorderRadius.only(
                                       topLeft: Radius.circular(20),
                                       topRight: Radius.circular(20)),*/
                                   color: Colors.white,
-                                  border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 227, 225, 225)),
+                                  border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
                                 ),
                                 child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [Column(children: [
-                                          Text('Long Term Rent',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
-                                          Text('${Constants.currency} ${data?.price}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: CustomTheme.peach),)
-                                        ],),
-                                          Column(children: [
-                                            Text('Deposit',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
-                                            Text('${Constants.currency} ${data?.deposit}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: CustomTheme.peach),)
-                                          ],)
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Long Term Rent',
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                                              ),
+                                              Text(
+                                                '${Constants.currency} ${data?.price}',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: CustomTheme.peach),
+                                              )
+                                            ],
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Deposit',
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                                              ),
+                                              Text(
+                                                '${Constants.currency} ${data?.deposit}',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: CustomTheme.peach),
+                                              )
+                                            ],
+                                          )
                                         ],
                                       ),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [Column(children: [
-                                          Text('Short Term Rent',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
-                                          Text('${Constants.currency} ${data?.stPrice}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: CustomTheme.peach),)
-                                        ],),
-                                          SizedBox(height: Get.height*.08,),
-                                          Column(children: [
-                                            Text('Deposit',style: TextStyle(fontSize: 16,fontWeight: FontWeight.normal),),
-                                            Text('${Constants.currency} ${data?.stDeposit}',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: CustomTheme.peach),)
-                                          ],)
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Short Term Rent',
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                                              ),
+                                              Text(
+                                                '${Constants.currency} ${data?.stPrice}',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: CustomTheme.peach),
+                                              )
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: Get.height * .08,
+                                          ),
+                                          Column(
+                                            children: [
+                                              Text(
+                                                'Deposit',
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
+                                              ),
+                                              Text(
+                                                '${Constants.currency} ${data?.stDeposit}',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: CustomTheme.peach),
+                                              )
+                                            ],
+                                          )
                                         ],
                                       ),
-                                   /*   Row(
+                                      /*   Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.start,
                                         crossAxisAlignment:
@@ -1257,43 +1089,30 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                       ),*/
 
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 15, right: 10),
+                                        padding: const EdgeInsets.only(top: 15, right: 10),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(
                                                 width: 200,
                                                 child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
                                                   children: [
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              top: 3),
-                                                      child: iconWidget(
-                                                          'location', 13, 13),
+                                                      padding: const EdgeInsets.only(top: 3),
+                                                      child: iconWidget('location', 13, 13),
                                                     ),
                                                     SizedBox(
                                                       width: 180,
-                                                      child: Text(
-                                                          '${data?.property!.address}',
+                                                      child: Text('${data?.property!.address}',
                                                           maxLines: 2,
                                                           style: TextStyle(
-                                                              fontFamily: Constants
-                                                                  .fontsFamily,
-                                                              color: Constants
-                                                                  .textColor,
+                                                              fontFamily: Constants.fontsFamily,
+                                                              color: Constants.textColor,
                                                               fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
+                                                              fontWeight: FontWeight.normal)),
                                                     )
                                                   ],
                                                 )),
@@ -1306,31 +1125,23 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                                       '${data?.property?.ownerPhone}',
                                                       context);*/
                                                   },
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Constants.primaryColor,
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: Constants.primaryColor,
                                                   ),
-                                                  icon: iconWidget(
-                                                      'phone', 30, 30),
+                                                  icon: iconWidget('phone', 30, 30),
                                                   label: Text(
                                                     'Contact',
                                                     style: TextStyle(
                                                         fontSize: 12,
-                                                        fontFamily: Constants
-                                                            .fontsFamily,
-                                                        fontWeight:
-                                                            FontWeight.bold),
+                                                        fontFamily: Constants.fontsFamily,
+                                                        fontWeight: FontWeight.bold),
                                                   )),
                                             )
                                           ],
                                         ),
                                       ),
                                       height(0.005),
-                                      sTitle(
-                                          'Property Details',
-                                          15,
-                                          const Color.fromARGB(255, 73, 72, 72),
+                                      sTitle('Property Details', 15, const Color.fromARGB(255, 73, 72, 72),
                                           FontWeight.w500),
                                       height(0.005),
                                       Text(
@@ -1345,47 +1156,27 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                       ),
                                       height(0.005),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          SizedBox(
-                                              width: 150,
-                                              child: columnTxt('BHK',
-                                                  '${data.listingType}')),
-                                          SizedBox(
-                                              width: 150,
-                                              child: columnTxt('Floor',
-                                                  '${data.property?.floor}'))
+                                          SizedBox(width: 150, child: columnTxt('BHK', '${data.listingType}')),
+                                          SizedBox(width: 150, child: columnTxt('Floor', '${data.property?.floor}'))
                                         ],
                                       ),
                                       height(0.005),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
-                                          SizedBox(
-                                              width: 150,
-                                              child: columnTxt('Flat Type',
-                                                  '${data.furnishType}')),
-                                          SizedBox(
-                                              width: 150,
-                                              child: columnTxt('Covered Area',
-                                                  '${data.area} Sqft'))
+                                          SizedBox(width: 150, child: columnTxt('Flat Type', '${data.furnishType}')),
+                                          SizedBox(width: 150, child: columnTxt('Covered Area', '${data.area} Sqft'))
                                         ],
                                       ),
                                       height(0.005),
-                                      columnTxt(
-                                          'City', '${data.property?.city} '),
+                                      columnTxt('City', '${data.property?.city} '),
                                       height(0.005),
                                       sTitle(
-                                          'Description :',
-                                          17,
-                                          const Color.fromARGB(255, 73, 72, 72),
-                                          FontWeight.w500),
+                                          'Description :', 17, const Color.fromARGB(255, 73, 72, 72), FontWeight.w500),
                                       width(0.005),
                                       Text(
                                         '${data.description}',
@@ -1396,11 +1187,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                             fontWeight: FontWeight.w500),
                                       ),
                                       height(0.005),
-                                      sTitle(
-                                          'Amenities',
-                                          17,
-                                          const Color.fromARGB(255, 73, 72, 72),
-                                          FontWeight.w500),
+                                      sTitle('Amenities', 17, const Color.fromARGB(255, 73, 72, 72), FontWeight.w500),
                                       height(0.005),
                                       // SizedBox(
                                       //   height: 70,
@@ -1413,71 +1200,53 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                       //           .toList()),
                                       // ),
                                       // height(10),
-                                      sTitle(
-                                          'Have a question?',
-                                          15,
-                                          const Color.fromARGB(255, 73, 72, 72),
+                                      sTitle('Have a question?', 15, const Color.fromARGB(255, 73, 72, 72),
                                           FontWeight.w500),
                                       width(0.005),
-                                      sTitle('Get a quick answer right here',
-                                          11, Colors.grey, FontWeight.normal),
+                                      sTitle('Get a quick answer right here', 11, Colors.grey, FontWeight.normal),
                                       height(0.005),
                                       Container(
                                         height: 45,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(7),
+                                          borderRadius: BorderRadius.circular(7),
                                           color: Colors.white,
-                                          border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 214, 212, 212)),
+                                          border: Border.all(color: const Color.fromARGB(255, 214, 212, 212)),
                                         ),
                                         child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Expanded(
                                                 child: TextField(
                                                   controller: askQController,
                                                   decoration: InputDecoration(
-                                                      hoverColor:
-                                                          Constants.hint,
+                                                      hoverColor: Constants.hint,
                                                       hintText: '',
                                                       border: InputBorder.none),
                                                 ),
                                               ),
                                               GestureDetector(
                                                 onTap: () {
-                                                  if (askQController
-                                                      .text.isEmpty) {
-                                                    showSnackBar(context,
-                                                        'Enter valid Question');
+                                                  if (askQController.text.isEmpty) {
+                                                    showSnackBar(context, 'Enter valid Question');
                                                   } else {
-                                                    issuesRequest(
-                                                        id: data.id.toString());
+                                                    issuesRequest(id: data.id.toString());
                                                   }
                                                 },
                                                 child: Container(
                                                   height: 45,
                                                   width: 100,
                                                   decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            7),
-                                                    color:
-                                                        Constants.primaryColor,
+                                                    borderRadius: BorderRadius.circular(7),
+                                                    color: Constants.primaryColor,
                                                   ),
                                                   child: Center(
                                                     child: Text(
                                                       'Ask now',
                                                       style: TextStyle(
-                                                          fontFamily: Constants
-                                                              .fontsFamily,
+                                                          fontFamily: Constants.fontsFamily,
                                                           color: Colors.white,
-                                                          fontWeight:
-                                                              FontWeight.bold),
+                                                          fontWeight: FontWeight.bold),
                                                     ),
                                                   ),
                                                 ),
@@ -1490,8 +1259,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                         child: ListView(
                                           shrinkWrap: true,
                                           scrollDirection: Axis.horizontal,
-                                          physics:
-                                              const BouncingScrollPhysics(),
+                                          physics: const BouncingScrollPhysics(),
                                           children: [
                                             chip('Price negotiable?'),
                                             chip('Still available?'),
@@ -1502,29 +1270,19 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                       height(0.005),
                                       Container(
                                         height: screenHeight * 0.20,
-                                        padding:
-                                            const EdgeInsets.only(right: 10),
+                                        padding: const EdgeInsets.only(right: 10),
                                         child: GoogleMap(
                                             markers: markers,
                                             mapType: MapType.normal,
                                             initialCameraPosition: CameraPosition(
-                                                target: data!
-                                                            .property?.latlng ==
-                                                        'undefined,undefined'
+                                                target: data!.property?.latlng == 'undefined,undefined'
                                                     ? const LatLng(0.0, 0.0)
-                                                    : LatLng(
-                                                        double.parse(
-                                                            '${data!.property?.latlng}'
-                                                                .split(',')[0]),
-                                                        double.parse(
-                                                            '${data!.property?.latlng}'
-                                                                .split(
-                                                                    ',')[1])),
+                                                    : LatLng(double.parse('${data!.property?.latlng}'.split(',')[0]),
+                                                        double.parse('${data!.property?.latlng}'.split(',')[1])),
                                                 zoom: 13.0,
                                                 tilt: 0,
                                                 bearing: 0),
-                                            onMapCreated: (GoogleMapController
-                                                controller) {
+                                            onMapCreated: (GoogleMapController controller) {
                                               _controller.complete(controller);
                                             }),
                                       ),
@@ -1580,8 +1338,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: Visibility(
-                          visible: data.availFrom == null ||
-                              checkforBooking(data.availFrom) == true,
+                          visible: data.availFrom == null || checkforBooking(data.availFrom) == true,
                           child: Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: Row(
@@ -1589,11 +1346,9 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 //Expanded(flex: 1, child: containerBtn('Request')),
-                                Expanded(
-                                    flex: 1, child: bookNowBtn('Book Now') ),
+                                Expanded(flex: 1, child: bookNowBtn('Book Now')),
 
-                              Expanded(
-                                  flex: 1, child: siteVisitBtn('Site Visit') ),
+                                Expanded(flex: 1, child: siteVisitBtn('Site Visit')),
                               ],
                             ),
                           ),

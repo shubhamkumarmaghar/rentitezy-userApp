@@ -103,13 +103,7 @@ log(" data ${getSingleBooking?.data?.name}");
 
   Future<void> invoicePayment({required String invoiceId}) async {
     String url = AppUrls.invoicePay;
-    // String a = 'intent://pay?pa=BasisPay1779@icici&pn=Rentiseazy&mc=&tr=ATC2933673&tn=PayTo:6546032&am=11000.00&mam=11000.00&cu=INR&/#Intent;scheme=upi;package=net.one97.paytm;end';
-    // String uaa = a.replaceAll('intent', 'upi');
-    //UrlLauncher.launchUrl(Uri.parse(uaa));
-//
-    // log('abced :::: $uaa');
     isLoading.value = true;
-    // await launchUrlString('https://www.instamojo.com/@Rentiseazy/492e2287666a4abc9fddcad9c8208768');
     final response = await homeApiController.apiService.postApiCall(endPoint: url,
         bodyParams: {
 
@@ -117,7 +111,6 @@ log(" data ${getSingleBooking?.data?.name}");
         });
     if (response['success']) {
 
-      debugPrint("longurl ${response['data']}");
       String longurl = response['data']['longurl'];
       log('abced $longurl');
 

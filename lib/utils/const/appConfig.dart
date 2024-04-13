@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/login/view/login_screen.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -141,7 +142,7 @@ void showSnackBar(BuildContext context, String result) {
         style: TextStyle(
           fontFamily: Constants.fontsFamily,
         )),
-    duration: const Duration(seconds: 2),
+    duration: const Duration(seconds: 2),backgroundColor: CustomTheme.appTheme,
   ));
 }
 

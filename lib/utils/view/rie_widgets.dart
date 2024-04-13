@@ -60,13 +60,13 @@ class RIEWidgets {
     );
   }
 
-  static void getToast({required String message, required Color color}) {
+  static void getToast({required String message,  Color? color}) {
     Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: color,
+        backgroundColor: color ?? CustomTheme.appThemeContrast,
         textColor: Colors.white,
         fontSize: 16.0);
   }

@@ -84,12 +84,13 @@ void showCustomToast(
   );
 }
 
-Widget iconWidget(String name, double he, double wi) {
+Widget iconWidget(String name, double he, double wi,[Color? color]) {
   return Image.asset(
     'assets/images/$name.png',
     fit: BoxFit.fill,
     height: he,
     width: wi,
+    color:color,
   );
 }
 

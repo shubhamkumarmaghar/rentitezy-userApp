@@ -2,8 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
+import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/user_model.dart';
@@ -100,8 +104,9 @@ class _UpdateState extends State<UpdateProfilePage> {
           imagePath,
           GetStorage().read(Constants.userId).toString());
       if (result['success']) {
+        Get.find<DashboardController>().setIndex(0);
         Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const MyHomePage()));
+            MaterialPageRoute(builder: (context) => DashboardView()));
       } else {
         showSnackBar(context, result['message']);
       }

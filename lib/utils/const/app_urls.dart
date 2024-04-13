@@ -11,13 +11,6 @@ class AppUrls {
   static const imagesRootUrl =
       "https://api.rentiseazy.com/user/images/";
   static const imagesRentIsEasyUrl = "${baseUrl}images/";
-  // static const rootUrl = "http://192.168.1.233:8136/prisma/rentitezy/";
-  // static const imagesRootUrl =
-  //     "http://192.168.1.233:8136/prisma/rentitezy/images/";
-
-  // static const rootUrl = "http://192.168.1.204:8136/prisma/rentitezy/";
-  // static const imagesRootUrl =
-  //     "http://192.168.1.204:8136/prisma/rentitezy/images/";
   static const user = baseUrl;
   static const userRegister = "${baseUrl}signUp";
   static const getUser = baseUrl;
@@ -46,6 +39,7 @@ class AppUrls {
   static const bookNow = "${baseUrl}leadsBooking";
   static const orderIdRzy = "https://api.razorpay.com/v1/orders";
   static const checkout = '${baseUrl}checkout';
+  static const checkoutV2 = '${baseUrl}checkOutV2';
   static const siteVisit = '${baseUrl}siteVisit';
   static const loginWeb = '${baseUrl}login';
   static const invoicePay = '${baseUrl}payment';

@@ -20,27 +20,21 @@ class CheckOutPage extends StatefulWidget {
   final String from;
   final SinglePropertyDetails? propertyModel;
   final DateTime? currentDate;
+
   const CheckOutPage(
-      {super.key,
-      required this.checkoutModel,
-      required this.from,
-      this.currentDate,
-      this.propertyModel});
+      {super.key, required this.checkoutModel, required this.from, this.currentDate, this.propertyModel});
 
   @override
   State<CheckOutPage> createState() => _CheckOutPageState();
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-  SinglePropertyDetailsController singlePropertyDetailsController =  Get.find();
+  SinglePropertyDetailsController singlePropertyDetailsController = Get.find();
+
   Widget textWid(String txt, Color clr, double font, FontWeight fw) {
     return Text(
       txt,
-      style: TextStyle(
-          fontFamily: Constants.fontsFamily,
-          color: clr,
-          fontSize: font,
-          fontWeight: fw),
+      style: TextStyle(fontFamily: Constants.fontsFamily, color: clr, fontSize: font, fontWeight: fw),
     );
   }
 
@@ -63,138 +57,125 @@ class _CheckOutPageState extends State<CheckOutPage> {
         context: context,
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
         ),
         builder: (context) {
           return Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: StatefulBuilder(
-                builder: (BuildContext context, setState) =>
-                    SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
-                                'Please Fill Your Details',
-                                style: TextStyle(
-                                    fontFamily: Constants.fontsFamily,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ),
+                builder: (BuildContext context, setState) => SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            'Please Fill Your Details',
+                            style: TextStyle(
+                                fontFamily: Constants.fontsFamily,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ),
+                        Center(
+                            child: Container(
+                          height: 1,
+                          width: 40,
+                          color: Colors.black,
+                        )),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          child: TextField(
+                            keyboardType: TextInputType.text,
+                            controller: singlePropertyDetailsController.nameController,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Name",
                             ),
-                            Center(
-                                child: Container(
-                              height: 1,
-                              width: 40,
-                              color: Colors.black,
-                            )),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              child: TextField(
-                                keyboardType: TextInputType.text,
-                                controller: singlePropertyDetailsController.nameController,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: "Name",
-                                ),
-                              ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          child: TextField(
+                            keyboardType: TextInputType.text,
+                            controller: singlePropertyDetailsController.emailController,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Email",
                             ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              child: TextField(
-                                keyboardType: TextInputType.text,
-                                controller: singlePropertyDetailsController.emailController,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: "Email",
-                                ),
-                              ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          child: TextField(
+                            keyboardType: TextInputType.phone,
+                            controller: singlePropertyDetailsController.phoneController,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Phone",
                             ),
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              child: TextField(
-                                keyboardType: TextInputType.phone,
-                                controller: singlePropertyDetailsController.phoneController,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: "Phone",
-                                ),
-                              ),
+                          ),
+                        ),
+                        height(0.05),
+                        GestureDetector(
+                          onTap: () async {
+                            if (singlePropertyDetailsController.nameController.text.isEmpty) {
+                              RIEWidgets.getToast(message: 'Enter valid name', color: CustomTheme.white);
+                            } else if (singlePropertyDetailsController.emailController.text.isEmpty) {
+                              RIEWidgets.getToast(message: 'Enter valid email', color: CustomTheme.white);
+                            } else if (singlePropertyDetailsController.phoneController.text.isEmpty) {
+                              RIEWidgets.getToast(message: 'Enter valid phone', color: CustomTheme.white);
+                            } else if (singlePropertyDetailsController.phoneController.text.length != 10) {
+                              RIEWidgets.getToast(message: 'Enter valid phone digit', color: CustomTheme.white);
+                            } else {
+                              singlePropertyDetailsController
+                                  .paymentRequest('${singlePropertyDetailsController.checkoutModel?.cardId}');
+                            }
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.70,
+                            height: 50,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Constants.primaryColor,
+                              borderRadius: BorderRadius.circular(40),
                             ),
-                            height(0.05),
-                            GestureDetector(
-                              onTap: () async {
-                                if (singlePropertyDetailsController.nameController.text.isEmpty) {
-                                  RIEWidgets.getToast(message: 'Enter valid name', color: CustomTheme.white);
-
-                                } else if (singlePropertyDetailsController.emailController.text.isEmpty) {
-                                  RIEWidgets.getToast(message: 'Enter valid email', color: CustomTheme.white);
-
-                                } else if (singlePropertyDetailsController.phoneController.text.isEmpty) {
-                                  RIEWidgets.getToast(message: 'Enter valid phone', color: CustomTheme.white);
-
-                                } else if (singlePropertyDetailsController.phoneController.text.length != 10) {
-                                  RIEWidgets.getToast(message: 'Enter valid phone digit', color: CustomTheme.white);
-                                } else {
-                                  setState(() => loadingLeads = true);
-                                  singlePropertyDetailsController.paymentRequest('${singlePropertyDetailsController.checkoutModel?.cardId}');
-                                }
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.70,
-                                height: 50,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Constants.primaryColor,
-                                  borderRadius: BorderRadius.circular(40),
-                                ),
-                                child: loadingLeads
-                                    ? const Center(
-                                        child: SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 3,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          'Submit',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: Constants.fontsFamily,
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                        ),
+                            child: loadingLeads
+                                ? const Center(
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        color: Colors.white,
                                       ),
-                              ),
-                            ),
-                            height(0.005),
-                          ],
-                        ))),
+                                    ),
+                                  )
+                                : Center(
+                                    child: Text(
+                                      'Submit',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: Constants.fontsFamily,
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        height(0.005),
+                      ],
+                    ))),
           );
         });
   }
 
-
-  @override
-  void initState() {
-
-
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,9 +194,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               color: Constants.primaryColor,
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30))),
+              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30))),
           child: Stack(children: [
             Align(
               alignment: Alignment.centerLeft,
@@ -234,10 +213,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
               child: Text(
                 'Checkout',
                 style: TextStyle(
-                    fontFamily: Constants.fontsFamily,
-                    color: Colors.white,
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold),
+                    fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
               ),
             ),
           ]),
@@ -256,64 +232,57 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                      child:
+                                          columnTxt("Name", '${singlePropertyDetailsController.checkoutModel?.name}')),
+                                  Expanded(
+                                      child: columnTxt(
+                                          "Address", '${singlePropertyDetailsController.checkoutModel?.address}'))
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                       child: columnTxt(
-                                          "Name", '${singlePropertyDetailsController.checkoutModel?.name}')),
-                                  Expanded(
-                                      child: columnTxt("Address",
-                                          '${singlePropertyDetailsController.checkoutModel?.address}' ))
+                                          "Move In", '${singlePropertyDetailsController.checkoutModel?.moveIn}')),
+                                  Expanded(child: columnTxt("Move Out", '${widget.checkoutModel?.moveOut}'))
                                 ],
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
-                                      child: columnTxt("Move In",
-                                          '${singlePropertyDetailsController.checkoutModel?.moveIn}')),
-                                  Expanded(
-                                      child: columnTxt("Move Out",
-                                          '${widget.checkoutModel?.moveOut}'  ))
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: columnTxt("Duration",
-                                          '${singlePropertyDetailsController.checkoutModel?.duration}')),
+                                      child: columnTxt(
+                                          "Duration", '${singlePropertyDetailsController.checkoutModel?.duration}')),
                                   Expanded(
                                       child: columnTxt("Rent",
-                                         '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.rent}'))
+                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.rent}'))
                                 ],
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                       child: columnTxt("Deposit",
-                                         '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.deposit}')),
+                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.deposit}')),
                                   Expanded(
-                                    child: columnTxt("OnBoarding",
-                                        '${widget.checkoutModel?.onboarding}'     ),
+                                    child: columnTxt("OnBoarding", '${widget.checkoutModel?.onboarding}'),
                                   )
                                 ],
                               ),
@@ -321,24 +290,22 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                       child: columnTxt(
-                                          "Guest",'${singlePropertyDetailsController.checkoutModel?.guest}'  )),
+                                          "Guest", '${singlePropertyDetailsController.checkoutModel?.guest}')),
                                   Expanded(
-                                      child: columnTxt("Lock In",
-                                          '${singlePropertyDetailsController.checkoutModel?.lockIn}'    ))
+                                      child: columnTxt(
+                                          "Lock In", '${singlePropertyDetailsController.checkoutModel?.lockIn}'))
                                 ],
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
@@ -353,8 +320,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
@@ -366,8 +332,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             height(0.05),
                             InkWell(
                               onTap: () async {
-                                showBottomDetails(
-                                    '${singlePropertyDetailsController.checkoutModel?.cardId}'   , context);
+                                showBottomDetails('${singlePropertyDetailsController.checkoutModel?.cardId}', context);
                               },
                               child: Container(
                                 width: MediaQuery.of(context).size.width * 0.70,

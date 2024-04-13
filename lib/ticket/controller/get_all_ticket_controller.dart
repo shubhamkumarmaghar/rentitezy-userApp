@@ -12,7 +12,7 @@ import '../model/TicketListModel.dart';
 import '../model/ticketModel.dart';
 import '../model/ticket_config_model.dart';
 
-class AllTicketController extends GetxController{
+class AllTicketController extends GetxController {
   TextEditingController ticketDescription = TextEditingController();
   String? bookingId;
   bool isLoading = false;
@@ -24,26 +24,26 @@ class AllTicketController extends GetxController{
   List<String>? ticketCategoriesList;
   List<String>? ticketStatusList;
   List<Properties>? ticketPropertiesList;
-  Properties? selectedProperty ;
-  String? selectedCategory ;
-  String? selectedStatus ;
- /* Properties? selectedProperty = Properties(title: 'Select Flat',value: 0);
-  String? selectedCategory ='Select Category';
-  String? selectedStatus ='Select Status';*/
+  Properties? selectedProperty;
+
+  String? selectedCategory;
+
+  String? selectedStatus;
+
+  AllTicketController({this.bookingId});
 
   @override
   void onInit() {
     super.onInit();
-    bookingId = Get.arguments ??'';
     getData();
-    //fetchTicketListDetails();
+    log('booking id :: $bookingId');
   }
 
-  void getData() async{
-    await  fetchTicketListDetails();
+  void getData() async {
+    await fetchTicketListDetails();
     await fetchTicketConfigListDetails();
-   // await fetchTicketConfigListDetails();
   }
+
   Future<void> fetchTicketListDetails() async {
     String url = AppUrls.getTicket;
     isLoading = true;
@@ -53,12 +53,12 @@ class AllTicketController extends GetxController{
     if (data['message'].toString().toLowerCase().contains('success')) {
       getAllDetails = TicketListModel.fromJson(data);
       update();
-      isLoading=false;
+      isLoading = false;
     } else {
-      getAllDetails= TicketListModel(
+      getAllDetails = TicketListModel(
         message: 'failure',
       );
-      isLoading=false;
+      isLoading = false;
       update();
     }
   }
@@ -71,35 +71,16 @@ class AllTicketController extends GetxController{
     final data = response as Map<String, dynamic>;
     if (data['message'].toString().toLowerCase().contains('success')) {
       ticketConfigModel = TicketConfigModel.fromJson(data);
-      //ticketCategoriesList?.add('Select Category');
-    //  log('aaaaaaaaaaaaa'+ '${ticketCategoriesList?[0]}');
-     // var cat = ticketConfigModel.data?.categories??[];
-       ticketCategoriesList = ticketConfigModel.data?.categories??[];
-     // ticketCategoriesList?.addAll(cat);
-      ticketCategoriesList?.forEach((element) {log(element); });
+      ticketCategoriesList = ticketConfigModel.data?.categories ?? [];
       update();
-      isLoading=false;
-
-     // ticketStatusList?.add('Select Status');
-    //  var stat = ticketConfigModel.data?.status??[];
-     // ticketStatusList?.addAll(stat);
-      ticketStatusList = ticketConfigModel.data?.status??[];
-    //  ticketStatusList?.forEach((element) {log('skkkkk  $element'); });
-
-
-
-    //  var prop = ticketConfigModel.data?.properties??[];
-     //ticketPropertiesList = ticketConfigModel.data?.properties??[];
-      //ticketPropertiesList?.add(Properties(title: 'Select Flat',value: 0));
-     // ticketPropertiesList?.addAll(prop);
-     // ticketPropertiesList?.forEach((element) {log('${element.value} ${element.title},'); });
+      isLoading = false;
+      ticketStatusList = ticketConfigModel.data?.status ?? [];
       update();
-
     } else {
       ticketConfigModel = TicketConfigModel(
         message: 'failure',
       );
-      isLoading=false;
+      isLoading = false;
       update();
     }
   }
@@ -113,7 +94,7 @@ class AllTicketController extends GetxController{
   }) async {
     String url = AppUrls.ticket;
     final response = await _apiService.postApiCall(endPoint: url, bodyParams: {
-      "bookingId":bookingId,
+      "bookingId": bookingId,
       "category": ticketCate,
       "description": ticketDesc,
       "status": ticketStat,
@@ -133,7 +114,7 @@ class AllTicketController extends GetxController{
   }) async {
     String url = AppUrls.ticket;
     final response = await _apiService.putApiCall(endPoint: url, bodyParams: {
-      "id":ticketId,
+      "id": ticketId,
       "unitId": flatId,
       "category": ticketCate,
       "description": ticketDesc,
@@ -148,20 +129,20 @@ class AllTicketController extends GetxController{
     String url = AppUrls.ticket;
     url = '$url?id=$ticketId';
     isLoading = true;
-    final response = await _apiService.getApiCallWithURL(endPoint: url,);
-   // final data = response as Map<String, dynamic>;
+    final response = await _apiService.getApiCallWithURL(
+      endPoint: url,
+    );
+    // final data = response as Map<String, dynamic>;
     if (response['message'].toString().toLowerCase().contains('success')) {
       getSingleTicketDetails = TicketModel.fromJson(response['data']);
       update();
-      isLoading=false;
+      isLoading = false;
     } else {
       getSingleTicketDetails = TicketModel(
         message: 'failure',
       );
-      isLoading=false;
+      isLoading = false;
       update();
     }
   }
-
-
 }

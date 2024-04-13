@@ -8,11 +8,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/settings.dart';
 import 'package:rentitezy/model/settings_model.dart';
 import 'package:rentitezy/login/view/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../dashboard/controller/dashboard_controller.dart';
 import '../utils/const/appConfig.dart';
 import '../home/home_view/home_screen.dart';
 
@@ -96,7 +98,8 @@ class _SplashPageState extends State<SplashScreenPage> {
                 GetStorage().read(Constants.isLogin) != false) {
               if (settings.agreement.isNotEmpty) {
                Settings().init(context, settings);
-                Get.offAll(const MyHomePage());
+               Get.find<DashboardController>().setIndex(0);
+                Get.offAll(DashboardView());
               } else {
                 if (kDebugMode) {
                   print('errr');

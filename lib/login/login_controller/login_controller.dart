@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/services/rie_user_api_service.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
 
+import '../../dashboard/controller/dashboard_controller.dart';
 import '../../home/home_view/home_screen.dart';
 import '../../utils/const/api.dart';
 import '../../utils/const/appConfig.dart';
@@ -73,7 +75,8 @@ class LoginController extends GetxController {
           GetStorage().write(Constants.emailkey, userModel?.data?.email);
           await Future<void>.delayed(const Duration(seconds: 2));
           isLoading = false;
-          Get.offAll(const MyHomePage());
+          Get.find<DashboardController>().setIndex(0);
+          Get.offAll(DashboardView());
         } else {
           RIEWidgets.getToast(
               message: '${userModel?.message}', color: CustomTheme.white);
@@ -142,7 +145,8 @@ class LoginController extends GetxController {
           GetStorage().write(Constants.emailkey, userModel?.data?.email);
           await Future<void>.delayed(const Duration(seconds: 2));
           isLoading = false;
-          Get.offAll(const MyHomePage());
+          Get.find<DashboardController>().setIndex(0);
+          Get.offAll(DashboardView());
         } else {
           isLoading = false;
           RIEWidgets.getToast(
@@ -243,10 +247,8 @@ class LoginController extends GetxController {
         GetStorage().write(Constants.emailkey, userModel.data?.email);
         await Future<void>.delayed(const Duration(seconds: 2));
         isLoading = false;
-
-        Get.offAll(const MyHomePage());
-        /*  Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const MyHomePage()));*/
+        Get.find<DashboardController>().setIndex(0);
+        Get.offAll(DashboardView());
       }
     } on Exception catch (error) {
       RIEWidgets.getToast(message: error.toString(), color: CustomTheme.white);
