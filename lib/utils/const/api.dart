@@ -24,6 +24,21 @@ import 'app_urls.dart';
 
 RIEUserApiService _apiService = RIEUserApiService();
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+String? registeredToken;
+
+Future<String?> _getRegisteredToken() async {
+  registeredToken = GetStorage().read(Constants.token);
+  // registeredToken = await GetStorage().read(rms_registeredUserToken);
+  return registeredToken;
+}
+
+Future<Map<String, String>> get getHeaders async {
+
+  return {
+    'user-auth-token':
+    (registeredToken ?? await _getRegisteredToken()).toString()
+  };
+}
 //user create
 Future<dynamic> createUser(
     String fName, String lName, String phone, String password, String email, String image) async {
@@ -233,14 +248,13 @@ Future<dynamic> createLeadsApi(String name, String phone, String address, String
 
 Future<dynamic> createIssuesApi(String userId, String propertyId, String question) async {
   final response = await http.post(Uri.parse(AppUrls.issues),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode(<String, String>{
+  headers: await getHeaders,
+      body: {
         "userId": userId,
         "propertyId": propertyId,
         "question": question,
-      }));
+      });
+  log('kkkkk ${response.statusCode}');
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
     return body;

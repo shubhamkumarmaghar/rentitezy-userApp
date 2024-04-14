@@ -1,35 +1,35 @@
 class CheckoutModel {
-  String name;
-  String address;
-  String moveIn;
-  String moveOut;
-  String duration;
-  String rent;
-  String deposit;
-  String onboarding;
-  String guest;
-  String lockIn;
-  String amount;
-  String total;
-  String cardId;
-  String maintenance;
-  List<Photos> imageList;
+  String? name;
+  String? address;
+  String? moveIn;
+  String? moveOut;
+  String? duration;
+  String? rent;
+  String? deposit;
+  String? onboarding;
+  String? guest;
+  String? lockIn;
+  String? amount;
+  String? total;
+  String? cardId;
+  String? maintenance;
+  List<Photos>? imageList;
   CheckoutModel(
-      {required this.name,
-      required this.address,
-      required this.moveIn,
-      required this.moveOut,
-      required this.duration,
-      required this.rent,
-      required this.deposit,
-      required this.onboarding,
-      required this.guest,
-      required this.lockIn,
-      required this.amount,
-      required this.total,
-      required this.cardId,
-      required this.maintenance,
-      required this.imageList});
+      { this.name,
+       this.address,
+       this.moveIn,
+       this.moveOut,
+       this.duration,
+       this.rent,
+       this.deposit,
+       this.onboarding,
+       this.guest,
+       this.lockIn,
+       this.amount,
+       this.total,
+        this.cardId,
+       this.maintenance,
+       this.imageList});
 
   factory CheckoutModel.fromJson(Map<String, dynamic> json) {
     return CheckoutModel(
@@ -47,16 +47,16 @@ class CheckoutModel {
         total: json['total'].toString(),
         cardId: json['cartId'].toString(),
         maintenance: json['maintenance'].toString(),
-        imageList: (json['photos'] as List)
+        imageList: (json['photos']! as List)
             .map((stock) => Photos.fromJson(stock))
             .toList());
   }
 }
 
 class Photos {
-  String url;
+  String? url;
 
-  Photos({required this.url});
+  Photos({ this.url});
 
   factory Photos.fromJson(Map<String, dynamic> json) {
     return Photos(url: json['url']);

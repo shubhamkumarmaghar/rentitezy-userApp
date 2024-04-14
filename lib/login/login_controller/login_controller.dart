@@ -27,8 +27,7 @@ class LoginController extends GetxController {
   TextEditingController uPasswordController = TextEditingController();
   TextEditingController uEmailController = TextEditingController();
 
-  Future<void> fetchLoginDetails(
-      {required String email, required String password}) async {
+  Future<void> fetchLoginDetails({required String email, required String password}) async {
     isLoading = true;
     String url = AppUrls.userLogin;
     final response = await rieUserApiService.postApiCall(
@@ -40,56 +39,45 @@ class LoginController extends GetxController {
         fromLogin: true);
     final data = response as Map<String, dynamic>;
 
-    if (data['message']
-        .toString()
-        .toLowerCase()
-        .contains('welcome to rentiseazy.')) {
+    if (data['message'].toString().toLowerCase().contains('success')) {
       isLoading = false;
       userModel = LoginModel.fromJson(data);
-      if (userModel?.success == true) {
-        if (userModel?.data != null) {
-          // userModel = LoginModel.fromJson(result);
-          RIEWidgets.getToast(
-              message: '${userModel?.message}', color: CustomTheme.white);
-          GetStorage().write(Constants.isLogin, true);
+      if (userModel?.data != null) {
+        // userModel = LoginModel.fromJson(result);
+        RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
+        GetStorage().write(Constants.isLogin, true);
 
-          if (userModel?.isTenant == true) {
-            // tenantModel = TenantModel.fromJson(result['tenantDet']);
-            GetStorage().write(Constants.isTenant, true);
-            GetStorage().write(Constants.tenantId, userModel?.data?.id);
-            // if (tenantModel.isAgree == 'true') {
-            //   GetStorage().write(Constants.isAgree, true);
-            // } else {
-            //   GetStorage().write(Constants.isAgree, false);
-            // }
-          } else {
-            GetStorage().write(Constants.isTenant, false);
-            GetStorage().write(Constants.tenantId, '');
-          }
-          debugPrint("isTenant ${GetStorage().read(Constants.isTenant)}");
-          GetStorage().write(Constants.userId, userModel?.data?.id.toString());
-          GetStorage().write(Constants.phonekey, userModel?.data?.phone);
-          GetStorage().write(Constants.token, userModel?.data?.token);
-          GetStorage().write(Constants.profileUrl, userModel?.data?.image);
-          GetStorage().write(Constants.usernamekey, userModel?.data?.firstName);
-          GetStorage().write(Constants.emailkey, userModel?.data?.email);
-          await Future<void>.delayed(const Duration(seconds: 2));
-          isLoading = false;
-          Get.find<DashboardController>().setIndex(0);
-          Get.offAll(DashboardView());
+        if (userModel?.isTenant == true) {
+          // tenantModel = TenantModel.fromJson(result['tenantDet']);
+          GetStorage().write(Constants.isTenant, true);
+          GetStorage().write(Constants.tenantId, userModel?.data?.id);
+          // if (tenantModel.isAgree == 'true') {
+          //   GetStorage().write(Constants.isAgree, true);
+          // } else {
+          //   GetStorage().write(Constants.isAgree, false);
+          // }
         } else {
-          RIEWidgets.getToast(
-              message: '${userModel?.message}', color: CustomTheme.white);
+          GetStorage().write(Constants.isTenant, false);
+          GetStorage().write(Constants.tenantId, '');
         }
+        debugPrint("isTenant ${GetStorage().read(Constants.isTenant)}");
+        GetStorage().write(Constants.userId, userModel?.data?.id.toString());
+        GetStorage().write(Constants.phonekey, userModel?.data?.phone);
+        GetStorage().write(Constants.token, userModel?.data?.token);
+        GetStorage().write(Constants.profileUrl, userModel?.data?.image);
+        GetStorage().write(Constants.usernamekey, userModel?.data?.firstName);
+        GetStorage().write(Constants.emailkey, userModel?.data?.email);
+        await Future<void>.delayed(const Duration(seconds: 2));
+        isLoading = false;
+        Get.find<DashboardController>().setIndex(0);
+        Get.offAll(DashboardView());
       } else {
-        RIEWidgets.getToast(
-            message: '${userModel?.message}', color: CustomTheme.white);
+        RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
       }
     } else {
       isLoading = false;
       userModel = LoginModel(message: 'failure');
-      RIEWidgets.getToast(
-          message: '${userModel?.message}', color: CustomTheme.white);
+      RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.appTheme);
     }
   }
 
@@ -116,12 +104,11 @@ class LoginController extends GetxController {
     isLoading = false;
     userModel = LoginModel.fromJson(data);
 
-      if (userModel?.success == true) {
-        if (data['message'].toString().toLowerCase().contains('user successfully registered.')) {
+    if (userModel?.success == true) {
+      if (data['message'].toString().toLowerCase().contains('user successfully registered.')) {
         if (userModel?.data != null) {
           // userModel = LoginModel.fromJson(result);
-          RIEWidgets.getToast(
-              message: '${userModel?.message}', color: CustomTheme.white);
+          RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
           GetStorage().write(Constants.isLogin, true);
           if (userModel?.isTenant == true) {
             // tenantModel = TenantModel.fromJson(result['tenantDet']);
@@ -149,30 +136,21 @@ class LoginController extends GetxController {
           Get.offAll(DashboardView());
         } else {
           isLoading = false;
-          RIEWidgets.getToast(
-              message: '${userModel?.message}', color: CustomTheme.white);
-        update();
+          RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
+          update();
         }
-      }
-      else {
+      } else {
         isLoading = false;
-        RIEWidgets.getToast(
-            message: '${userModel?.message}', color: CustomTheme.white);
-      update();
+        RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
+        update();
       }
-
-    }
-    else if (userModel?.message ==
-        "Phone Number already taken. Existing Account") {
+    } else if (userModel?.message == "Phone Number already taken. Existing Account") {
       isLoading = false;
-      RIEWidgets.getToast(
-          message: '${userModel?.message}', color: CustomTheme.white);
+      RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
       update();
-    }
-    else {
+    } else {
       userModel = LoginModel(message: 'failure');
-      RIEWidgets.getToast(
-          message: '${userModel?.message}', color: CustomTheme.white);
+      RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
       isLoading = false;
       update();
     }
@@ -188,13 +166,8 @@ class LoginController extends GetxController {
       log('abced ${isLogin.toString()}');
       dynamic result;
       if (loginORSignup == false) {
-        result = await createUser(
-            uFNameController.text,
-            uLNameController.text,
-            uPhoneController.text,
-            uPasswordController.text,
-            uEmailController.text,
-            imagePath);
+        result = await createUser(uFNameController.text, uLNameController.text, uPhoneController.text,
+            uPasswordController.text, uEmailController.text, imagePath);
         if (result['success']) {
           userModel = LoginModel.fromJson(result);
         } else {
@@ -202,24 +175,19 @@ class LoginController extends GetxController {
           log('${result['message']}');
         }
       } else {
-        result =
-            await userLogin(uFNameController.text, uPasswordController.text);
+        result = await userLogin(uFNameController.text, uPasswordController.text);
         if (result['success']) {
           log('message ::${result}');
           if (result['data'] != null) {
             userModel = LoginModel.fromJson(result);
-            RIEWidgets.getToast(
-                message: result['message'], color: CustomTheme.white);
+            RIEWidgets.getToast(message: result['message'], color: CustomTheme.white);
             //showSnackBar(context, result['message']);
           } else {
-            RIEWidgets.getToast(
-                message: result['Invalid Credentials'],
-                color: CustomTheme.white);
+            RIEWidgets.getToast(message: result['Invalid Credentials'], color: CustomTheme.white);
             // showSnackBar(context, 'Invalid Credentials');
           }
         } else {
-          RIEWidgets.getToast(
-              message: result['message'], color: CustomTheme.white);
+          RIEWidgets.getToast(message: result['message'], color: CustomTheme.white);
           // showSnackBar(context, result['message']);
         }
       }
@@ -267,8 +235,7 @@ class LoginController extends GetxController {
   }
 */
   bool isPasswordValid(String password) {
-    RegExp regex =
-        RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    RegExp regex = RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
     return regex.hasMatch(password);
   }
 }

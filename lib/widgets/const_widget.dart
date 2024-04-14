@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 
 import '../utils/const/widgets.dart';
@@ -23,11 +24,11 @@ SnackbarController toast(String title, String value) {
   );
 }
 
-Widget sTitle(String title, double fSize, Color color, FontWeight fontWeight) {
+Widget sTitle(String title, double fSize, FontWeight fontWeight) {
   return Text(
     title,
     style: TextStyle(
-        color: color,
+        color: CustomTheme.appThemeContrast,
         fontSize: fSize,
         fontWeight: fontWeight,
         fontFamily: Constants.fontsFamily),
@@ -71,7 +72,7 @@ Widget reloadErr(String error, Function() function) {
           height(0.005),
           ElevatedButton(
               onPressed: function,
-              child: sTitle('RELOAD', 13, Colors.white, FontWeight.bold)),
+              child: sTitle('RELOAD', 13, FontWeight.bold)),
           height(0.005),
         ]),
   );

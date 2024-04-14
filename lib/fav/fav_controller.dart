@@ -61,20 +61,18 @@ class FavController extends GetxController {
     String url = AppUrls.wishlist;
     loadFav.value = true;
     final response = await apiService.getApiCallWithURL(endPoint: url);
+    final responseHome = await apiService.getApiCallWithURL(endPoint: 'https://api.rentiseazy.com/user/home');
 
     bool success = response["success"];
+
 
     try {
       if (response['message'].toString().toLowerCase() == 'success') {
         allWishlistData = WishlistModel.fromJson(response);
-        /* (response["data"] as List)
-              .map((stock) => PropertyModel.fromJson(stock))
-              .toList();*/
-        //allPropertyData.addAll(apiPropertyList);
       }
-      allWishlistData?.data?.forEach((element) {
-        log('faviourite prop id ::: ${element.listing?.id}');
-      });
+      if (responseHome['message'].toString().toLowerCase() == 'success') {
+        log('Home data :: $responseHome');
+      }
       loadFav.value = false;
     } catch (e) {
       debugPrint(e.toString());

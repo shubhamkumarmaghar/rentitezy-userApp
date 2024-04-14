@@ -1,8 +1,5 @@
 
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
 import 'package:rentitezy/home/home_view/home_screen.dart';
@@ -50,7 +47,7 @@ class DashboardView extends StatelessWidget {
     return [
       barItem(icon: Icons.home, label: 'Home', selected: selectedIndex == 0),
       barItem(icon: Icons.favorite_border, label: 'Wishlist', selected: selectedIndex == 1),
-      barItem(icon: Icons.query_stats, label: 'Tickets', selected: selectedIndex == 2),
+      barItem(icon: Icons.add_chart_sharp, label: 'Tickets', selected: selectedIndex == 2),
     ];
   }
 

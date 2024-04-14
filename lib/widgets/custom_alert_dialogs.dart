@@ -83,6 +83,7 @@ void showImageDialogAlert(
     {required BuildContext context, Icon? icon, required String description, required Color textColor, Text? subText}) {
   showAdaptiveDialog(
     context: context,
+    barrierDismissible: false,
     builder: (context) {
       return Dialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
@@ -119,6 +120,8 @@ void showImageDialogAlert(
                 height: screenHeight * 0.01,
               ),
               subText ?? const SizedBox.shrink(),
+              const SizedBox(height: 10,),
+              const CircularProgressIndicator.adaptive()
             ],
           ),
         ),

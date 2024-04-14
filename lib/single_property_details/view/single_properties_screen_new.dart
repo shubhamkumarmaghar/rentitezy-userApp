@@ -1,10 +1,10 @@
-// ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -46,21 +46,9 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
   TextEditingController locationController = TextEditingController();
   TextEditingController zipcodeController = TextEditingController();
 
-  Set<Marker> markers = {};
   String? availFrom;
   String bookingType = 'm';
   DateTime availFromDate = DateTime.now();
-
-  //final dbFavItem = DbHelper.instance;
-
-  //PropertyModel? singleProPerty;
-
-  @override
-  void initState() {
-    //singlePropertyDetailsController.getSinglePropertyDetails();
-    //fetchSingleProperties(widget.propertyId);
-    super.initState();
-  }
 
   Widget _imageView(String image) {
     return ClipRRect(
@@ -78,15 +66,14 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
     return GestureDetector(
       onTap: () {
         showBottomSiteVisit(title);
-        // selectBookingTypeAlertDialog(context, 'Select Booking type',);
       },
       child: Container(
         height: 50,
         padding: const EdgeInsets.all(10),
         margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: Constants.primaryColor,
-          borderRadius: BorderRadius.circular(5),
+          color: CustomTheme.appThemeContrast,
+          borderRadius: BorderRadius.circular(25),
         ),
         child: Center(
           child: Text(
@@ -104,7 +91,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
     return GestureDetector(
       onTap: () {
         showBottomLeads(title);
-        // selectBookingTypeAlertDialog(context, 'Select Booking type',);
       },
       child: Container(
         height: 50,
@@ -112,7 +98,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
         margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           color: Constants.primaryColor,
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(25),
         ),
         child: Center(
           child: Text(
@@ -128,8 +114,8 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
 
   Widget? _indicatorBuilder(BuildContext context, int index, int length) {
     return Container(
-      width: 60,
-      padding: const EdgeInsets.all(4),
+      width: 70,
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(20),
@@ -182,30 +168,9 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
         height(0.005),
         Text(
           subTitle,
-          style: const TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500),
+          style: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
         ),
       ],
-    );
-  }
-
-  Widget iconCard(String icon) {
-    return Container(
-      height: 60,
-      width: 60,
-      margin: const EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-        border: Border.all(color: const Color.fromARGB(255, 241, 239, 239)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(6),
-        child: iconWidget(icon, 30, 30),
-        // child: Icon(
-        //   iconData,
-        //   size: 35,
-        // ),
-      ),
     );
   }
 
@@ -535,7 +500,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                           Get.back();
                                           singlePropertyDetailsController.submitReqBooking(from,
                                               unitId: singlePropertyDetailsController.unitId!.id.toString());
-
                                         },
                                         title: 'Booking Alert',
                                         subTitle: 'Valid ID /KYC should be provided at the time on check in');
@@ -796,6 +760,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
         builder: (controller) {
           var data = controller.singleProPerty?.data;
           var images = data?.images;
+
           return Scaffold(
             body: controller.singlePage.value
                 ? SizedBox(
@@ -824,10 +789,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                     ))
                 : Stack(
                     children: [
-                      /*  SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                      ),*/
                       CustomScrollView(
                         physics: const NeverScrollableScrollPhysics(),
                         slivers: [
@@ -864,9 +825,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               child: Container(
                                 padding: const EdgeInsets.only(left: 10, top: 20, right: 10),
                                 decoration: BoxDecoration(
-                                  /*  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(20),
-                                      topRight: Radius.circular(20)),*/
                                   color: Colors.white,
                                   border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
                                 ),
@@ -879,7 +837,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                         children: [
                                           Column(
                                             children: [
-                                              Text(
+                                              const Text(
                                                 'Long Term Rent',
                                                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
                                               ),
@@ -947,147 +905,6 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                           )
                                         ],
                                       ),
-                                      /*   Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              RichText(
-                                                text: TextSpan(
-                                                  children: [
-                                                    WidgetSpan(
-                                                      child: Text(
-                                                          Constants.currency,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.black,
-                                                              fontSize: 18,
-                                                              fontFamily: Constants
-                                                                  .fontsFamily,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal)),
-                                                    ),
-                                                    WidgetSpan(
-                                                      child: Text(
-                                                          '.${data?.price}',
-                                                          style: TextStyle(
-                                                              fontFamily: Constants
-                                                                  .fontsFamily,
-                                                              color: CustomTheme.peach,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text("Per Month",
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                          Constants.fontsFamily,
-                                                      color: Constants
-                                                          .primaryColor,
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                          FontWeight.normal))
-                                            ],
-                                          ),
-                                          width(0.05),
-                                          Container(
-                                            margin:
-                                            const EdgeInsets.only(top: 5),
-                                            height: 20,
-                                            width: 2,
-                                            color: Colors.black,
-                                          ),
-                                          width(0.05),
-                                          Column(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                            children: [
-
-                                              RichText(
-                                                text: TextSpan(
-                                                  children: [
-                                                    WidgetSpan(
-                                                      child: Text(
-                                                          Constants.currency,
-                                                          style: TextStyle(
-                                                              color:
-                                                              Colors.black,
-                                                              fontSize: 18,
-                                                              fontFamily: Constants
-                                                                  .fontsFamily,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .normal)),
-                                                    ),
-                                                    WidgetSpan(
-                                                      child: Text(
-                                                          '.${data?.price}',
-                                                          style: TextStyle(
-                                                              fontFamily: Constants
-                                                                  .fontsFamily,
-                                                              color: Constants
-                                                                  .black,
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .bold)),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text("Daily",
-                                                  style: TextStyle(
-                                                      fontFamily:
-                                                      Constants.fontsFamily,
-                                                      color: Constants
-                                                          .primaryColor,
-                                                      fontSize: 10,
-                                                      fontWeight:
-                                                      FontWeight.normal))
-                                            ],
-                                          ),
-                                          width(0.05),
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 5),
-                                            height: 20,
-                                            width: 2,
-                                            color: Colors.black,
-                                          ),
-                                          width(0.05),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 3),
-                                            child: Text(
-                                              '${data?.property?.plots} Plots',
-                                              maxLines: 1,
-                                              overflow: TextOverflow.fade,
-                                              style: TextStyle(
-                                                  fontFamily:
-                                                      Constants.fontsFamily,
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                            ),
-                                          ),
-                                        ],
-                                      ),*/
-
                                       Padding(
                                         padding: const EdgeInsets.only(top: 15, right: 10),
                                         child: Row(
@@ -1140,19 +957,19 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                           ],
                                         ),
                                       ),
-                                      height(0.005),
-                                      sTitle('Property Details', 15, const Color.fromARGB(255, 73, 72, 72),
+                                      height(0.02),
+                                      sTitle('Property Details', 18,
                                           FontWeight.w500),
                                       height(0.005),
                                       Text(
                                         '${data!.property?.name}',
                                         maxLines: 1,
-                                        overflow: TextOverflow.fade,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             fontFamily: Constants.fontsFamily,
                                             color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.normal),
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                       height(0.005),
                                       Row(
@@ -1174,9 +991,9 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                       ),
                                       height(0.005),
                                       columnTxt('City', '${data.property?.city} '),
-                                      height(0.005),
+                                      height(0.02),
                                       sTitle(
-                                          'Description :', 17, const Color.fromARGB(255, 73, 72, 72), FontWeight.w500),
+                                          'Description :', 18, FontWeight.w500),
                                       width(0.005),
                                       Text(
                                         '${data.description}',
@@ -1187,71 +1004,58 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                             fontWeight: FontWeight.w500),
                                       ),
                                       height(0.005),
-                                      sTitle('Amenities', 17, const Color.fromARGB(255, 73, 72, 72), FontWeight.w500),
+                                      sTitle('Amenities', 18, FontWeight.w500),
                                       height(0.005),
-                                      // SizedBox(
-                                      //   height: 70,
-                                      //   child: ListView(
-                                      //       shrinkWrap: true,
-                                      //       scrollDirection: Axis.horizontal,
-                                      //       physics: const BouncingScrollPhysics(),
-                                      //       children: singleProPerty!.amenitiesList
-                                      //           .map((e) => iconCard(mapIcon(e)!))
-                                      //           .toList()),
-                                      // ),
-                                      // height(10),
-                                      sTitle('Have a question?', 15, const Color.fromARGB(255, 73, 72, 72),
+                                      sTitle('Have a question?', 18,
                                           FontWeight.w500),
                                       width(0.005),
-                                      sTitle('Get a quick answer right here', 11, Colors.grey, FontWeight.normal),
+                                      sTitle('Get a quick answer right here', 11, FontWeight.normal),
                                       height(0.005),
                                       Container(
-                                        height: 45,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(7),
-                                          color: Colors.white,
-                                          border: Border.all(color: const Color.fromARGB(255, 214, 212, 212)),
-                                        ),
-                                        child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                child: TextField(
-                                                  controller: askQController,
-                                                  decoration: InputDecoration(
-                                                      hoverColor: Constants.hint,
-                                                      hintText: '',
-                                                      border: InputBorder.none),
+                                        height: screenHeight * 0.06,
+                                        child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+                                          Container(
+                                            width: screenWidth * 0.7,
+                                            child: TextField(
+                                              controller: askQController,
+                                              decoration: InputDecoration(
+                                                contentPadding: EdgeInsets.only(left: 10, right: 10),
+                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                                                hoverColor: Constants.hint,
+                                                hintText: 'Your query...',
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth*0.02,
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (askQController.text.isEmpty) {
+                                                showSnackBar(context, 'Enter valid Question');
+                                              } else {
+                                                issuesRequest(id: data.id.toString());
+                                              }
+                                            },
+                                            child: Container(
+                                              height: screenHeight * 0.05,
+                                              width: screenWidth * 0.2,
+                                              decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(7),
+                                                color: Constants.primaryColor,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  'Ask now',
+                                                  style: TextStyle(
+                                                      fontFamily: Constants.fontsFamily,
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.bold),
                                                 ),
                                               ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  if (askQController.text.isEmpty) {
-                                                    showSnackBar(context, 'Enter valid Question');
-                                                  } else {
-                                                    issuesRequest(id: data.id.toString());
-                                                  }
-                                                },
-                                                child: Container(
-                                                  height: 45,
-                                                  width: 100,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius.circular(7),
-                                                    color: Constants.primaryColor,
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      'Ask now',
-                                                      style: TextStyle(
-                                                          fontFamily: Constants.fontsFamily,
-                                                          color: Colors.white,
-                                                          fontWeight: FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                            ]),
+                                            ),
+                                          )
+                                        ]),
                                       ),
                                       height(0.005),
                                       SizedBox(
@@ -1267,16 +1071,24 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                           ],
                                         ),
                                       ),
-                                      height(0.005),
+                                      height(0.04),
+                                      Text(
+                                        'Map',
+                                        style: TextStyle(
+                                            fontFamily: Constants.fontsFamily,
+                                            color: CustomTheme.appThemeContrast,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      height(0.01),
                                       Container(
-                                        height: screenHeight * 0.20,
-                                        padding: const EdgeInsets.only(right: 10),
+                                        height: screenHeight * 0.25,
                                         child: GoogleMap(
-                                            markers: markers,
+
                                             mapType: MapType.normal,
                                             initialCameraPosition: CameraPosition(
                                                 target: data!.property?.latlng == 'undefined,undefined'
-                                                    ? const LatLng(0.0, 0.0)
+                                                    ? const LatLng(12.9166, 77.6101)
                                                     : LatLng(double.parse('${data!.property?.latlng}'.split(',')[0]),
                                                         double.parse('${data!.property?.latlng}'.split(',')[1])),
                                                 zoom: 13.0,
@@ -1286,38 +1098,40 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                               _controller.complete(controller);
                                             }),
                                       ),
-                                      height(0.009),
+                                      height(0.1),
                                     ]),
                               ),
                             ),
                           )),
-                      /*        Positioned(
-                        right: 15,
-                        top: MediaQuery.of(context).size.height * 0.05,
-                        child: circleContainer(
-                            IconButton(
-                                onPressed: () async {
-                                  if (listingDetailsId.isNotEmpty) {
-                                    dynamic result =
-                                        await addToFav(listingDetailsId);
-                                    if (result['message'].toString() == 'Success') {
-                                      addToFavItem(singleProPerty!);
-                                    }
-                                  }
-                                },
-                                icon: Icon(
-                                  singleProPerty!.isFav
+                      Positioned(
+                          right: 15,
+                          top: MediaQuery.of(context).size.height * 0.05,
+                          child: circleContainer(
+                              IconButton(
+                                  onPressed: () async {
+                                    // if (listingDetailsId.isNotEmpty) {
+                                    //   dynamic result =
+                                    //       await addToFav(listingDetailsId);
+                                    //   if (result['message'].toString() == 'Success') {
+                                    //     addToFavItem(singleProPerty!);
+                                    //   }
+                                    // }
+                                  },
+                                  icon: Icon(
+                                    /* singleProPerty!.isFav
                                       ? Icons.favorite_rounded
-                                      : Icons.favorite_border_rounded,
-                                  size: 18,
-                                  color: singleProPerty!.isFav
+                                      :*/
+                                    Icons.favorite_border_rounded,
+                                    size: 18,
+                                    color: /*singleProPerty!.isFav
                                       ? Colors.red
-                                      : Colors.black,
-                                )),
-                            Colors.white,
-                            100,
-                            35,
-                            35)),*/
+                                      :*/
+                                        Colors.black,
+                                  )),
+                              Colors.white,
+                              100,
+                              35,
+                              35)),
                       Positioned(
                           left: 15,
                           top: MediaQuery.of(context).size.height * 0.05,
@@ -1335,7 +1149,8 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               100,
                               35,
                               35)),
-                      Align(
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15),
                         alignment: Alignment.bottomCenter,
                         child: Visibility(
                           visible: data.availFrom == null || checkforBooking(data.availFrom) == true,
@@ -1345,10 +1160,8 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                //Expanded(flex: 1, child: containerBtn('Request')),
-                                Expanded(flex: 1, child: bookNowBtn('Book Now')),
-
                                 Expanded(flex: 1, child: siteVisitBtn('Site Visit')),
+                                Expanded(flex: 1, child: bookNowBtn('Book Now')),
                               ],
                             ),
                           ),

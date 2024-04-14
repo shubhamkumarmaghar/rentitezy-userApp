@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/fav_model.dart';
 import '../single_property_details/view/single_properties_screen_new.dart';
 import '../utils/const/widgets.dart';
 import '../widgets/const_widget.dart';
+import '../widgets/wrap_items.dart';
 
 class WishListWidget extends StatefulWidget {
   final WishListSingleData? wishListSingleDataModel;
@@ -25,30 +27,6 @@ class WishListWidgetState extends State<WishListWidget> {
   @override
   void dispose() {
     super.dispose();
-  }
-
-  Widget wrapItems(String text, String icon, double width1) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        iconWidget(icon, 15, 15),
-        width(0.03),
-        SizedBox(
-          width: width1,
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.fade,
-            style: TextStyle(
-                color: Constants.textColor,
-                fontSize: 13,
-                fontFamily: Constants.fontsFamily,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-      ],
-    );
   }
 
   @override
@@ -81,7 +59,7 @@ class WishListWidgetState extends State<WishListWidget> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
               ),
-              color: Constants.lightBg,
+              color: Colors.white,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,11 +71,11 @@ class WishListWidgetState extends State<WishListWidget> {
                           image: imageProvider,
                           fit: BoxFit.cover,
                         ),
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
+                        borderRadius:
+                            const BorderRadius.only(topLeft: Radius.circular(15), topRight: Radius.circular(15))),
                   ),
                   Container(
-                      margin: EdgeInsets.all(8),
-                      //padding: const EdgeInsets.all(4.0),
+                      margin: const EdgeInsets.all(8),
                       child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +93,7 @@ class WishListWidgetState extends State<WishListWidget> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           FittedBox(
-                                            child: Container(
+                                            child: SizedBox(
                                               width: Get.width * 0.6,
                                               child: Column(
                                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -133,7 +111,7 @@ class WishListWidgetState extends State<WishListWidget> {
                                                   ),
                                                   height(0.005),
                                                   Text(
-                                                    '${Constants.currency}.${widget.wishListSingleDataModel?.listing?.price}/ Month',
+                                                    '${Constants.currency} ${widget.wishListSingleDataModel?.listing?.price}/ Month',
                                                     maxLines: 1,
                                                     overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
@@ -222,28 +200,20 @@ class WishListWidgetState extends State<WishListWidget> {
                 ],
               ),
             ),
-            Positioned(
+            const Positioned(
                 right: 15,
                 top: 15,
-                child: circleContainer(
-                    IconButton(
-                        onPressed: () async {
-                          // bool response =  await likeProperty(listingId: '${widget.propertyModel?.id}' );
-                          // if(response){
-                          //   setState(() {
-                          //
-                          //   });
-                          // }
-                        },
-                        icon: const Icon(
-                          Icons.favorite_border_rounded,
-                          size: 18,
-                          color: Colors.red,
-                        )),
-                    Colors.white,
-                    100,
-                    35,
-                    35)),
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  radius: 16,
+                  child: Icon(
+                    Icons.favorite,
+                    color: Color(
+                      0XFFFF0000,
+                    ),
+                    size: 20,
+                  ),
+                )),
           ])),
     );
   }

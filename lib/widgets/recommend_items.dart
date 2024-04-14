@@ -7,6 +7,7 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/property_model.dart';
 import 'package:rentitezy/single_property_details/view/single_properties_screen.dart';
 import 'package:rentitezy/widgets/const_widget.dart';
+import 'package:rentitezy/widgets/wrap_items.dart';
 
 import '../home/model/property_list_nodel.dart';
 import '../single_property_details/view/single_properties_screen_new.dart';
@@ -23,39 +24,6 @@ class RecommendItem extends StatefulWidget {
 }
 
 class RecommendListItemState extends State<RecommendItem> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  Widget wrapItems(String text, String icon, double width1) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        iconWidget(icon, 15, 15),
-        width(0.03),
-        SizedBox(
-          width: width1,
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.fade,
-            style: TextStyle(
-                color: Constants.textColor,
-                fontSize: 13,
-                fontFamily: Constants.fontsFamily,
-                fontWeight: FontWeight.normal),
-          ),
-        ),
-      ],
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +97,7 @@ class RecommendListItemState extends State<RecommendItem> {
                                 ),
                                 height(0.005),
                                 Text(
-                                  '${Constants.currency}.${widget.propertyModel?.price}/ Month',
+                                  '${Constants.currency} ${widget.propertyModel?.price}/ Month',
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
@@ -213,13 +181,22 @@ class RecommendListItemState extends State<RecommendItem> {
                       onPressed: () async {
                         bool response = await likeProperty(listingId: '${widget.propertyModel?.id}');
                         if (response) {
-                          setState(() {});
+                          final val = widget.propertyModel!.wishlist;
+                          if (val != null) {
+                            setState(() {
+                              if (val == 0) {
+                                widget.propertyModel!.wishlist = 1;
+                              } else {
+                                widget.propertyModel!.wishlist = 0;
+                              }
+                            });
+                          }
                         }
                       },
                       icon: Icon(
                         widget.propertyModel!.wishlist == 1 ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                         size: 18,
-                        color: widget.propertyModel!.wishlist == 1 ? Colors.red : Colors.black,
+                        color: widget.propertyModel!.wishlist == 1 ? const Color(0XFFFF0000) : Colors.black,
                       )),
                   Colors.white,
                   100,

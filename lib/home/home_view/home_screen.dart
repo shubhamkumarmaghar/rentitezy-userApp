@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
 import 'package:rentitezy/screen/profile_screen_new.dart';
@@ -129,7 +130,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 ? RIEWidgets.getLoader()
                 : ListView.builder(
                     shrinkWrap: false,
-                    // physics: const BouncingScrollPhysics(),
                     scrollDirection: Axis.horizontal,
                     itemCount: homeController.allPropertyData != null && homeController.allPropertyData?.data != null
                         ? homeController.allPropertyData!.data!.length > 5
@@ -197,17 +197,27 @@ class _MyHomePageState extends State<MyHomePage> {
             width: screenWidth,
             child: ListView(
               shrinkWrap: true,
-              padding: const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 75),
+              padding: const EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 75),
               children: [
                 searchWidget(),
-                height(0.03),
+                height(0.02),
                 SizedBox(height: 45, width: screenWidth, child: buildTabBar()),
-                height(0.015),
-                title("Near by Properties", 18),
+                height(0.04),
+                Text("Near by Properties",textAlign: TextAlign.center,style: TextStyle(
+                     fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: CustomTheme.appThemeContrast
+                ),),
                 height(0.01),
                 buildOnGoingList(),
-                height(0.01),
-                title("Recommended", 18),
+                height(0.04),
+                Text("Recommended Properties",textAlign: TextAlign.center,style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+
+                    color: CustomTheme.appThemeContrast
+                ),),
+                height(0.02),
                 Obx(
                   () => homeController.isLoading.value
                       ? Center(child: RIEWidgets.getLoader())
@@ -224,27 +234,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                 );
                               },
                             ),
-                            Container(
-                              padding: const EdgeInsets.all(5),
-                              margin: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
-                              child: TextButton(
-                                  onPressed: () {
-                                    homeController.scrollListener(false);
-                                  },
-                                  child: Text(
-                                    'LOAD MORE',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: Constants.fontsFamily,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                            )
                           ],
                         ),
                 ),
-                height(0.13),
+                height(0.18),
               ],
             ),
           ),

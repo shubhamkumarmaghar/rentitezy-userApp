@@ -24,6 +24,7 @@ import '../controller/single_property_details_controller.dart';
 
 class PropertiesDetailsPage extends StatefulWidget {
   const PropertiesDetailsPage({super.key, required this.propertyId});
+
   final String propertyId;
 
   @override
@@ -37,19 +38,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   TextEditingController zipcodeController = TextEditingController();
 
   List<String> guestList = ['1', '2', '3', '4', '5'];
-  List<String> monthList = [
-    '1',
-    '2',
-    '3',
-    '4',
-    '5',
-    '6',
-    '7',
-    '8',
-    '9',
-    '10',
-    '11'
-  ];
+  List<String> monthList = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
   var dropdownValueGuest;
   var dropdownValueMonth = '11';
   var selectFlat;
@@ -63,10 +52,10 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   String listingDetailsId = 'guest';
   String? availFrom;
   DateTime availFromDate = DateTime.now();
+
   //final dbFavItem = DbHelper.instance;
   SinglePropertyDetailsController singlePropertyDetailsController = Get.put(SinglePropertyDetailsController());
   PropertyModel? singleProPerty;
-
 
   @override
   void initState() {
@@ -75,15 +64,10 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   }
 
   void fetchSingleProperties(String id) async {
-
-
     String url = '${AppUrls.listingDetail}?id=$id';
-    final response =
-    await http.get(
+    final response = await http.get(
       Uri.parse(url),
-      headers: <String, String>{
-        "Auth-Token": GetStorage().read(Constants.token).toString()
-      },
+      headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
     );
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
@@ -135,7 +119,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
         images: [],
         amenitiesList: [],
         createdOn: propertyModel.createdOn);
- /*   if (!await dbFavItem.isInFav(
+    /*   if (!await dbFavItem.isInFav(
         GetStorage().read(Constants.userId).toString(),
         propertyModel.id.toString())) {
       propertyModel.isFav = true;
@@ -152,9 +136,9 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
 
   fetchPropertyDetails(PropertyModel model) async {
     if (mounted) {
-     /* FavModel? favData = await dbFavItem.getFavItem(
+      /* FavModel? favData = await dbFavItem.getFavItem(
           model.id, GetStorage().read(Constants.userId).toString());*/
-    /*  if (favData != null) {
+      /*  if (favData != null) {
         model.isFav = true;
       } else {
         model.isFav = false;
@@ -168,10 +152,9 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   }
 
   fetchUser(PropertyModel model) async {
-    if (GetStorage().read(Constants.userId).toString() !='guest') {
+    if (GetStorage().read(Constants.userId).toString() != 'guest') {
       userId = GetStorage().read(Constants.userId).toString();
-        tenantId = GetStorage().read(Constants.tenantId).toString();
-
+      tenantId = GetStorage().read(Constants.tenantId).toString();
     } else {
       GetStorage().write(Constants.userId, 'guest');
       GetStorage().write(Constants.tenantId, 'guest');
@@ -185,8 +168,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
         infoWindow: InfoWindow(title: model.address),
         position: model.latlng == 'undefined,undefined'
             ? const LatLng(0.0, 0.0)
-            : LatLng(double.parse(model.latlng.split(',')[0]),
-                double.parse(model.latlng.split(',')[1])),
+            : LatLng(double.parse(model.latlng.split(',')[0]), double.parse(model.latlng.split(',')[1])),
       ),
     };
   }
@@ -198,8 +180,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
       child: ClipRRect(
         clipBehavior: Clip.antiAlias,
         borderRadius: BorderRadius.circular(8),
-        child: imgLoadWid(image, 'assets/images/user_vec.png', 320, screenWidth,
-            BoxFit.cover),
+        child: imgLoadWid(image, 'assets/images/user_vec.png', 320, screenWidth, BoxFit.cover),
       ),
     );
   }
@@ -222,10 +203,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-                color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.bold),
+                fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -254,17 +232,11 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
             text: TextSpan(
               text: '${index + 1}',
               style: TextStyle(
-                  fontSize: 12,
-                  fontFamily: Constants.fontsFamily,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w500),
+                  fontSize: 12, fontFamily: Constants.fontsFamily, color: Colors.white, fontWeight: FontWeight.w500),
               children: [
                 TextSpan(
                   text: '/',
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: Constants.fontsFamily,
-                      color: Colors.white),
+                  style: TextStyle(fontSize: 12, fontFamily: Constants.fontsFamily, color: Colors.white),
                 ),
                 TextSpan(
                   text: '$length',
@@ -289,16 +261,12 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
       children: [
         Text(
           title,
-          style: TextStyle(
-              color: Constants.textColor,
-              fontSize: 13,
-              fontWeight: FontWeight.normal),
+          style: TextStyle(color: Constants.textColor, fontSize: 13, fontWeight: FontWeight.normal),
         ),
         height(0.005),
         Text(
           subTitle,
-          style: const TextStyle(
-              color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500),
+          style: const TextStyle(color: Colors.black, fontSize: 13, fontWeight: FontWeight.w500),
         ),
       ],
     );
@@ -342,15 +310,14 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
             child: Text(
           val,
           style: TextStyle(
-              fontFamily: Constants.fontsFamily,
-              fontSize: 13,
-              color: const Color.fromARGB(255, 110, 109, 109)),
+              fontFamily: Constants.fontsFamily, fontSize: 13, color: const Color.fromARGB(255, 110, 109, 109)),
         )),
       ),
     );
   }
 
   bool loadingLeads = false;
+
   //TextEditingController flatNoController = TextEditingController();
   void showBottomLeads(String from) {
     showModalBottomSheet(
@@ -358,237 +325,209 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
         context: context,
         backgroundColor: Colors.white,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
         ),
         builder: (context) {
           return Padding(
             padding: MediaQuery.of(context).viewInsets,
             child: StatefulBuilder(
-                builder: (BuildContext context, setState) =>
-                    SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(12),
-                              child: Text(
-                                'Please Fill Your Details',
-                                style: TextStyle(
+                builder: (BuildContext context, setState) => SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Text(
+                            'Please Fill Your Details',
+                            style: TextStyle(
+                                fontFamily: Constants.fontsFamily,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
+                        ),
+                        Center(
+                            child: Container(
+                          height: 1,
+                          width: 40,
+                          color: Colors.black,
+                        )),
+                        Container(
+                          padding: const EdgeInsets.all(3),
+                          margin: contEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            color: Constants.lightBg,
+                            border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
+                          ),
+                          child: DropdownButton(
+                            underline: const SizedBox(),
+                            isExpanded: true,
+                            hint: Text(
+                              'Select Guest',
+                              style: TextStyle(
+                                  color: Constants.getColorFromHex('CDCDCD'), fontFamily: Constants.fontsFamily),
+                            ),
+                            iconEnabledColor: Constants.getColorFromHex('CDCDCD'),
+                            items: guestList.map((item) {
+                              return DropdownMenuItem(
+                                value: item.toString(),
+                                child: Text(
+                                  item.toString(),
+                                  style: TextStyle(
                                     fontFamily: Constants.fontsFamily,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20),
-                              ),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (newVal) {
+                              setState(() => dropdownValueGuest = newVal);
+                            },
+                            value: dropdownValueGuest,
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.all(3),
+                          margin: contEdge,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(7),
+                            color: Constants.lightBg,
+                            border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
+                          ),
+                          child: DropdownButton(
+                            underline: const SizedBox(),
+                            isExpanded: true,
+                            hint: Text(
+                              'Select Months',
+                              style: TextStyle(
+                                  color: Constants.getColorFromHex('CDCDCD'), fontFamily: Constants.fontsFamily),
                             ),
-                            Center(
-                                child: Container(
-                              height: 1,
-                              width: 40,
-                              color: Colors.black,
-                            )),
-                            Container(
-                              padding: const EdgeInsets.all(3),
-                              margin: contEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7),
-                                color: Constants.lightBg,
-                                border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 227, 225, 225)),
-                              ),
-                              child: DropdownButton(
-                                underline: const SizedBox(),
-                                isExpanded: true,
-                                hint: Text(
-                                  'Select Guest',
+                            iconEnabledColor: Constants.getColorFromHex('CDCDCD'),
+                            items: monthList.map((item) {
+                              return DropdownMenuItem(
+                                value: item.toString(),
+                                child: Text(
+                                  item.toString(),
                                   style: TextStyle(
-                                      color:
-                                          Constants.getColorFromHex('CDCDCD'),
-                                      fontFamily: Constants.fontsFamily),
+                                    fontFamily: Constants.fontsFamily,
+                                  ),
                                 ),
-                                iconEnabledColor:
-                                    Constants.getColorFromHex('CDCDCD'),
-                                items: guestList.map((item) {
-                                  return DropdownMenuItem(
-                                    value: item.toString(),
-                                    child: Text(
-                                      item.toString(),
-                                      style: TextStyle(
-                                        fontFamily: Constants.fontsFamily,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (newVal) {
-                                  setState(() => dropdownValueGuest = newVal);
-                                },
-                                value: dropdownValueGuest,
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(3),
-                              margin: contEdge,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7),
-                                color: Constants.lightBg,
-                                border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 227, 225, 225)),
-                              ),
-                              child: DropdownButton(
-                                underline: const SizedBox(),
-                                isExpanded: true,
-                                hint: Text(
-                                  'Select Months',
-                                  style: TextStyle(
-                                      color:
-                                          Constants.getColorFromHex('CDCDCD'),
-                                      fontFamily: Constants.fontsFamily),
-                                ),
-                                iconEnabledColor:
-                                    Constants.getColorFromHex('CDCDCD'),
-                                items: monthList.map((item) {
-                                  return DropdownMenuItem(
-                                    value: item.toString(),
-                                    child: Text(
-                                      item.toString(),
-                                      style: TextStyle(
-                                        fontFamily: Constants.fontsFamily,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (newVal) {
-                                  setState(() =>
-                                      dropdownValueMonth = newVal.toString());
-                                },
-                                value: dropdownValueMonth,
-                              ),
-                            ),
-                            title('Select Date', 15),
-                            Container(
-                              height: 55,
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(7)),
-                                color: Constants.lightBg,
-                              ),
-                              margin: contEdge,
-                              padding: const EdgeInsets.all(5),
-                              child: InkWell(
-                                onTap: () async {
-                                  if (availFrom != null) {
-                                    DateTime newDate = availFromDate
-                                        .add(const Duration(days: 7));
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate: currentDate,
-                                      firstDate: availFromDate,
-                                      lastDate: newDate,
-                                    ).then((pickedDate) {
-                                      if (pickedDate != null &&
-                                          pickedDate != currentDate) {
-                                        setState(
-                                            () => currentDate = pickedDate);
-                                      }
-                                    });
-                                  } else {
-                                    await showDatePicker(
-                                      context: context,
-                                      initialDate: currentDate,
-                                      firstDate: DateTime.now()
-                                          .subtract(const Duration(days: 0)),
-                                      lastDate: DateTime(2100),
-                                    ).then((pickedDate) {
-                                      if (pickedDate != null &&
-                                          pickedDate != currentDate) {
-                                        setState(
-                                            () => currentDate = pickedDate);
-                                      }
-                                    });
+                              );
+                            }).toList(),
+                            onChanged: (newVal) {
+                              setState(() => dropdownValueMonth = newVal.toString());
+                            },
+                            value: dropdownValueMonth,
+                          ),
+                        ),
+                        title('Select Date', 15),
+                        Container(
+                          height: 55,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(7)),
+                            color: Constants.lightBg,
+                          ),
+                          margin: contEdge,
+                          padding: const EdgeInsets.all(5),
+                          child: InkWell(
+                            onTap: () async {
+                              if (availFrom != null) {
+                                DateTime newDate = availFromDate.add(const Duration(days: 7));
+                                await showDatePicker(
+                                  context: context,
+                                  initialDate: currentDate,
+                                  firstDate: availFromDate,
+                                  lastDate: newDate,
+                                ).then((pickedDate) {
+                                  if (pickedDate != null && pickedDate != currentDate) {
+                                    setState(() => currentDate = pickedDate);
                                   }
-                                },
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 1,
-                                      child: getCustomText(
-                                          DateFormat.yMMMd()
-                                              .format(currentDate),
-                                          Constants.primaryColor,
-                                          1,
-                                          TextAlign.start,
-                                          FontWeight.w400,
-                                          15),
-                                    ),
-                                    Icon(
-                                      Icons.calendar_today_outlined,
-                                      color: Constants.textColor,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            height(0.05),
-                            GestureDetector(
-                              onTap: () async {
-                                if (userId == 'null' || userId == 'guest') {
-                                  RIEWidgets.getToast(message: 'You are not ${AppUrls.appName} user. Please Login/Register', color: CustomTheme.white);
-                                } else if (dropdownValueGuest == null ||
-                                    dropdownValueGuest == 'null' ||
-                                    dropdownValueGuest.isEmpty) {
-                                  RIEWidgets.getToast(message: 'Select valid month', color: CustomTheme.white);
-                                } else if (dropdownValueMonth.isEmpty) {
-                                  RIEWidgets.getToast(message: 'Select valid month', color: CustomTheme.white);
-                                } else {
-                                  if (int.parse(dropdownValueGuest.toString()) >
-                                      1) {
-                                    alertDialog(
-                                        context,
-                                        'Booking Alert',
-                                        'Valid ID /KYC should be provided at the time on check in',
-                                        from);
-                                  } else {
-                                    submitReqBooking(from);
+                                });
+                              } else {
+                                await showDatePicker(
+                                  context: context,
+                                  initialDate: currentDate,
+                                  firstDate: DateTime.now().subtract(const Duration(days: 0)),
+                                  lastDate: DateTime(2100),
+                                ).then((pickedDate) {
+                                  if (pickedDate != null && pickedDate != currentDate) {
+                                    setState(() => currentDate = pickedDate);
                                   }
-                                }
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.70,
-                                height: 50,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Constants.primaryColor,
-                                  borderRadius: BorderRadius.circular(40),
+                                });
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: getCustomText(DateFormat.yMMMd().format(currentDate), Constants.primaryColor,
+                                      1, TextAlign.start, FontWeight.w400, 15),
                                 ),
-                                child: loadingLeads
-                                    ? const Center(
-                                        child: SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            strokeWidth: 3,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      )
-                                    : Center(
-                                        child: Text(
-                                          'Submit',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontFamily: Constants.fontsFamily,
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                              ),
+                                Icon(
+                                  Icons.calendar_today_outlined,
+                                  color: Constants.textColor,
+                                )
+                              ],
                             ),
-                            height(0.05),
-                          ],
-                        ))),
+                          ),
+                        ),
+                        height(0.05),
+                        GestureDetector(
+                          onTap: () async {
+                            if (userId == 'null' || userId == 'guest') {
+                              RIEWidgets.getToast(
+                                  message: 'You are not ${AppUrls.appName} user. Please Login/Register',
+                                  color: CustomTheme.white);
+                            } else if (dropdownValueGuest == null ||
+                                dropdownValueGuest == 'null' ||
+                                dropdownValueGuest.isEmpty) {
+                              RIEWidgets.getToast(message: 'Select valid month', color: CustomTheme.white);
+                            } else if (dropdownValueMonth.isEmpty) {
+                              RIEWidgets.getToast(message: 'Select valid month', color: CustomTheme.white);
+                            } else {
+                              if (int.parse(dropdownValueGuest.toString()) > 1) {
+                                alertDialog(context, 'Booking Alert',
+                                    'Valid ID /KYC should be provided at the time on check in', from);
+                              } else {
+                                submitReqBooking(from);
+                              }
+                            }
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width * 0.70,
+                            height: 50,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Constants.primaryColor,
+                              borderRadius: BorderRadius.circular(40),
+                            ),
+                            child: loadingLeads
+                                ? const Center(
+                                    child: SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 3,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : Center(
+                                    child: Text(
+                                      'Submit',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontFamily: Constants.fontsFamily,
+                                          color: Colors.white,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        height(0.05),
+                      ],
+                    ))),
           );
         });
   }
@@ -598,12 +537,11 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
     final f = DateFormat('yyyy-MM-dd');
     String url =
         "${AppUrls.checkout}?checkin=${f.format(currentDate)}&duration=$dropdownValueMonth&guest=$dropdownValueGuest&listingId=$listingDetailsId";
-    dynamic result = await getCheckOut(
-        url, GetStorage().read(Constants.token).toString());
+    dynamic result = await getCheckOut(url, GetStorage().read(Constants.token).toString());
     debugPrint("result");
     debugPrint(result.toString());
     bool success = result["success"];
-  /*  if (success) {
+    /*  if (success) {
       bool isBack = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -622,8 +560,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
     }*/
   }
 
-  Future<void> alertDialog(
-      BuildContext context, String title, String subttitle, String from) {
+  Future<void> alertDialog(BuildContext context, String title, String subttitle, String from) {
     return showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -661,7 +598,6 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
   }
 
   void issuesRequest(PropertyModel model) async {
-
     try {
       dynamic result = await createIssuesApi(
         GetStorage().read(Constants.userId).toString(),
@@ -691,8 +627,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100)),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: SizedBox(
@@ -729,15 +664,10 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                     controller: ScrollPageController(),
                                     delay: const Duration(seconds: 4),
                                     indicatorAlign: Alignment.bottomLeft,
-                                    indicatorPadding: EdgeInsets.only(
-                                        bottom:
-                                            MediaQuery.of(context).size.height *
-                                                0.10,
-                                        left: 5),
+                                    indicatorPadding:
+                                        EdgeInsets.only(bottom: MediaQuery.of(context).size.height * 0.10, left: 5),
                                     indicatorWidgetBuilder: _indicatorBuilder,
-                                    children: singleProPerty!.images
-                                        .map((image) => _imageView(image))
-                                        .toList(),
+                                    children: singleProPerty!.images.map((image) => _imageView(image)).toList(),
                                   )
                                 : _imageView(singleProPerty!.images.first),
                           ),
@@ -756,13 +686,10 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                         child: Container(
                           padding: const EdgeInsets.only(left: 10, top: 20),
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20)),
+                            borderRadius:
+                                const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                             color: Colors.white,
-                            border: Border.all(
-                                color:
-                                    const Color.fromARGB(255, 227, 225, 225)),
+                            border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
                           ),
                           child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -774,8 +701,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                   children: [
                                     Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
                                       children: [
                                         RichText(
                                           text: TextSpan(
@@ -785,29 +711,23 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                                     style: TextStyle(
                                                         color: Colors.black,
                                                         fontSize: 18,
-                                                        fontFamily: Constants
-                                                            .fontsFamily,
-                                                        fontWeight:
-                                                            FontWeight.normal)),
+                                                        fontFamily: Constants.fontsFamily,
+                                                        fontWeight: FontWeight.normal)),
                                               ),
                                               WidgetSpan(
-                                                child: Text(
-                                                    '.${singleProPerty!.price}',
+                                                child: Text('.${singleProPerty!.price}',
                                                     style: TextStyle(
-                                                        fontFamily: Constants
-                                                            .fontsFamily,
+                                                        fontFamily: Constants.fontsFamily,
                                                         color: Constants.black,
                                                         fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
+                                                        fontWeight: FontWeight.bold)),
                                               ),
                                             ],
                                           ),
                                         ),
                                         Text("Per Month",
                                             style: TextStyle(
-                                                fontFamily:
-                                                    Constants.fontsFamily,
+                                                fontFamily: Constants.fontsFamily,
                                                 color: Constants.primaryColor,
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.normal))
@@ -837,41 +757,30 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                   ],
                                 ),
                                 Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 15, right: 10),
+                                  padding: const EdgeInsets.only(top: 15, right: 10),
                                   child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       SizedBox(
                                           width: 200,
                                           child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 3),
-                                                child: iconWidget(
-                                                    'location', 13, 13),
+                                                padding: const EdgeInsets.only(top: 3),
+                                                child: iconWidget('location', 13, 13),
                                               ),
                                               SizedBox(
                                                 width: 180,
-                                                child: Text(
-                                                    singleProPerty!.address,
+                                                child: Text(singleProPerty!.address,
                                                     maxLines: 2,
                                                     style: TextStyle(
-                                                        fontFamily: Constants
-                                                            .fontsFamily,
-                                                        color:
-                                                            Constants.textColor,
+                                                        fontFamily: Constants.fontsFamily,
+                                                        color: Constants.textColor,
                                                         fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.normal)),
+                                                        fontWeight: FontWeight.normal)),
                                               )
                                             ],
                                           )),
@@ -880,22 +789,17 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                         height: 40,
                                         child: ElevatedButton.icon(
                                             onPressed: () {
-                                              openDialPad(
-                                                  singleProPerty!.ownerPhone,
-                                                  context);
+                                              openDialPad(singleProPerty!.ownerPhone, context);
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Constants.primaryColor,
+                                              backgroundColor: Constants.primaryColor,
                                             ),
                                             icon: iconWidget('phone', 30, 30),
                                             label: Text(
                                               'Contact',
                                               style: TextStyle(
                                                   fontSize: 12,
-
-                                                  fontFamily:
-                                                      Constants.fontsFamily,
+                                                  fontFamily: Constants.fontsFamily,
                                                   fontWeight: FontWeight.bold),
                                             )),
                                       )
@@ -903,11 +807,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                   ),
                                 ),
                                 height(0.005),
-                                sTitle(
-                                    'Property Details',
-                                    15,
-                                    const Color.fromARGB(255, 73, 72, 72),
-                                    FontWeight.w500),
+                                sTitle('Property Details', 18, FontWeight.w500),
                                 height(0.005),
                                 Text(
                                   singleProPerty!.name,
@@ -921,44 +821,27 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                 ),
                                 height(0.005),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    SizedBox(
-                                        width: 150,
-                                        child: columnTxt(
-                                            'BHK', singleProPerty!.bhkType)),
-                                    SizedBox(
-                                        width: 150,
-                                        child: columnTxt(
-                                            'Floor', singleProPerty!.floor))
+                                    SizedBox(width: 150, child: columnTxt('BHK', singleProPerty!.bhkType)),
+                                    SizedBox(width: 150, child: columnTxt('Floor', singleProPerty!.floor))
                                   ],
                                 ),
                                 height(0.005),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
+                                    SizedBox(width: 150, child: columnTxt('Flat Type', singleProPerty!.type)),
                                     SizedBox(
-                                        width: 150,
-                                        child: columnTxt(
-                                            'Flat Type', singleProPerty!.type)),
-                                    SizedBox(
-                                        width: 150,
-                                        child: columnTxt('Covered Area',
-                                            '${singleProPerty!.area} Sqft'))
+                                        width: 150, child: columnTxt('Covered Area', '${singleProPerty!.area} Sqft'))
                                   ],
                                 ),
                                 height(0.005),
                                 columnTxt('City', singleProPerty!.city),
                                 height(0.005),
-                                sTitle(
-                                    'Description :',
-                                    17,
-                                    const Color.fromARGB(255, 73, 72, 72),
-                                    FontWeight.w500),
+                                sTitle('Description :', 18, FontWeight.w500),
                                 width(0.005),
                                 Text(
                                   singleProPerty!.description,
@@ -969,11 +852,7 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                       fontWeight: FontWeight.w500),
                                 ),
                                 height(0.005),
-                                sTitle(
-                                    'Amenities',
-                                    17,
-                                    const Color.fromARGB(255, 73, 72, 72),
-                                    FontWeight.w500),
+                                sTitle('Amenities', 18, FontWeight.w500),
                                 height(0.005),
                                 // SizedBox(
                                 //   height: 70,
@@ -986,44 +865,35 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                 //           .toList()),
                                 // ),
                                 // height(10),
-                                sTitle(
-                                    'Have a question?',
-                                    15,
-                                    const Color.fromARGB(255, 73, 72, 72),
-                                    FontWeight.w500),
+                                sTitle('Have a question?', 18, FontWeight.w500),
                                 width(0.005),
-                                sTitle('Get a quick answer right here', 11,
-                                    Colors.grey, FontWeight.normal),
+                                const Text(
+                                  'Get a quick answer right here',
+                                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                                ),
                                 height(0.005),
                                 Container(
                                   height: 45,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(7),
                                     color: Colors.white,
-                                    border: Border.all(
-                                        color: const Color.fromARGB(
-                                            255, 214, 212, 212)),
+                                    border: Border.all(color: const Color.fromARGB(255, 214, 212, 212)),
                                   ),
                                   child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
                                         Expanded(
                                           child: TextField(
                                             controller: askQController,
                                             decoration: InputDecoration(
-                                                hoverColor: Constants.hint,
-                                                hintText: '',
-                                                border: InputBorder.none),
+                                                hoverColor: Constants.hint, hintText: '', border: InputBorder.none),
                                           ),
                                         ),
                                         GestureDetector(
                                           onTap: () {
                                             if (askQController.text.isEmpty) {
-                                              showSnackBar(context,
-                                                  'Enter valid Question');
+                                              showSnackBar(context, 'Enter valid Question');
                                             } else {
                                               issuesRequest(singleProPerty!);
                                             }
@@ -1032,19 +902,16 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                             height: 45,
                                             width: 100,
                                             decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(7),
+                                              borderRadius: BorderRadius.circular(7),
                                               color: Constants.primaryColor,
                                             ),
                                             child: Center(
                                               child: Text(
                                                 'Ask now',
                                                 style: TextStyle(
-                                                    fontFamily:
-                                                        Constants.fontsFamily,
+                                                    fontFamily: Constants.fontsFamily,
                                                     color: Colors.white,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                    fontWeight: FontWeight.bold),
                                               ),
                                             ),
                                           ),
@@ -1073,21 +940,14 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                                       markers: markers,
                                       mapType: MapType.normal,
                                       initialCameraPosition: CameraPosition(
-                                          target: singleProPerty!.latlng ==
-                                                  'undefined,undefined'
+                                          target: singleProPerty!.latlng == 'undefined,undefined'
                                               ? const LatLng(0.0, 0.0)
-                                              : LatLng(
-                                                  double.parse(singleProPerty!
-                                                      .latlng
-                                                      .split(',')[0]),
-                                                  double.parse(singleProPerty!
-                                                      .latlng
-                                                      .split(',')[1])),
+                                              : LatLng(double.parse(singleProPerty!.latlng.split(',')[0]),
+                                                  double.parse(singleProPerty!.latlng.split(',')[1])),
                                           zoom: 13.0,
                                           tilt: 0,
                                           bearing: 0),
-                                      onMapCreated:
-                                          (GoogleMapController controller) {
+                                      onMapCreated: (GoogleMapController controller) {
                                         _controller.complete(controller);
                                       }),
                                 ),
@@ -1103,21 +963,16 @@ class _MartHomeState extends State<PropertiesDetailsPage> {
                         IconButton(
                             onPressed: () async {
                               if (listingDetailsId.isNotEmpty) {
-                                dynamic result =
-                                    await addToFav(listingDetailsId);
+                                dynamic result = await addToFav(listingDetailsId);
                                 if (result['message'].toString() == 'Success') {
                                   addToFavItem(singleProPerty!);
                                 }
                               }
                             },
                             icon: Icon(
-                              singleProPerty!.isFav
-                                  ? Icons.favorite_rounded
-                                  : Icons.favorite_border_rounded,
+                              singleProPerty!.isFav ? Icons.favorite_rounded : Icons.favorite_border_rounded,
                               size: 18,
-                              color: singleProPerty!.isFav
-                                  ? Colors.red
-                                  : Colors.black,
+                              color: singleProPerty!.isFav ? Colors.red : Colors.black,
                             )),
                         Colors.white,
                         100,

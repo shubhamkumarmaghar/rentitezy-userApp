@@ -24,20 +24,13 @@ Widget loading() {
   );
 }
 
-Widget title(
-  String title,
-  double fSize,
-{FontWeight fontWeight=FontWeight.w500}
-) {
+Widget title(String title, double fSize, {FontWeight fontWeight = FontWeight.w500}) {
   return Text(
     title,
     maxLines: 1,
     overflow: TextOverflow.ellipsis,
     textAlign: TextAlign.center,
-    style: poppinsStyle(
-        color: Colors.black,
-        fontSize: fSize,
-        fontWeight:fontWeight ),
+    style: poppinsStyle(color: Colors.black, fontSize: fSize, fontWeight: fontWeight),
   );
 }
 
@@ -49,11 +42,7 @@ Widget titleClr(String title, double fSize, Color clr, FontWeight fw) {
     maxLines: 1,
     overflow: TextOverflow.ellipsis,
     textAlign: TextAlign.center,
-    style: TextStyle(
-        fontFamily: Constants.fontsFamily,
-        color: clr,
-        fontSize: fSize,
-        fontWeight: fw),
+    style: TextStyle(fontFamily: Constants.fontsFamily, color: clr, fontSize: fSize, fontWeight: fw),
   );
 }
 
@@ -70,8 +59,8 @@ Widget width(double w) {
 }
 
 double get getScreenHeight => Get.size.height;
-double get getScreenWidth => Get.size.width;
 
+double get getScreenWidth => Get.size.width;
 
 void showCustomToast(
   BuildContext context,
@@ -84,18 +73,17 @@ void showCustomToast(
   );
 }
 
-Widget iconWidget(String name, double he, double wi,[Color? color]) {
+Widget iconWidget(String name, double he, double wi, [Color? color]) {
   return Image.asset(
     'assets/images/$name.png',
     fit: BoxFit.fill,
     height: he,
     width: wi,
-    color:color,
+    color: color,
   );
 }
 
-Widget imgLoadWidCircle(String imgUrl, String asset, double h, double w, BoxFit fit,
-    double radius) {
+Widget imgLoadWidCircle(String imgUrl, String asset, double h, double w, BoxFit fit, double radius) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(radius),
     child: FadeInImage.assetNetwork(
@@ -134,21 +122,18 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
       });
 }
 
-String dateConvert(String date){
+String dateConvert(String date) {
   String dateTime;
-  try{
-    if(date.isNotEmpty) {
+  try {
+    if (date.isNotEmpty) {
       DateTime datee = DateTime.parse(date);
       dateTime = DateFormat('dd-MM-yyyy').format(datee);
+    } else {
+      dateTime = 'NA';
     }
-    else{
-      dateTime='NA';
-    }
-  }
-  catch (e)
-  {
+  } catch (e) {
     log('error exception ::$e');
-    dateTime='NA';
+    dateTime = 'NA';
   }
   return dateTime;
 }

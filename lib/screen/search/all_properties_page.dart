@@ -141,14 +141,22 @@ class AllPropertiesPage extends StatelessWidget {
                             child: CircularProgressIndicator.adaptive(
                             valueColor: AlwaysStoppedAnimation<Color>(Constants.primaryColor),
                           ))
-                        : ListView.builder(
-                            itemCount: controller.apiPropertyList.length,
-                            itemBuilder: (context, index) {
-                              return SearchItem(
-                                propertyModel: controller.apiPropertyList[index],
-                              );
-                            },
-                          ),
+                        : controller.apiPropertyList.isEmpty
+                            ? Center(
+                                child: Text(
+                                  'No Properties found.',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600, fontSize: 20, color: CustomTheme.appThemeContrast),
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: controller.apiPropertyList.length,
+                                itemBuilder: (context, index) {
+                                  return SearchItem(
+                                    propertyModel: controller.apiPropertyList[index],
+                                  );
+                                },
+                              ),
                   ),
                 ],
               )),

@@ -75,12 +75,16 @@ class HomeController extends GetxController {
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
     // var body = jsonDecode(response.body);
-    bool success = response["success"];
+    String success = response["message"];
     try {
-      if (success) {
+      if (success.toLowerCase().contains('success')) {
         allPropertyData = PropertyListModel.fromJson(response);
         isLoading(false);
+        log('data count ${allPropertyData?.data?.length}');
         update();
+        allPropertyData!.data?.forEach((element) {
+          log('props ::::: ${element.wishlist}--${element.id}');
+        });
         /* (response["data"] as List)
               .map((stock) => PropertyModel.fromJson(stock))
               .toList();*/
@@ -102,9 +106,9 @@ class HomeController extends GetxController {
     );
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
-      bool success = body["success"];
+      String success = body["message"];
       try {
-        if (success) {
+        if (success.toLowerCase().contains('success')) {
           List<dynamic> response = body['data'] as List;
           for (var i in response) {
             categories.add(i.toString());

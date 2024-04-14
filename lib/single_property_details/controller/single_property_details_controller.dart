@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -87,7 +88,7 @@ class SinglePropertyDetailsController extends GetxController {
     singlePage.value = true;
     final response = await apiService.getApiCallWithURL(endPoint: url);
     String success = response["message"];
-    if (success == 'success') {
+    if (success.toLowerCase() == 'success') {
       singleProPerty = SinglePropertyDetails.fromJson(response);
       update();
     } else {
@@ -115,13 +116,14 @@ class SinglePropertyDetailsController extends GetxController {
     String url =
         "${AppUrls.checkout}?checkin=${f.format(currentDate)}&duration=$duration&guest=$dropdownValueGuest&listingId=${singleProPerty?.data?.id}&unitId=$unitId}";
     final response = await apiService.getApiCallWithURL(endPoint: url);
-
     String success = response["message"];
-    if (success == 'success') {
-      checkoutModel = CheckoutModel.fromJson(response['data']);
-      Get.back();
-      await Get.to(CheckOutPage(
-          from: from, currentDate: currentDate, propertyModel: singleProPerty, checkoutModel: checkoutModel));
+    if (success.toLowerCase() == 'success') {
+      if (response['data']['data'] != null) {
+        checkoutModel = CheckoutModel.fromJson(response['data']['data']);
+        Get.back();
+        await Get.to(CheckOutPage(
+            from: from, currentDate: currentDate, propertyModel: singleProPerty, checkoutModel: checkoutModel));
+      }
     } else {
       singlePage.value = false;
       Get.back();

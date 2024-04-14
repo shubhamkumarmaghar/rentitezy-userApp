@@ -53,6 +53,7 @@ class AppUrls {
   static const listing = '${baseUrl}listing';
   static const locations = '${baseUrl}locations';
   static const wishlist = '${baseUrl}wishlist';
+  static const paymentCallback = '${baseUrl}paymentCallback';
 
   static Widget emptyWidget(String path) {
     return SizedBox(height: 150, width: 150, child: Lottie.network(path));
