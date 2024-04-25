@@ -81,6 +81,8 @@ class Constants {
   static String fontsFamily = 'Kanit';
   static const usernamekey = "usernamekey";
   static const profileUrl = "profileUrl";
+  static const firstName = "firstName";
+  static const lastName = "lastName";
   static const userId = "userId";
   static const auth_key = "auth_key";
   static const token = "token";
@@ -103,7 +105,9 @@ class Constants {
   static Color textColor = getColorFromHex('99000000');
   static Color bgNearProperties = getColorFromHex('D9D9D9');
   static Color black = getColorFromHex('000000');
-  static Color primaryColor = getColorFromHex('0075FF');
+  //static Color primaryColor = getColorFromHex('0075FF');
+
+  static Color primaryColor = getColorFromHex('12086F');
   static Color greyLight = getColorFromHex('CDCDCD');
   static Color navBg = getColorFromHex('D9D9D9');
   static Color green = getColorFromHex('26C000');

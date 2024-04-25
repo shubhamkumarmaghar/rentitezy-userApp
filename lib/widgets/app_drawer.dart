@@ -12,7 +12,7 @@ import '../pdf/pdf_new.dart';
 import '../screen/faq_screen.dart';
 import '../screen/terms_conditions.dart/policy_data.dart';
 import '../screen/terms_conditions.dart/terms_and_condition.dart';
-import '../screen/update_profile.dart';
+import '../screen/update_profile/view/update_profile.dart';
 import '../theme/custom_theme.dart';
 import '../utils/const/appConfig.dart';
 import '../utils/model/agreement_det.dart';
@@ -21,7 +21,7 @@ import 'menu_side_bar_widget.dart';
 
 class AppDrawer extends StatelessWidget {
   final String userName = GetStorage().read(Constants.usernamekey);
-  final String userId = GetStorage().read(Constants.userId) ?? "guest";
+  final String userId = GetStorage().read(Constants.userId).toString() ?? "guest";
   final bool isTenant = GetStorage().read(Constants.isTenant);
 
   final AgreementDet tempPdf = AgreementDet(
@@ -67,8 +67,11 @@ class AppDrawer extends StatelessWidget {
                       bottomRight: Radius.circular(25))),
               child: Column(
                 children: [
-                  imgLoadWid(
-                      GetStorage().read(Constants.profileUrl), 'assets/images/user_vec.png', 70, 70, BoxFit.contain),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(screenHeight*0.07),
+                    child: imgLoadWid(
+                        GetStorage().read(Constants.profileUrl), 'assets/images/user_vec.png', screenHeight*0.11, screenWidth*0.24, BoxFit.fill),
+                  ),
                   height(0.015),
                   Text(
                     userName,
@@ -84,15 +87,15 @@ class AppDrawer extends StatelessWidget {
               ) //UserAccountDrawerHeader
               ), //DrawerHeaderRS
           getMenuSideBar(
-            leading: iconWidget('profile_edit', 24, 24, CustomTheme.appTheme.withOpacity(0.9)),
+            leading: iconWidget('profile_edit', 24, 24, Constants.primaryColor),
             title: Text(' Profile Edit ', style: menuTextStyle()),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const UpdateProfilePage()));
+              Get.to(() => const UpdateProfilePage());
             },
           ),
 
           getMenuSideBar(
-            leading: iconWidget('shopping_bag', 24, 24, CustomTheme.appTheme.withOpacity(0.9)),
+            leading: iconWidget('shopping_bag', 24, 24, Constants.primaryColor),
             title: Text('My Bookings ', style: menuTextStyle()),
             onTap: () {
               Get.to(() => MyBookingsScreenList(
@@ -101,7 +104,7 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           getMenuSideBar(
-            leading: iconWidget('help', 24, 24, CustomTheme.appTheme.withOpacity(0.9)),
+            leading: iconWidget('help', 24, 24, Constants.primaryColor),
             title: Text(' Faq ', style: menuTextStyle()),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const FaqScreen()));
@@ -111,14 +114,14 @@ class AppDrawer extends StatelessWidget {
           Visibility(
             visible: isTenant,
             child: getMenuSideBar(
-                leading: iconWidget('agreement', 24, 24, CustomTheme.appTheme.withOpacity(0.9)),
+                leading: iconWidget('agreement', 24, 24, Constants.primaryColor),
                 title: Text(' Agreement ', style: menuTextStyle()),
                 onTap: () {
                   showInvoice();
                 }),
           ),
           getMenuSideBar(
-            leading: iconWidget('privacy_policy', 24, 24, CustomTheme.appTheme.withOpacity(0.9)),
+            leading: iconWidget('privacy_policy', 24, 24, Constants.primaryColor),
             title: Text(' Privacy Policy', style: menuTextStyle()),
             onTap: () {
               Navigator.push(
@@ -131,7 +134,7 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           getMenuSideBar(
-            leading: iconWidget('about_us', 24, 24, CustomTheme.appTheme.withOpacity(0.9)),
+            leading: iconWidget('about_us', 24, 24, Constants.primaryColor),
             title: Text(' Terms & Conditions ', style: menuTextStyle()),
             onTap: () async {
               Navigator.push(
@@ -144,7 +147,7 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           getMenuSideBar(
-            leading: iconWidget('about_us', 24, 24, CustomTheme.appTheme.withOpacity(0.9)),
+            leading: iconWidget('about_us', 24, 24, Constants.primaryColor),
             title: Text(' Cancellation Policy ', textAlign: TextAlign.start, style: menuTextStyle()),
             onTap: () async {
               Navigator.push(
@@ -159,7 +162,7 @@ class AppDrawer extends StatelessWidget {
           getMenuSideBar(
             leading: Icon(
               (userId.isNotEmpty || userId != 'null' || userId != 'guest') ? Icons.logout_rounded : Icons.login_rounded,
-              color: CustomTheme.appTheme.withOpacity(0.9),
+              color: Constants.primaryColor.withOpacity(0.8),
             ),
             title: Text((userId.isNotEmpty || userId != 'null' || userId != 'guest') ? 'Logout' : 'Login',
                 style: menuTextStyle()),

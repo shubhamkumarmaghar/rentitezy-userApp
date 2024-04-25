@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/faq_model.dart';
+import 'package:rentitezy/utils/const/widgets.dart';
 
 class FaqScreen extends StatefulWidget {
   const FaqScreen({super.key});
@@ -83,8 +84,7 @@ class _FaqState extends State<FaqScreen> {
 //faqApi
   Widget listFaq() {
     return ListView.builder(
-      itemBuilder: (BuildContext context, int index) =>
-          expandItemFaq(faqModelList[index]),
+      itemBuilder: (BuildContext context, int index) => expandItemFaq(faqModelList[index]),
       itemCount: faqModelList.length,
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
@@ -127,60 +127,18 @@ class _FaqState extends State<FaqScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 0,
         backgroundColor: Constants.primaryColor,
         systemOverlayStyle: SystemUiOverlayStyle.light,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
+        titleSpacing: -10,
+        title: Text(
+          'Faq',
+          style: TextStyle(
+              fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
+        ),
       ),
-      body: Stack(children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-        ),
-        Container(
-          height: 120,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              color: Constants.primaryColor,
-              borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30))),
-          child: Stack(children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  Navigator.pop(context, true);
-                },
-              ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Faq',
-                style: TextStyle(
-                    fontFamily: Constants.fontsFamily,
-                    color: Colors.white,
-                    fontSize: 23,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          ]),
-        ),
-        Align(
-            alignment: Alignment.bottomCenter,
-            child: Stack(
-              children: [
-                SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height - 150,
-                    child: listFaq()),
-              ],
-            ))
-      ]),
+      body: SizedBox(width: screenWidth, height: screenHeight, child: listFaq()),
     );
   }
 }

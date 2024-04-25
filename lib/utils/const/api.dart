@@ -89,6 +89,7 @@ Future<List<UserModel>> fetchUserApi(String url) async {
     Uri.parse(url),
     headers: <String, String>{'Auth-Token': GetStorage().read(Constants.token).toString()},
   );
+  log('eeeeee ${response.body}');
   if (response.statusCode == 200) {
     var body = jsonDecode(response.body);
     bool success = body["success"];

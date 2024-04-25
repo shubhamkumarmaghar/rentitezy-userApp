@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/services/rie_user_api_service.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
+import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 
 import '../../dashboard/controller/dashboard_controller.dart';
 import '../../home/home_view/home_screen.dart';
@@ -27,9 +29,10 @@ class LoginController extends GetxController {
   TextEditingController uPasswordController = TextEditingController();
   TextEditingController uEmailController = TextEditingController();
 
-  Future<void> fetchLoginDetails({required String email, required String password}) async {
-    isLoading = true;
+  Future<void> fetchLoginDetails(
+      {required BuildContext context, required String email, required String password}) async {
     String url = AppUrls.userLogin;
+    showProgressLoader(context);
     final response = await rieUserApiService.postApiCall(
         endPoint: url,
         bodyParams: {
@@ -39,43 +42,36 @@ class LoginController extends GetxController {
         fromLogin: true);
     final data = response as Map<String, dynamic>;
 
-    if (data['message'].toString().toLowerCase().contains('success')) {
-      isLoading = false;
+    if (data['message'].toString() == 'Welcome to Rentiseazy') {
       userModel = LoginModel.fromJson(data);
       if (userModel?.data != null) {
-        // userModel = LoginModel.fromJson(result);
         RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
         GetStorage().write(Constants.isLogin, true);
 
         if (userModel?.isTenant == true) {
-          // tenantModel = TenantModel.fromJson(result['tenantDet']);
           GetStorage().write(Constants.isTenant, true);
           GetStorage().write(Constants.tenantId, userModel?.data?.id);
-          // if (tenantModel.isAgree == 'true') {
-          //   GetStorage().write(Constants.isAgree, true);
-          // } else {
-          //   GetStorage().write(Constants.isAgree, false);
-          // }
         } else {
           GetStorage().write(Constants.isTenant, false);
           GetStorage().write(Constants.tenantId, '');
         }
-        debugPrint("isTenant ${GetStorage().read(Constants.isTenant)}");
         GetStorage().write(Constants.userId, userModel?.data?.id.toString());
         GetStorage().write(Constants.phonekey, userModel?.data?.phone);
         GetStorage().write(Constants.token, userModel?.data?.token);
         GetStorage().write(Constants.profileUrl, userModel?.data?.image);
         GetStorage().write(Constants.usernamekey, userModel?.data?.firstName);
+        GetStorage().write(Constants.firstName, userModel?.data?.firstName);
+        GetStorage().write(Constants.lastName, userModel?.data?.lastName);
         GetStorage().write(Constants.emailkey, userModel?.data?.email);
-        await Future<void>.delayed(const Duration(seconds: 2));
-        isLoading = false;
+        cancelLoader();
         Get.find<DashboardController>().setIndex(0);
-        Get.offAll(DashboardView());
+        Get.offAll(() => const DashboardView());
       } else {
-        RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.white);
+        cancelLoader();
+        RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.appTheme);
       }
     } else {
-      isLoading = false;
+      cancelLoader();
       userModel = LoginModel(message: 'failure');
       RIEWidgets.getToast(message: '${userModel?.message}', color: CustomTheme.appTheme);
     }

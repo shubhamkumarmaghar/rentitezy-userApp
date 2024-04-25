@@ -33,7 +33,7 @@ class DashboardView extends StatelessWidget {
 
   Widget getDashboardBody(BuildContext context, int index) {
     if (index == 0) {
-      return const MyHomePage();
+      return MyHomePage();
     } else if (index == 1) {
       return const FavScreen();
     } else if (index == 2) {

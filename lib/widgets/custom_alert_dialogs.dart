@@ -36,7 +36,9 @@ void showProgressLoader(BuildContext context) {
     },
   );
 }
-
+void cancelLoader(){
+  Get.back();
+}
 void showTextAlertDialog(
     {required BuildContext context, required String title, required String subTitle, Function()? onYesTap}) {
   showCupertinoDialog(

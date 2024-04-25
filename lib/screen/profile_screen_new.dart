@@ -19,7 +19,6 @@ import '../utils/const/app_urls.dart';
 import '../utils/const/widgets.dart';
 import 'faq_screen.dart';
 
-
 class ProfileScreenNew extends StatefulWidget {
   const ProfileScreenNew({super.key});
 
@@ -59,10 +58,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
   Widget infoTile(String title) {
     return Text(
       title,
-      style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 13,
-          color: Constants.textColor),
+      style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Constants.textColor),
     );
   }
 
@@ -82,18 +78,12 @@ class _MyProfileState extends State<ProfileScreenNew> {
         children: [
           Text(
             title,
-            style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-                color: Colors.black,
-                fontSize: 13),
+            style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.black, fontSize: 13),
           ),
           Text(
             value,
             textAlign: TextAlign.start,
-            style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-                color: Colors.grey,
-                fontSize: 15),
+            style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.grey, fontSize: 15),
           ),
         ],
       ),
@@ -127,8 +117,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
       children: [
         const Text(
           "Version",
-          style: TextStyle(
-              fontWeight: FontWeight.w600, fontSize: 15, color: Colors.grey),
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15, color: Colors.grey),
         ),
         height(0.001),
         infoTile(packageInfo.version),
@@ -139,55 +128,25 @@ class _MyProfileState extends State<ProfileScreenNew> {
   void fetchLocal() async {
     SharedPreferences sharedPreferences = await prefs;
     if (GetStorage().read(Constants.userId) != null) {
-      dynamic result = await fetchTenantUserApi(
-          '${AppUrls.getUser}?id=${GetStorage().read(Constants.userId).toString()}');
+      dynamic result =
+          await fetchTenantUserApi('${AppUrls.getUser}?id=${GetStorage().read(Constants.userId).toString()}');
       if (result["success"]) {
         UserModel userModel = UserModel.fromJson(result["data"][0]);
         GetStorage().write(Constants.userId, userModel.id);
         userId = userModel.id.toString();
         if (GetStorage().read(Constants.isTenant)!) {
           vendorId = userModel.id.toString();
-          GetStorage().write(
-              Constants.tenantId, userModel.id.toString());
+          GetStorage().write(Constants.tenantId, userModel.id.toString());
           isTenant = true;
         }
-        // if (result['isTenant']) {
-        //   GetStorage().write(Constants.isTenant, true);
-        // TenantModel tempTenant = TenantModel.fromJson(result['tenantDet']);
-        // GetStorage().write(Constants.tenantId, userModel.id);
-        GetStorage().write(Constants.usernamekey,
-            '${userModel.firstName} ${userModel.lastName}');
+        GetStorage().write(Constants.usernamekey, '${userModel.firstName} ${userModel.lastName}');
         GetStorage().write(Constants.phonekey, userModel.phone);
-        // GetStorage().write(Constants.emailkey, tempTenant.email);
-        // GetStorage().write(Constants.profileUrl, tempTenant.photo);
         userName = '${userModel.firstName} ${userModel.lastName}';
         userEmail = userModel.email;
         userPhone = userModel.phone;
         profileImg = userModel.image;
-        // isTenant = true;
-        // vendorId = userModel.id.toString();
-        // GetStorage().write(Constants.isTenant, true);
-        // isTenant = true;
-        // if (tempTenant.isAgree == 'true') {
-        //   GetStorage().write(Constants.isAgree, true);
-        // } else {
-        //   GetStorage().write(Constants.isAgree, false);
-        // }
-        // } else {
-        // isTenant = false;
-        // vendorId = 'guest';
-        // userId = userModel.id.toString();
-        // userName = userModel.firstName;
-        // userEmail = userModel.email;
-        // userPhone = userModel.phone;
-        // profileImg = userModel.image;
-        // GetStorage().write(Constants.usernamekey, userModel.firstName);
-        // GetStorage().write(Constants.phonekey, userModel.phone);
         GetStorage().write(Constants.emailkey, userModel.email);
         GetStorage().write(Constants.profileUrl, userModel.image);
-        // userId = userModel.id.toString();
-        // userName = userModel.firstName;
-        //}
       } else {
         isTenant = false;
         userId = 'guest';
@@ -228,13 +187,9 @@ class _MyProfileState extends State<ProfileScreenNew> {
           IconButton(
               onPressed: () {
                 if (image == 'faq') {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FaqScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const FaqScreen()));
                 } else {
-                  deleteAlertDialog(context, 'Delete your Account',
-                      '* Do you want Delete Rentiseazy Account*');
+                  deleteAlertDialog(context, 'Delete your Account', '* Do you want Delete Rentiseazy Account*');
                 }
               },
               icon: const Icon(
@@ -247,8 +202,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
     );
   }
 
-  Future<void> deleteAlertDialog(
-      BuildContext context, String title, String subttitle) {
+  Future<void> deleteAlertDialog(BuildContext context, String title, String subttitle) {
     return showCupertinoDialog(
       context: context,
       builder: (context) {
@@ -269,8 +223,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                     )),
                 onPressed: () async {
                   SharedPreferences sharedPreferences = await prefs;
-                  dynamic result = await deleteUser(
-                      GetStorage().read(Constants.userId).toString());
+                  dynamic result = await deleteUser(GetStorage().read(Constants.userId).toString());
                   if (result['success']) {
                     executeLogOut(context);
                   }
@@ -344,12 +297,11 @@ class _MyProfileState extends State<ProfileScreenNew> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                circleIcon('Facebook', Colors.indigoAccent,
-                    'https://www.facebook.com/people/Rentiseazy/100085212123196/'),
-                circleIcon('Twitter', Colors.blue,
-                    'https://twitter.com/i/flow/login?redirect_after_login=%2Frentiseazy'),
-                circleIcon('Instagram', Colors.pink,
-                    'https://www.instagram.com/rentiseazy/')
+                circleIcon(
+                    'Facebook', Colors.indigoAccent, 'https://www.facebook.com/people/Rentiseazy/100085212123196/'),
+                circleIcon(
+                    'Twitter', Colors.blue, 'https://twitter.com/i/flow/login?redirect_after_login=%2Frentiseazy'),
+                circleIcon('Instagram', Colors.pink, 'https://www.instagram.com/rentiseazy/')
               ],
             ),
           ],
@@ -366,10 +318,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
         minVerticalPadding: 1,
         title: Text(
           title,
-          style: TextStyle(
-              fontFamily: Constants.fontsFamily,
-              color: Colors.black,
-              fontSize: 15),
+          style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.black, fontSize: 15),
         ),
         leading: IconButton(
             onPressed: () {
@@ -437,8 +386,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
             return Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Theme(
-                data: Theme.of(context)
-                    .copyWith(dividerColor: Colors.transparent),
+                data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
                   leading: iconWidget(image, 30, 30),
                   title: Text(
@@ -450,20 +398,15 @@ class _MyProfileState extends State<ProfileScreenNew> {
                   childrenPadding: const EdgeInsets.all(5),
                   tilePadding: const EdgeInsets.all(5),
                   children: [
-                    rowText('Property name',
-                        '${item.propUnit?.listing?.property?.name}'),
+                    rowText('Property name', '${item.propUnit?.listing?.property?.name}'),
                     rowText('Flat No', '${item.propUnit?.flatNo}'),
-                    rowText(
-                        'Monthly Rent', '${Constants.currency}.${item.rent}'),
-                    rowText('Deposit Amount',
-                        '${Constants.currency}.${item.deposit}'),
+                    rowText('Monthly Rent', '${Constants.currency}.${item.rent}'),
+                    rowText('Deposit Amount', '${Constants.currency}.${item.deposit}'),
                     rowText('Guest', '${Constants.currency}.${item.guest}'),
                     rowText('House Type', '${item.propUnit?.listing?.listingType}'),
-                    rowText('11 Months Rent',
-                        '${Constants.currency}.${(double.parse(item.rent.toString()) * 11)}'),
+                    rowText('11 Months Rent', '${Constants.currency}.${(double.parse(item.rent.toString()) * 11)}'),
                     // rowText('Pay Date', getFormatedDate(tenantModel.payDate)),
-                    rowText('Pay Status (This month)',
-                        '${item.invoices?.first.status.toUpperCase()}'),
+                    rowText('Pay Status (This month)', '${item.invoices?.first.status.toUpperCase()}'),
                   ],
                 ),
               ),
@@ -490,20 +433,14 @@ class _MyProfileState extends State<ProfileScreenNew> {
           children: [
             rowText('Property name', tenantModel.propertyModel!.name),
             rowText('House  Id', tenantModel.houseId),
-            rowText('Monthly Rent',
-                '${Constants.currency}.${tenantModel.rentalAmt}'),
-            rowText('Advance Paid',
-                '${Constants.currency}.${tenantModel.advancePaid}'),
-            rowText('Remaining Rent',
-                '${Constants.currency}.${tenantModel.remainingRent}'),
-            rowText('Total Amount',
-                '${Constants.currency}.${tenantModel.totalAmt}'),
-            rowText('11 Months Rent',
-                '${Constants.currency}.${(double.parse(tenantModel.rentalAmt) * 11)}'),
+            rowText('Monthly Rent', '${Constants.currency}.${tenantModel.rentalAmt}'),
+            rowText('Advance Paid', '${Constants.currency}.${tenantModel.advancePaid}'),
+            rowText('Remaining Rent', '${Constants.currency}.${tenantModel.remainingRent}'),
+            rowText('Total Amount', '${Constants.currency}.${tenantModel.totalAmt}'),
+            rowText('11 Months Rent', '${Constants.currency}.${(double.parse(tenantModel.rentalAmt) * 11)}'),
             rowText('House Type', tenantModel.bhkType),
             rowText('Pay Date', getFormatedDate(tenantModel.payDate)),
-            rowText('Pay Status (This month)',
-                tenantModel.payStatus.split('T')[0].toUpperCase()),
+            rowText('Pay Status (This month)', tenantModel.payStatus.split('T')[0].toUpperCase()),
           ],
         ),
       ),
@@ -552,9 +489,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
   Widget profileView() {
     return Card(
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20)),
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20)),
         ),
         child: Container(
           decoration: BoxDecoration(
@@ -603,8 +538,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                                 imgLoadWid(
                                     profileImg.contains('https://')
                                         ? profileImg
-                                        : AppUrls.imagesRentIsEasyUrl +
-                                            profileImg,
+                                        : AppUrls.imagesRentIsEasyUrl + profileImg,
                                     'assets/images/user_vec.png',
                                     75,
                                     75,
@@ -634,17 +568,11 @@ class _MyProfileState extends State<ProfileScreenNew> {
                             ),
                             Text(
                               'Phone :$userPhone',
-                              style: TextStyle(
-                                  fontFamily: Constants.fontsFamily,
-                                  color: Colors.black,
-                                  fontSize: 13),
+                              style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.black, fontSize: 13),
                             ),
                             Text(
                               'Email : $userEmail',
-                              style: TextStyle(
-                                  fontFamily: Constants.fontsFamily,
-                                  color: Colors.black,
-                                  fontSize: 13),
+                              style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.black, fontSize: 13),
                             ),
                             height(0.005),
                             Visibility(
@@ -679,8 +607,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
                           heroTag: UniqueKey(),
                           backgroundColor: Colors.white,
                           onPressed: () {
-                            alertDialog(
-                                context, 'LOG OUT', '* Do you want Logout *');
+                            alertDialog(context, 'LOG OUT', '* Do you want Logout *');
                           },
                           child: const Icon(
                             Icons.exit_to_app_rounded,
@@ -721,21 +648,18 @@ class _MyProfileState extends State<ProfileScreenNew> {
                       Card(
                         child: Column(children: [
                           Visibility(
-                              visible: isTenant &&
-                                  (vendorId != 'null' || vendorId != 'guest'),
+                              visible: isTenant && (vendorId != 'null' || vendorId != 'guest'),
                               child: tenantWidget('rent', 'Rent Details')),
                           Visibility(visible: isTenant, child: const Divider()),
                           expandItemContactUs('contact_us', 'Contact Info'),
                           const Divider(),
                           expandItemFollowUs('follow_us', 'Follow Us'),
                           const Divider(),
-                          expandItemWeb(
-                              'web_site', 'Website', 'https://rentiseazy.com/'),
+                          expandItemWeb('web_site', 'Website', 'https://rentiseazy.com/'),
                           const Divider(),
                           expandItemFaq('faq', 'FAQ '),
                           const Divider(),
-                          expandItemFaq('delete-account',
-                              'Delete My Rentiseasy Account '),
+                          expandItemFaq('delete-account', 'Delete My Rentiseasy Account '),
                         ]),
                       ),
                       height(0.05),

@@ -52,7 +52,7 @@ class RazorpayController extends GetxController {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),
         ),
         textColor: status == 'success' ? const Color(0XFF7AB02A) : const Color(0XFFFF0000));
-    await Future.delayed(Duration(seconds: 4));
+
     _paymentCallback(
         status: status,
         razorpayOrderId: paymentResponseModel.orderId ?? '',

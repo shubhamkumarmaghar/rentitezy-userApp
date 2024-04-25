@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:rentitezy/ticket/view/view_ticket_details.dart';
+import 'package:rentitezy/utils/const/appConfig.dart';
 
 import '../../../theme/custom_theme.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
@@ -40,7 +41,7 @@ class _GetAllTicketsState extends State<GetAllTickets> {
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
         titleSpacing: -10,
-        backgroundColor: CustomTheme.appTheme,
+        backgroundColor: Constants.primaryColor,
         title: const Padding(
           padding: EdgeInsets.all(10),
           child: Text('All Tickets '),

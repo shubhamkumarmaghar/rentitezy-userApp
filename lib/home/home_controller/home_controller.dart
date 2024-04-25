@@ -1,18 +1,23 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:rentitezy/model/property_model.dart';
+import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
+import 'package:rentitezy/utils/view/rie_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../model/assets_req_model.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/widgets.dart';
+import '../../utils/model/property_model.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../widgets/const_widget.dart';
+import '../../widgets/custom_alert_dialogs.dart';
 import '../model/property_list_nodel.dart';
 
 class HomeController extends GetxController {
@@ -27,6 +32,8 @@ class HomeController extends GetxController {
   var categories = <String>[].obs;
   final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   var offset = 10.obs;
+  List<PropertyInfoModel>? propertyInfoList;
+  List<PropertyInfoModel>? nearbyPropertyInfoList;
 
   final RIEUserApiService apiService = RIEUserApiService();
 
@@ -52,7 +59,7 @@ class HomeController extends GetxController {
   void localSetup() {
     isTenant = GetStorage().read(Constants.isTenant);
     userName = GetStorage().read(Constants.usernamekey);
-    userId = GetStorage().read(Constants.userId) ?? "guest";
+    userId = GetStorage().read(Constants.userId) != null ? GetStorage().read(Constants.userId).toString() : "guest";
     imageUrl = GetStorage().read(Constants.profileUrl) ?? '';
   }
 
@@ -61,6 +68,43 @@ class HomeController extends GetxController {
       offset(isNext ? (offset.value + 10) : (offset.value - 10));
     }
     fetchProperties(true);
+  }
+
+  void fetchNearbyProperties(bool isNext) async {
+    if (!isNext) {
+      isLoading(true);
+    }
+    String url = '${AppUrls.listing}?limit=10&available=true&offset=$offset';
+    if (locationBy.value != 'ALL') {
+      url = '${AppUrls.listing}?limit=10&available=true&offset=$offset&location=${locationBy.value}';
+    }
+
+    final response = await apiService.getApiCallWithURL(endPoint: url);
+
+    String success = response["message"];
+    try {
+      if (success.toLowerCase().contains('success')) {
+        if (response['data'] != null) {
+          Iterable iterable = response['data'];
+
+          propertyInfoList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
+        } else {
+          propertyInfoList = [];
+        }
+
+        allPropertyData = PropertyListModel.fromJson(response);
+        isLoading(false);
+        update();
+        // allPropertyData!.data?.forEach((element) {
+        //   log('props ::::: ${element.wishlist}--${element.id}');
+        // });
+      }
+      if (!isNext) {
+        isLoading(false);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   void fetchProperties(bool isNext) async {
@@ -74,21 +118,19 @@ class HomeController extends GetxController {
 
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
-    // var body = jsonDecode(response.body);
     String success = response["message"];
     try {
       if (success.toLowerCase().contains('success')) {
-        allPropertyData = PropertyListModel.fromJson(response);
+        if (response['data'] != null) {
+          Iterable iterable = response['data'];
+
+          propertyInfoList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
+        } else {
+          propertyInfoList = [];
+        }
+
         isLoading(false);
-        log('data count ${allPropertyData?.data?.length}');
         update();
-        allPropertyData!.data?.forEach((element) {
-          log('props ::::: ${element.wishlist}--${element.id}');
-        });
-        /* (response["data"] as List)
-              .map((stock) => PropertyModel.fromJson(stock))
-              .toList();*/
-        //allPropertyData.addAll(apiPropertyList);
       }
       if (!isNext) {
         isLoading(false);
@@ -263,5 +305,22 @@ class HomeController extends GetxController {
                     ))),
           );
         });
+  }
+
+  Future<void> likeProperty({required BuildContext context, required PropertyInfoModel propertyInfoModel}) async {
+    showProgressLoader(context);
+    String url = AppUrls.addFav;
+    final response = await apiService.postApiCall(endPoint: url, bodyParams: {
+      'listingId': propertyInfoModel.id.toString(),
+      'wishlist': propertyInfoModel.wishlist != null && propertyInfoModel.wishlist == 0 ? '1' : '0',
+    });
+    final data = response as Map<String, dynamic>;
+    cancelLoader();
+    if (data['message'].toString().toLowerCase().contains('success')) {
+      propertyInfoModel.wishlist = propertyInfoModel.wishlist == 0 ? 1 : 0;
+    } else {
+      RIEWidgets.getToast(message: '${data['message']}', color: CustomTheme.errorColor);
+    }
+    update();
   }
 }

@@ -10,20 +10,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../utils/const/app_urls.dart';
+import '../../utils/model/property_model.dart';
 
 class SearchPropertiesController extends GetxController {
   var isLoading = false;
   var offset = 10.obs;
   bool suggestion = false;
   final searchQuery = TextEditingController();
+  List<PropertyInfoModel>? searchedPropertyList;
   var apiPropertyList = <PropertySingleData>[].obs;
   List<String> searchedLocation = [];
-
-  @override
-  void onInit() {
-    super.onInit();
-    fetchProperties();
-  }
 
   @override
   void onClose() {
@@ -37,7 +33,7 @@ class SearchPropertiesController extends GetxController {
   }
 
   void onLocationTextChanged(String text) {
-    searchedLocation.add('BTM Layout,Bangalore');
+    searchedLocation.add(text);
     showSuggestion = true;
     if (text.isEmpty) {
       searchedLocation.clear();
@@ -55,21 +51,21 @@ class SearchPropertiesController extends GetxController {
       Uri.parse(searchUrl),
       headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
     );
+    isLoading = false;
     if (response.statusCode == 200) {
       var body = jsonDecode(response.body);
-      bool success = body["success"];
-      try {
-        if (success) {
-          Iterable iterable = body["data"];
-          apiPropertyList.value = iterable.map((flat) => PropertySingleData.fromJson(flat)).toList();
-          log('apiPropertyList ${apiPropertyList.length}  ');
+      String success = body["message"];
+      if (success.toString().toLowerCase() == 'success') {
+        if (body['data'] != null) {
+          Iterable iterable = body['data'];
+
+          searchedPropertyList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
+        } else {
+          searchedPropertyList = [];
         }
-        isLoading = false;
-        showSuggestion = false;
-        update();
-      } catch (e) {
-        log('error ::$e');
       }
+      showSuggestion = false;
+      update();
     } else {
       Get.snackbar("Error", 'Error during fetch api data');
     }

@@ -1009,7 +1009,14 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                       sTitle('Have a question?', 18,
                                           FontWeight.w500),
                                       width(0.005),
-                                      sTitle('Get a quick answer right here', 11, FontWeight.normal),
+                                Text(
+                                    'Get a quick answer right here',
+                                    style: TextStyle(
+                                        fontFamily: Constants.fontsFamily,
+                                        color: Colors.grey,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w500),),
+                                    //  sTitle('Get a quick answer right here', 11, FontWeight.normal),
                                       height(0.005),
                                       Container(
                                         height: screenHeight * 0.06,

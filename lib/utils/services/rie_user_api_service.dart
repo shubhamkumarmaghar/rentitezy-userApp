@@ -45,6 +45,22 @@ class RIEUserApiService {
     }
     return null;
   }
+  Future<dynamic> getApiCallUserData() async {
+    log('URL ::  ${await getHeaders}');
+    try {
+      final response = await http.get(Uri.parse('https://test-api.rentiseazy.com/user',), headers: await getHeaders);
+
+      return await _response(
+        response,
+        url: Uri.https(_baseURL, '').toString(),
+      );
+    } on SocketException {
+      log('SocketException Happened');
+    } catch (e) {
+      log('Error : ${e.toString()}');
+    }
+    return null;
+  }
 
   Future<dynamic> getApiCallWithQueryParams({
     required String endPoint,
@@ -157,6 +173,7 @@ class RIEUserApiService {
     }
     return {'message': 'failure'};
   }
+
 
   dynamic deleteApiCall({required String endPoint}) async {
     try {

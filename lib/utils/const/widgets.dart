@@ -116,8 +116,8 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
         return Image.asset(
           asset,
           fit: fit,
-          height: h,
-          width: w,
+          //height: h,
+          //width: w,
         );
       });
 }

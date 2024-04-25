@@ -24,7 +24,6 @@ class RecommendItem extends StatefulWidget {
 }
 
 class RecommendListItemState extends State<RecommendItem> {
-
   @override
   Widget build(BuildContext context) {
     ImageProvider imageProvider;
@@ -116,7 +115,6 @@ class RecommendListItemState extends State<RecommendItem> {
                                   ],
                                 ),
                                 height(0.005),
-
                                 wrapItems('${widget.propertyModel?.property?.address}', 'location', 150),
                                 height(0.005),
                               ],
@@ -151,12 +149,7 @@ class RecommendListItemState extends State<RecommendItem> {
                                   )),
                             ),
                             InkWell(
-                              onTap: () {
-                                /* openDialPad(
-                                  widget.propertyModel
-                                      ?.ownerPhone,
-                                  context);*/
-                              },
+                              onTap: () {},
                               child: Container(
                                 padding: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
@@ -174,8 +167,8 @@ class RecommendListItemState extends State<RecommendItem> {
             ),
           ),
           Positioned(
-              right: 25,
-              top: 25,
+              right: screenWidth*0.04,
+              top: screenHeight*0.01,
               child: circleContainer(
                   IconButton(
                       onPressed: () async {

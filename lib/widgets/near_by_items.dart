@@ -1,174 +1,137 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/model/property_model.dart';
-import 'package:rentitezy/single_property_details/view/single_properties_screen.dart';
-import 'package:rentitezy/widgets/const_widget.dart';
-
-import '../home/model/property_list_nodel.dart';
+import 'package:rentitezy/utils/model/property_model.dart';
+import '../home/home_controller/home_controller.dart';
 import '../single_property_details/view/single_properties_screen_new.dart';
-import '../utils/const/api.dart';
 import '../utils/const/widgets.dart';
 
-class NearByItem extends StatefulWidget {
-  final PropertySingleData? propertyModel;
+class NearByPropertyScreen extends StatelessWidget {
+  final PropertyInfoModel propertyInfoModel;
+  final homeController = Get.find<HomeController>();
 
-  const NearByItem({Key? key, required this.propertyModel}) : super(key: key);
+  NearByPropertyScreen({super.key, required this.propertyInfoModel});
 
-  @override
-  State<NearByItem> createState() => NearListItemState();
-}
-
-class NearListItemState extends State<NearByItem> {
   @override
   Widget build(BuildContext context) {
-    ImageProvider imageProvider;
-    if (widget.propertyModel?.images?.first == '') {
-      imageProvider = const AssetImage('assets/images/app_logo.png');
-    } else {
-      imageProvider = NetworkImage('${widget.propertyModel?.images?.first.url}');
+    List<String> images = [
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmcZfrx5HCXD6E0ROTB5onJjhxJp7u-ntyo2BbyVTgPw&s'
+    ];
+    if (propertyInfoModel.images != null && propertyInfoModel.images!.isNotEmpty) {
+      images = propertyInfoModel.images!.map((e) => e.url ?? '').toList();
     }
     return GestureDetector(
       onTap: () async {
         Get.to(
-            () => PropertiesDetailsPageNew(
-                  propertyId: '${widget.propertyModel?.id.toString()}',
-                ),
-            arguments: '${widget.propertyModel?.id.toString()}');
+          () => PropertiesDetailsPageNew(
+            propertyId: propertyInfoModel.id.toString(),
+          ),
+          arguments: propertyInfoModel.id.toString(),
+        );
       },
       child: Container(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: Card(
-          elevation: 8.0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+        decoration: BoxDecoration(
+          color: Constants.primaryColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(30),
+            topRight: Radius.circular(30),
+            bottomRight: Radius.circular(30),
           ),
-          child: Stack(children: [
-            Container(
-              margin: EdgeInsets.symmetric(
-                horizontal: Get.width * 0.03,
-                vertical: Get.width * 0.02,
-              ),
-              width: Get.width * 0.55,
-              height: Get.height * 0.4,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: imageProvider,
-                  fit: BoxFit.cover,
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  constraints: BoxConstraints(
-                    maxHeight: Get.height * 0.14,
-                    minHeight: Get.width * 0.2,
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+              bottomRight: Radius.circular(30),
+            ),
+          ),
+          padding: EdgeInsets.only(left: screenWidth * 0.02, right: screenWidth * 0.02),
+          margin: EdgeInsets.only(left: screenWidth * 0.009, bottom: screenHeight * 0.005),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: screenHeight * 0.01,
                   ),
-                  width: double.maxFinite,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ),
-                  // height: Get.width * 0.2,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: FittedBox(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        FittedBox(
-                          child: Container(
-                            margin: const EdgeInsets.only(top: 5),
-                            width: Get.width * 0.45,
-                            child: Text(
-                              '${widget.propertyModel?.title.toString().capitalizeFirst!}',
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: Get.width * 0.44,
-                          margin: EdgeInsets.only(top: 5, bottom: 5),
-                          child: Text(
-                            '${widget.propertyModel?.property?.address}',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.black87,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '₹${widget.propertyModel?.price}/Month',
-                          maxLines: 1,
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: CustomTheme.peach,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                  SizedBox(
+                    width: screenWidth * 0.45,
+                    height: screenHeight * 0.2,
+                    child: ClipRRect(
+                      borderRadius:
+                          const BorderRadius.only(topRight: Radius.circular(30.0), topLeft: Radius.circular(30.0)),
+                      child: Image.network(
+                        images[0],
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
-                ),
+                  Container(
+                      width: screenWidth * 0.45,
+                      padding: EdgeInsets.only(
+                          left: screenWidth * 0.007, top: screenHeight * 0.01, right: screenWidth * 0.007),
+                      child: Text(
+                        '${propertyInfoModel.title ?? ''},${propertyInfoModel.property?.location?.name ?? ''}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                          color: Constants.primaryColor,
+                        ),
+                      )),
+                  Container(
+                      width: screenWidth * 0.45,
+                      padding: EdgeInsets.only(
+                          left: screenWidth * 0.007, top: screenHeight * 0.01, right: screenWidth * 0.007),
+                      child: Text(
+                        '${propertyInfoModel.property?.name ?? ''},${propertyInfoModel.property?.location?.name ?? ''}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: Constants.primaryColor,
+                        ),
+                      )),
+                  Container(
+                      width: screenWidth * 0.4,
+                      padding: EdgeInsets.only(
+                          left: screenWidth * 0.007, top: screenHeight * 0.01, right: screenWidth * 0.007),
+                      child: Text(
+                        '${Constants.currency}${propertyInfoModel.price ?? ''}',
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                          color: CustomTheme.appThemeContrast,
+                        ),
+                      )),
+                ],
               ),
-            ),
-            Positioned(
-              right: 5,
-              bottom: 0,
-              child: IconButton(
-                onPressed: () {
-                  //  openDialPad(widget.propertyModel?.ownerPhone, context);
-                },
-                icon: iconWidget('phone', 25, 25),
-              ),
-            ),
-            Positioned(
-                right: screenWidth * 0.05,
+              Positioned(
+                right: screenWidth * 0.02,
                 top: screenHeight * 0.02,
-                child: circleContainer(
-                    IconButton(
-                        onPressed: () async {
-                          bool response = await likeProperty(listingId: '${widget.propertyModel?.id}');
-                          if (response) {
-                            final val = widget.propertyModel!.wishlist;
-                            if (val != null) {
-                              setState(() {
-                                if (val == 0) {
-                                  widget.propertyModel!.wishlist = 1;
-                                } else {
-                                  widget.propertyModel!.wishlist = 0;
-                                }
-                              });
-                            }
-                          }
-                        },
-                        icon: Icon(
-                          widget.propertyModel!.wishlist == 1 ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                          size: 16,
-                          color: widget.propertyModel!.wishlist == 1 ? Colors.red : Colors.black,
-                        )),
-                    Colors.white,
-                    100,
-                    30,
-                    30)),
-          ]),
+                child: GestureDetector(
+                  onTap: () async =>
+                      await homeController.likeProperty(context: context, propertyInfoModel: propertyInfoModel),
+                  child: CircleAvatar(
+                      radius: 18,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        size: 20,
+                        propertyInfoModel.wishlist == 1 ? Icons.favorite : Icons.favorite_border,
+                        color: propertyInfoModel.wishlist == 1 ? CustomTheme.errorColor : Constants.primaryColor,
+                      )),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

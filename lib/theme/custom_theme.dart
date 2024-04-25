@@ -8,6 +8,8 @@ class CustomTheme {
   static final Color appThemeContrast = Color(0xffF2641A);
   static const Color errorColor = Color(0xffff0000);
 
+  static const Color propertyTextColor =  Color(0xff1C2D3A);
+
   static final Color skyBlue = Color(0xff639fdc); // original one
  // static final Color skyBlue = Color(0xff2596be);
  // static final Color skyBlue =Color(0xff3377fe);
