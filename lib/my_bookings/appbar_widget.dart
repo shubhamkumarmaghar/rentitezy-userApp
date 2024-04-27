@@ -9,7 +9,6 @@ import '../dashboard/controller/dashboard_controller.dart';
 PreferredSizeWidget appBarBooking(String title, BuildContext context, bool from, Function() onTap) {
   return AppBar(
     toolbarHeight: 70,
-    backgroundColor: Colors.white,
     title: Text(
       title,
       style:
@@ -20,10 +19,9 @@ PreferredSizeWidget appBarBooking(String title, BuildContext context, bool from,
         onPressed: () {
           if (from) {
             Get.find<DashboardController>().setIndex(0);
-            Navigator.pushAndRemoveUntil(
-                context, MaterialPageRoute(builder: (context) => DashboardView()), (route) => false);
+            Get.offAll(() => const DashboardView());
           } else {
-            Navigator.pop(context);
+            Get.back();
           }
         },
         icon: const Icon(

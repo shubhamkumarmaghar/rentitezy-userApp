@@ -1,20 +1,16 @@
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../theme/custom_theme.dart';
 
 class RIEWidgets {
-  static void showLoaderDialog(
-      {required BuildContext context, required String message}) {
+  static void showLoaderDialog({required BuildContext context, required String message}) {
     AlertDialog alert = AlertDialog(
       content: SizedBox(
         width: MediaQuery.of(context).size.width,
         child: Row(
           children: [
-            CircularProgressIndicator(
-                valueColor:
-                    AlwaysStoppedAnimation<Color>(CustomTheme.appTheme)),
+            CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(CustomTheme.appTheme)),
             SizedBox(
               width: 15,
             ),
@@ -39,8 +35,7 @@ class RIEWidgets {
     AlertDialog alert = AlertDialog(
       content: Row(
         children: [
-          const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Color(0xff7AB02A))),
+          const CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Color(0xff7AB02A))),
           SizedBox(
             width: 5,
           ),
@@ -60,7 +55,7 @@ class RIEWidgets {
     );
   }
 
-  static void getToast({required String message,  Color? color}) {
+  static void getToast({required String message, Color? color}) {
     Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
@@ -73,35 +68,23 @@ class RIEWidgets {
 
   static Widget getLoader({Color? color}) {
     return Center(
-      child: CircularProgressIndicator.adaptive(
-          valueColor:
-              AlwaysStoppedAnimation<Color>(color ?? CustomTheme.appTheme)),
+      child:
+          CircularProgressIndicator.adaptive(valueColor: AlwaysStoppedAnimation<Color>(color ?? CustomTheme.appTheme)),
     );
   }
 
-  static Widget noData(
-      {required BuildContext context,
-      required String message,
-      Color? fontColor,
-      double? fontSize,
-      FontWeight? fontWeight}) {
-    FontWeight.w600;
-    return Center(
-      child: Container(
-        padding: EdgeInsets.only(left: 20, right: 20),
-        child: Text(
-          message,
-          style: TextStyle(
-              fontSize: fontSize ?? 20,
-              fontWeight: fontWeight,
-              color: fontColor),
-        ),
+  static Widget noData({
+    required String message,
+  }) {
+    return  Center(
+      child: Text(
+        message,
+        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Colors.grey),
       ),
     );
   }
 
   static Widget networkErrorPage({required BuildContext context}) {
-
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -110,14 +93,17 @@ class RIEWidgets {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wifi_off,color: Colors.grey,size: 50,),
-            SizedBox(height: 20,),
+            Icon(
+              Icons.wifi_off,
+              color: Colors.grey,
+              size: 50,
+            ),
+            SizedBox(
+              height: 20,
+            ),
             Text(
               'Check Your Internet Connection...',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.grey),
             ),
           ],
         ),
@@ -126,27 +112,17 @@ class RIEWidgets {
   }
 
   static Widget someError(
-      {required BuildContext context,
-      String? message,
-      Color? fontColor,
-      double? fontSize,
-      FontWeight? fontWeight}) {
+      {required BuildContext context, String? message, Color? fontColor, double? fontSize, FontWeight? fontWeight}) {
     FontWeight.w600;
     return Center(
       child: Text(
         message ?? 'Something went wrong...',
-        style: TextStyle(
-            fontSize: fontSize ?? 20,
-            fontWeight: fontWeight,
-            color: fontColor ?? CustomTheme.appTheme),
+        style: TextStyle(fontSize: fontSize ?? 20, fontWeight: fontWeight, color: fontColor ?? CustomTheme.appTheme),
       ),
     );
   }
 
-  static void showSnackbar(
-      {required BuildContext context,
-      required String message,
-      required Color color}) {
+  static void showSnackbar({required BuildContext context, required String message, required Color color}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -156,8 +132,7 @@ class RIEWidgets {
     );
   }
 
-  static Widget showShimmer(
-      {required double height, required double width, double? borderCorner}) {
+  static Widget showShimmer({required double height, required double width, double? borderCorner}) {
     return Shimmer.fromColors(
         child: Container(
           height: height,

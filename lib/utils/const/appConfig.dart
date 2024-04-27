@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/login/view/login_screen.dart';
@@ -122,7 +124,6 @@ class Constants {
 }
 
 executeLogOut(BuildContext context) async {
-  final SharedPreferences prefs = await _prefs;
   GetStorage().write(Constants.isLogin, false);
   GetStorage().write(Constants.usernamekey, "guest");
   GetStorage().write(Constants.userId, "guest");
@@ -132,21 +133,18 @@ executeLogOut(BuildContext context) async {
 
   if (context.mounted) {
     Navigator.pop(context);
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-        (route) => false);
+    Get.offAll(() => const LoginScreen());
   }
 }
 
-void showSnackBar(BuildContext context, String result) {
+void showSnackBar(BuildContext context, String result,[Color? color]) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(result,
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: Constants.fontsFamily,
         )),
-    duration: const Duration(seconds: 2),backgroundColor: CustomTheme.appTheme,
+    duration: const Duration(seconds: 2),backgroundColor:color ?? CustomTheme.appTheme,
   ));
 }
 

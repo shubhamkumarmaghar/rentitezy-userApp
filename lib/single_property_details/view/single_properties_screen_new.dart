@@ -498,6 +498,7 @@ class _PropertiesDetailsPageNew extends State<PropertiesDetailsPageNew> {
                                         onYesTap: () {
                                           Get.back();
                                           Get.back();
+
                                           singlePropertyDetailsController.submitReqBooking(from,
                                               unitId: singlePropertyDetailsController.unitId!.id.toString());
                                         },

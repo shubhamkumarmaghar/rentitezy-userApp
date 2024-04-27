@@ -5,12 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
-import 'package:rentitezy/screen/razorpay_payment/model/razorpay_payment_response_model.dart';
-import 'package:rentitezy/screen/razorpay_payment/view/razorpay_payment_view.dart';
 import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 import '../../home/home_controller/home_controller.dart';
 import '../../model/checkout_model.dart';
+import '../../razorpay_payment/model/razorpay_payment_response_model.dart';
+import '../../razorpay_payment/view/razorpay_payment_view.dart';
 import '../../screen/checkout_screen.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/api.dart';
@@ -118,8 +118,8 @@ class SinglePropertyDetailsController extends GetxController {
     final response = await apiService.getApiCallWithURL(endPoint: url);
     String success = response["message"];
     if (success.toLowerCase() == 'success') {
-      if (response['data']['data'] != null) {
-        checkoutModel = CheckoutModel.fromJson(response['data']['data']);
+      if (response['data'] != null) {
+        checkoutModel = CheckoutModel.fromJson(response['data']);
         Get.back();
         await Get.to(CheckOutPage(
             from: from, currentDate: currentDate, propertyModel: singleProPerty, checkoutModel: checkoutModel));

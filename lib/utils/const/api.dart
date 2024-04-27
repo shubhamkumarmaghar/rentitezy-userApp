@@ -424,7 +424,7 @@ Future<List<TenantModel>> fetchTenantApi(
   }
 }
 
-Future<dynamic> createTicketApi(
+Future<dynamic> CreateTicketScreenApi(
     String tenantId, String ticket, String comments, String houseId, String propertyId) async {
   final response = await http.post(Uri.parse(AppUrls.ticket),
       headers: <String, String>{
@@ -829,7 +829,7 @@ Future<dynamic> createPaymentRequest(String invoiceId, String token) async {
   }
 }
 */
-//add fav
+//add wishlist
 Future<dynamic> addToFav(
   String listingId,
 ) async {

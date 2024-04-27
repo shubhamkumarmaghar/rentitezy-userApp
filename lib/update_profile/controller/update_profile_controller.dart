@@ -37,11 +37,11 @@ class UpdateProfileController extends GetxController {
     } else {
       userId = 'guest';
     }
-    firstNameController.text = storage.read(Constants.firstName);
-    lastNameController.text = storage.read(Constants.lastName);
-    emailController.text = storage.read(Constants.emailkey);
-    phoneController.text = storage.read(Constants.phonekey);
-    imagePath = storage.read(Constants.profileUrl);
+    firstNameController.text = storage.read(Constants.firstName) ??'';
+    lastNameController.text = storage.read(Constants.lastName) ??'';
+    emailController.text = storage.read(Constants.emailkey) ??'';
+    phoneController.text = storage.read(Constants.phonekey) ??'';
+    imagePath = storage.read(Constants.profileUrl)??'';
     update();
   }
 

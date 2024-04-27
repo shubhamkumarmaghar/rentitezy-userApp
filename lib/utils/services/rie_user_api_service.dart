@@ -45,10 +45,15 @@ class RIEUserApiService {
     }
     return null;
   }
+
   Future<dynamic> getApiCallUserData() async {
     log('URL ::  ${await getHeaders}');
     try {
-      final response = await http.get(Uri.parse('https://test-api.rentiseazy.com/user',), headers: await getHeaders);
+      final response = await http.get(
+          Uri.parse(
+            'https://test-api.rentiseazy.com/user',
+          ),
+          headers: await getHeaders);
 
       return await _response(
         response,
@@ -130,26 +135,6 @@ class RIEUserApiService {
     return {'message': 'failure'};
   }
 
-  /*
-  Future<dynamic> postApiCallFormData(
-      {required String endPoint, required FormData formData}) async {
-    log('URL :: $_baseURL/$endPoint ---- Model :: ${formData.toString()} -- ${await getHeaders}');
-
-    try {
-      Dio dio = Dio();
-      final response = await dio.post(Uri.https(_baseURL, endPoint).toString(),
-          options: Options(headers: await getHeaders), data: formData);
-      return response.statusCode == 200
-          ? {'msg': 'success'}
-          : {'msg': 'failure'};
-    } on SocketException {
-      log('SocketException Happened');
-    } catch (e) {
-      log('Error : ${e.toString()}');
-    }
-    return {'msg': 'failure'};
-  }
-  */
   Future<dynamic> putApiCall({
     required String endPoint,
     required Map<String, dynamic> bodyParams,
@@ -173,7 +158,6 @@ class RIEUserApiService {
     }
     return {'message': 'failure'};
   }
-
 
   dynamic deleteApiCall({required String endPoint}) async {
     try {
@@ -231,9 +215,8 @@ class RIEUserApiService {
 
   Map<String, dynamic> _getErrorResponse(decode) {
     final error = decode as Map<String, dynamic>;
-    log(error.toString());
-    RIEWidgets.getToast(message: error['message'] ?? 'failure', color: Color(0xffFF0000));
-    return {'message': 'failure ' + error['message']};
+    RIEWidgets.getToast(message: 'Error :: ${error['message']}', color: const Color(0xffFF0000));
+    return {'message': 'failure ${error['message']}'};
   }
 
   Future<dynamic> getApiCallWithQueryParamsWithHeaders(

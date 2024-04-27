@@ -379,9 +379,9 @@ class _MyProfileState extends State<ProfileScreenNew> {
     return Obx(() => ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: bookingController.myBookingData.length,
+          itemCount: bookingController.myBookingData!.length,
           itemBuilder: (context, index) {
-            var item = bookingController.myBookingData[index];
+            var item = bookingController.myBookingData![index];
             // return expandItemRentNew(image, title, item);
             return Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),

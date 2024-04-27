@@ -4,112 +4,145 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:rentitezy/my_bookings/appbar_widget.dart';
-import 'package:rentitezy/ticket/view/create_ticket.dart';
+import 'package:rentitezy/ticket/view/create_ticket_screen.dart';
+import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
+import 'package:rentitezy/utils/view/rie_widgets.dart';
+import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../theme/custom_theme.dart';
-import '../../ticket/view/get_all_ticket.dart';
+import '../../ticket/view/tickets_list_screen.dart';
 import '../controller/my_booking_controller.dart';
 import 'invoice_screen.dart';
 
 class BookingDetailsPage extends StatelessWidget {
-  // final MyBookingModelData bookingModelData;
-  MyBookingController myBookingController = Get.find();
+  final MyBookingController myBookingController = Get.find();
 
   BookingDetailsPage({
     super.key,
-    //required this.bookingModelData
   });
 
   @override
   @override
   Widget build(BuildContext context) {
     var data = myBookingController.getSingleBooking?.data;
-    log('$data');
     return Scaffold(
       appBar: appBarBooking('Booking Details  ( Flat no. ${data?.id} )', context, false, (() {})),
       body: Container(
         width: getScreenWidth,
         height: getScreenHeight,
         padding: EdgeInsets.symmetric(horizontal: getScreenWidth * 0.03, vertical: getScreenWidth * 0.05),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            getPropInfoView(
-              context: context,
-            ),
-            SizedBox(
-              height: getScreenHeight * 0.02,
-            ),
-            Divider(),
-            SizedBox(
-              height: getScreenHeight * 0.01,
-            ),
-            Text(
-              'Financial Info',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
-            ),
-            SizedBox(
-              height: getScreenHeight * 0.01,
-            ),
-            getPropPaymentView(context: context),
-            SizedBox(
-              height: getScreenHeight * 0.02,
-            ),
-            Divider(),
-            SizedBox(
-              height: getScreenHeight * 0.01,
-            ),
-            Text(
-              'User Info',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
-            ),
-            SizedBox(
-              height: getScreenHeight * 0.01,
-            ),
-            getPropUserView(context: context),
-            SizedBox(
-              height: getScreenHeight * 0.02,
-            ),
-            Divider(),
-            SizedBox(
-              height: getScreenHeight * 0.01,
-            ),
-            Text(
-              'Booking Info',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
-            ),
-            SizedBox(
-              height: getScreenHeight * 0.01,
-            ),
-            getPropBookingView(context: context),
-            SizedBox(
-              height: getScreenHeight * 0.02,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(CustomTheme.appTheme),
-                    ),
-                    onPressed: () async {
-                      await myBookingController.fetchBookingInvoices(bookingID: '${data?.id.toString()}');
-                      Get.to(const InvoiceScreen());
-                    },
-                    child: const Text('Invoice(s)')),
-                ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(CustomTheme.appTheme),
-                    ),
-                    onPressed: () {
-                      Get.to(CreateTicket(
-                        bookingId: myBookingController.getSingleBooking?.data?.id.toString(),
-                      ));
-                    },
-                    child: const Text('Create Ticket')),
-              ],
-            )
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              getPropInfoView(
+                context: context,
+              ),
+              SizedBox(
+                height: getScreenHeight * 0.02,
+              ),
+              Row(
+                children: [
+                  Text(
+                    'Booking Status : ',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black),
+                  ),
+                  Text(
+                    data?.status?.capitalizeFirst ?? '',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: data!.status!.toLowerCase().contains('cancel')
+                            ? CustomTheme.errorColor
+                            : CustomTheme.myFavColor),
+                  ),
+                ],
+              ),
+              Divider(),
+              SizedBox(
+                height: getScreenHeight * 0.01,
+              ),
+              Text(
+                'Financial Info',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
+              ),
+              SizedBox(
+                height: getScreenHeight * 0.01,
+              ),
+              getPropPaymentView(context: context),
+              SizedBox(
+                height: getScreenHeight * 0.02,
+              ),
+              Divider(),
+              SizedBox(
+                height: getScreenHeight * 0.01,
+              ),
+              Text(
+                'User Info',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
+              ),
+              SizedBox(
+                height: getScreenHeight * 0.01,
+              ),
+              getPropUserView(context: context),
+              SizedBox(
+                height: getScreenHeight * 0.02,
+              ),
+              Divider(),
+              SizedBox(
+                height: getScreenHeight * 0.01,
+              ),
+              Text(
+                'Booking Info',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black),
+              ),
+              SizedBox(
+                height: getScreenHeight * 0.01,
+              ),
+              getPropBookingView(context: context),
+              SizedBox(
+                height: getScreenHeight * 0.02,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    width: screenWidth * 0.4,
+                    height: screenHeight * 0.05,
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(CustomTheme.appThemeContrast),
+                        ),
+                        onPressed: () async {
+                          showProgressLoader(context);
+                          await myBookingController.fetchBookingInvoices(bookingID: '${data?.id.toString()}');
+                          cancelLoader();
+                          Get.to(() => const InvoiceScreen());
+                        },
+                        child: const Text('Invoice(s)')),
+                  ),
+                  Container(
+                    width: screenWidth * 0.4,
+                    height: screenHeight * 0.05,
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(Constants.primaryColor),
+                        ),
+                        onPressed: () {
+                          if( data.status!.toLowerCase().contains('cancel')){
+                            RIEWidgets.getToast(message: "Can't create ticket for cancelled booking!",color: CustomTheme.errorColor);
+                            return;
+                          }
+                          Get.to(CreateTicketScreen(
+                            bookingId: myBookingController.getSingleBooking!.data!.id.toString(),
+                          ));
+                        },
+                        child: const Text('Create Ticket')),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -123,28 +156,26 @@ class BookingDetailsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(15)),
             child: Card(
-              clipBehavior: Clip.hardEdge,
               elevation: 2,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+              ),
               child: Container(
                 height: getScreenHeight * 0.15,
-                width: getScreenWidth * 0.25,
+                width: getScreenWidth * 0.32,
                 decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
                     image: DecorationImage(
-                  image: NetworkImage(
-                    myBookingController.getSingleBooking?.data?.propListing != null &&
-                            myBookingController.getSingleBooking?.data?.propListing?.images!.length != 0
-                        ? myBookingController.getSingleBooking?.data?.propListing?.images![0].url ?? ''
-                        : '',
-                  ),
-                  fit: BoxFit.cover,
-                )),
-                /*child: Image.network(myBookingController.getSingleBooking?.data?.propListing !=
-                            null &&
-                    myBookingController.getSingleBooking?.data?.propListing?.images!.length != 0
-                    ? myBookingController.getSingleBooking?.data?.propListing?.images![0].url ?? ''
-                    : '',),*/
+                      image: NetworkImage(
+                        myBookingController.getSingleBooking?.data?.propListing != null &&
+                                myBookingController.getSingleBooking?.data?.propListing?.images!.length != 0
+                            ? myBookingController.getSingleBooking?.data?.propListing?.images![0].url ?? ''
+                            : '',
+                      ),
+                      fit: BoxFit.cover,
+                    )),
               ),
             ),
           ),
@@ -152,7 +183,7 @@ class BookingDetailsPage extends StatelessWidget {
             width: getScreenWidth * 0.015,
           ),
           Container(
-            width: getScreenWidth * 0.65,
+            width: getScreenWidth * 0.57,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -162,14 +193,17 @@ class BookingDetailsPage extends StatelessWidget {
                     Icon(
                       Icons.house,
                       size: getScreenWidth * 0.05,
-                      color: Colors.grey,
+                      color: CustomTheme.propertyTextColor,
                     ),
                     SizedBox(
                       width: getScreenWidth * 0.01,
                     ),
-                    Text(
-                      '${myBookingController.getSingleBooking?.data?.propListing?.property?.name ?? ''}',
-                      style: TextStyle(color: Colors.black, fontSize: 22, fontWeight: FontWeight.w600),
+                    SizedBox(
+                      width: getScreenWidth * 0.47,
+                      child: Text(
+                        '${myBookingController.getSingleBooking?.data?.propListing?.property?.name ?? ''}',
+                        style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ],
                 ),
@@ -180,19 +214,20 @@ class BookingDetailsPage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Icon(
-                      Icons.home_max,
+                      Icons.location_searching,
                       size: getScreenWidth * 0.05,
-                      color: Colors.grey,
+                      color: CustomTheme.propertyTextColor,
                     ),
                     SizedBox(
                       width: getScreenWidth * 0.01,
                     ),
                     Container(
-                      width: Get.width * 0.52,
+                      width: Get.width * 0.47,
                       child: Text(
-                        'Address: ${myBookingController.getSingleBooking?.data?.propListing?.property?.address ?? ''}',
+                        '${myBookingController.getSingleBooking?.data?.propListing?.property?.address ?? ''}',
                         maxLines: 3,
-                        style: TextStyle(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.w600),
+                        style:
+                            TextStyle(color: CustomTheme.propertyTextColor, fontSize: 16, fontWeight: FontWeight.w500),
                       ),
                     ),
                   ],
@@ -206,13 +241,13 @@ class BookingDetailsPage extends StatelessWidget {
                     Icon(
                       Icons.location_on,
                       size: getScreenWidth * 0.05,
-                      color: Colors.grey,
+                      color: CustomTheme.propertyTextColor,
                     ),
                     SizedBox(
                       width: getScreenWidth * 0.01,
                     ),
                     Container(
-                        width: getScreenWidth * 0.58,
+                        width: getScreenWidth * 0.47,
                         child: Text(
                           '${myBookingController.getSingleBooking?.data?.propListing?.property?.latlng ?? ''}',
                           style: TextStyle(color: Colors.black54, fontSize: 16, fontWeight: FontWeight.w500),

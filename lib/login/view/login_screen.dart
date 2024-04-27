@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -38,11 +38,18 @@ class _LoginState extends State<LoginScreen> {
         borderRadius: BorderRadius.circular(40),
         color: Constants.primaryColor.withOpacity(0.1),
       ),
+      height: screenHeight * 0.065,
       child: TextField(
         controller: tController,
         obscureText: hind == 'Password' ? obscureText : false,
+          keyboardType: hind == 'Password' ?TextInputType.text:TextInputType.number,
+          maxLength: hind == 'Password' ?null:10,
+          inputFormatters:hind == 'Password' ?null: <TextInputFormatter>[
+            FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+          ],
         decoration: InputDecoration(
             hoverColor: Constants.hint,
+
             contentPadding: const EdgeInsets.only(left: 20, right: 20),
             suffix: hind == 'Password'
                 ? InkWell(
@@ -57,6 +64,7 @@ class _LoginState extends State<LoginScreen> {
                     ))
                 : null,
             hintText: hind,
+
             border: InputBorder.none),
       ),
     );
@@ -65,106 +73,109 @@ class _LoginState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-          margin: const EdgeInsets.all(5),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                height(0.05),
-                SizedBox(
-                    height: 170,
-                    width: 250,
-                    child: Image.asset(
-                      'assets/images/login_image.png',
-                      fit: BoxFit.fill,
-                    )),
-                title("Welcome", 27),
-                height(0.05),
-                inputField('Phone number', loginController.uFNameController, 5),
-                SizedBox(
-                  height: screenHeight * 0.025,
-                ),
-                inputField('Password', loginController.uPasswordController, 0),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotScreen()));
-                    },
-                    child: Text("Forgot Password? ",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontFamily: Constants.fontsFamily,
-                            color: CustomTheme.appThemeContrast,
-                            fontSize: 17,
-                            fontWeight: FontWeight.normal)),
+      body: GestureDetector(
+        onTap: ()=>FocusScope.of(context).requestFocus(FocusNode()),
+        child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
+            margin: const EdgeInsets.all(5),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  height(0.05),
+                  SizedBox(
+                      height: 170,
+                      width: 250,
+                      child: Image.asset(
+                        'assets/images/login_image.png',
+                        fit: BoxFit.fill,
+                      )),
+                  title("Welcome", 27),
+                  height(0.05),
+                  inputField('Phone number', loginController.uFNameController, 5),
+                  SizedBox(
+                    height: screenHeight * 0.025,
                   ),
-                ),
-                height(0.1),
-                SizedBox(
-                  height: screenHeight * 0.06,
-                  width: screenWidth * 0.8,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Constants.primaryColor,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      ),
-                      onPressed: () async {
-                        if (loginController.uFNameController.text.isEmpty) {
-                          showSnackBar(context, 'Enter valid username');
-                        } else if (loginController.uPasswordController.text.isEmpty) {
-                          showSnackBar(context, 'Enter valid password');
-                        } else {
-                          loginController.fetchLoginDetails(
-                              context: context,
-                              email: loginController.uFNameController.text,
-                              password: loginController.uPasswordController.text);
-                          //loginController.userRequest(loginORSignup: true);
-                        }
+                  inputField('Password', loginController.uPasswordController, 0),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotScreen()));
                       },
-                      child: loginController.isLoading
-                          ? load()
-                          : Text(
-                              'Login',
-                              style: TextStyle(
-                                  fontFamily: Constants.fontsFamily, color: Colors.white, fontWeight: FontWeight.bold),
-                            )),
-                ),
-                height(0.03),
-                GestureDetector(
-                  onTap: () {
-                    Get.to(const SignUpScreen());
-                  },
-                  child: RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                            text: 'Already have an account?  ',
-                            style: TextStyle(
-                                fontFamily: Constants.fontsFamily,
-                                color: Constants.textColor,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500)),
-                        TextSpan(
-                            text: 'Sign Up Now',
-                            style: TextStyle(
-                                fontFamily: Constants.fontsFamily,
-                                color: CustomTheme.appThemeContrast,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600)),
-                      ],
+                      child: Text("Forgot Password? ",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: Constants.fontsFamily,
+                              color: CustomTheme.appThemeContrast,
+                              fontSize: 17,
+                              fontWeight: FontWeight.normal)),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )),
+                  height(0.1),
+                  SizedBox(
+                    height: screenHeight * 0.06,
+                    width: screenWidth * 0.8,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Constants.primaryColor,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        ),
+                        onPressed: () async {
+                          if (loginController.uFNameController.text.isEmpty) {
+                            showSnackBar(context, 'Enter valid username',CustomTheme.errorColor);
+                          } else if (loginController.uPasswordController.text.isEmpty) {
+                            showSnackBar(context, 'Enter valid password',CustomTheme.errorColor);
+                          } else {
+                            loginController.fetchLoginDetails(
+                                context: context,
+                                email: loginController.uFNameController.text,
+                                password: loginController.uPasswordController.text);
+                            //loginController.userRequest(loginORSignup: true);
+                          }
+                        },
+                        child: loginController.isLoading
+                            ? load()
+                            : Text(
+                                'Login',
+                                style: TextStyle(
+                                    fontFamily: Constants.fontsFamily, color: Colors.white, fontWeight: FontWeight.bold),
+                              )),
+                  ),
+                  height(0.03),
+                  GestureDetector(
+                    onTap: () {
+                      Get.to(const SignUpScreen());
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                              text: 'Already have an account?  ',
+                              style: TextStyle(
+                                  fontFamily: Constants.fontsFamily,
+                                  color: Constants.textColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500)),
+                          TextSpan(
+                              text: 'Sign Up Now',
+                              style: TextStyle(
+                                  fontFamily: Constants.fontsFamily,
+                                  color: CustomTheme.appThemeContrast,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

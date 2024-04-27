@@ -658,7 +658,7 @@ class _MartHomeState extends State<RentRemainScreen> {
                                   children: [
                                     height(0.005),
                                     Text(
-                                      '${controller.myBookingData.first.propUnit?.listing?.property?.name}',
+                                      '${controller.myBookingData!.first.propUnit?.listing?.property?.name}',
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(

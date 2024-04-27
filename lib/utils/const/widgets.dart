@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -7,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:rentitezy/utils/const/appbar_widget.dart';
 import '../../theme/custom_theme.dart';
 import 'appConfig.dart';
 import 'app_urls.dart';
@@ -82,6 +84,16 @@ Widget iconWidget(String name, double he, double wi, [Color? color]) {
     color: color,
   );
 }
+Widget drawerIconWidget(String name, double he, double wi, [Color? color]) {
+  return Image.asset(
+    'assets/images/$name.png',
+    fit: BoxFit.fill,
+    height: he,
+    width: wi,
+    color: color,
+  );
+}
+
 
 Widget imgLoadWidCircle(String imgUrl, String asset, double h, double w, BoxFit fit, double radius) {
   return ClipRRect(
@@ -105,6 +117,25 @@ Widget imgLoadWidCircle(String imgUrl, String asset, double h, double w, BoxFit 
 }
 
 Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
+  return CachedNetworkImage(
+      height: h,
+      width: w,
+      memCacheWidth: w.toInt(),
+      memCacheHeight: h.toInt(),
+      imageUrl: imgUrl,
+      imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
+            ),
+          ),
+      placeholder: (context, url) => loading(),
+      errorWidget: (context, url, error) => Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              image: DecorationImage(image: AssetImage(assetImg), fit: BoxFit.contain),
+            ),
+          ));
   return FadeInImage.assetNetwork(
       fit: fit,
       height: h,
@@ -125,7 +156,7 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
 String dateConvert(String date) {
   String dateTime;
   try {
-    if (date.isNotEmpty) {
+    if (date != 'null' && date.isNotEmpty) {
       DateTime datee = DateTime.parse(date);
       dateTime = DateFormat('dd-MM-yyyy').format(datee);
     } else {

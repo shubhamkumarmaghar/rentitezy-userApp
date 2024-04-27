@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/screen/razorpay_payment/controller/razorpay_controller.dart';
-import 'package:rentitezy/screen/razorpay_payment/model/razorpay_payment_response_model.dart';
+
 import 'package:rentitezy/utils/const/appConfig.dart';
+
+import '../controller/razorpay_controller.dart';
+import '../model/razorpay_payment_response_model.dart';
 
 class RazorpayPaymentView extends StatelessWidget {
   final RazorpayPaymentResponseModel paymentResponseModel;

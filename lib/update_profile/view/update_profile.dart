@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/screen/update_profile/controller/update_profile_controller.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import '../../../utils/const/widgets.dart';
+import '../controller/update_profile_controller.dart';
 
 class UpdateProfilePage extends StatelessWidget {
   const UpdateProfilePage({super.key});
@@ -74,15 +74,18 @@ class UpdateProfilePage extends StatelessWidget {
                         inputField(
                             controller: controller.firstNameController,
                             hintText: 'First name',
+                            prefixIcon: Icons.account_circle_rounded,
                             textInputType: TextInputType.text),
                         inputField(
                             controller: controller.lastNameController,
                             hintText: 'Last name',
+                            prefixIcon:Icons.person ,
                             textInputType: TextInputType.text),
                         inputField(
                             controller: controller.phoneController,
                             hintText: 'Mobile number',
-                            textInputType: TextInputType.phone,
+                            prefixIcon: Icons.phone,
+                            textInputType: TextInputType.number,
                             maxLength: 10,
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.allow(RegExp("[0-9]")),
@@ -90,6 +93,7 @@ class UpdateProfilePage extends StatelessWidget {
                         inputField(
                             controller: controller.emailController,
                             hintText: 'Email Address',
+                            prefixIcon: Icons.email,
                             textInputType: TextInputType.emailAddress),
                         SizedBox(
                           height: screenHeight * 0.18,
@@ -137,6 +141,7 @@ class UpdateProfilePage extends StatelessWidget {
       {required TextEditingController controller,
       required String hintText,
       required TextInputType textInputType,
+        required IconData prefixIcon,
       int? maxLength,
       List<TextInputFormatter>? inputFormatters}) {
     return Container(
@@ -146,18 +151,28 @@ class UpdateProfilePage extends StatelessWidget {
         borderRadius: BorderRadius.circular(40),
         color: Constants.primaryColor.withOpacity(0.1),
       ),
-      child: TextField(
-        controller: controller,
-        keyboardType: textInputType,
-        inputFormatters: inputFormatters,
-        maxLength: maxLength,
-        decoration: InputDecoration(
-            hoverColor: Constants.hint,
-            hintText: hintText,
-            hintStyle: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500),
-            border: InputBorder.none,
-            labelStyle: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20)),
+      child: Row(
+        children: [
+          SizedBox(width: screenWidth*0.04,),
+          Icon(prefixIcon,color: Constants.primaryColor,size: 20,),
+          SizedBox(
+            width: screenWidth*0.78,
+            child: TextFormField(
+              controller: controller,
+              keyboardType: textInputType,
+
+              inputFormatters: inputFormatters,
+              maxLength: maxLength,
+              decoration: InputDecoration(
+                  hoverColor: Constants.hint,
+                  hintText: hintText,
+                  hintStyle: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500),
+                  border: InputBorder.none,
+                  labelStyle: const TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w600),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 20)),
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -91,13 +91,8 @@ class HomeController extends GetxController {
         } else {
           propertyInfoList = [];
         }
-
-        allPropertyData = PropertyListModel.fromJson(response);
         isLoading(false);
         update();
-        // allPropertyData!.data?.forEach((element) {
-        //   log('props ::::: ${element.wishlist}--${element.id}');
-        // });
       }
       if (!isNext) {
         isLoading(false);
@@ -167,160 +162,10 @@ class HomeController extends GetxController {
 
   locationFunc(String newVal) {
     locationBy.value = newVal;
-    //allPropertyData.value = [];
     update();
     refresh();
     fetchProperties(false);
   }
 
-  Future<List<AssetReqModel>> getAllAssetsReq(String userId) async {
-    final response = await http.get(
-      Uri.parse('${AppUrls.assetReq}?userId=$userId'),
-      headers: <String, String>{},
-    );
-    if (response.statusCode == 200) {
-      var body = jsonDecode(response.body);
-      int success = body["success"];
-      if (success == 1) {
-        try {
-          return (body["data"] as List).map((stock) => AssetReqModel.fromJson(stock)).toList();
-        } catch (e) {
-          return [];
-        }
-      } else {
-        throw Exception(body["message"]);
-      }
-    } else {
-      throw Exception('Failed to Assets Request');
-    }
-  }
 
-  List<String> ticketList = [
-    'Plumbing',
-    'Electrical',
-    'General Maintenance',
-    'Emergency',
-    'Water',
-    'Sanitary',
-    'Others'
-  ];
-  String selectedTicket = 'Plumbing';
-
-  void showBottomTickets(BuildContext context) {
-    showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(15.0), topRight: Radius.circular(15.0)),
-        ),
-        builder: (context) {
-          return Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: StatefulBuilder(
-                builder: (BuildContext context, setState) => SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(12),
-                          child: Text(
-                            'Create your Ticket',
-                            style: TextStyle(
-                                fontFamily: Constants.fontsFamily,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20),
-                          ),
-                        ),
-                        Center(
-                            child: Container(
-                          height: 1,
-                          width: 40,
-                          color: Colors.black,
-                        )),
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: ticketList
-                                .map(
-                                  (temp) => RadioListTile(
-                                    contentPadding: const EdgeInsets.all(0),
-                                    value: temp,
-                                    groupValue: selectedTicket,
-                                    selected: temp == selectedTicket,
-                                    onChanged: (value) {
-                                      setState(
-                                        () => selectedTicket = value.toString(),
-                                      );
-                                    },
-                                    title: Text(
-                                      temp,
-                                      style: TextStyle(
-                                          color: Colors.black, fontFamily: Constants.fontsFamily, fontSize: 15),
-                                    ),
-                                    activeColor: Constants.primaryColor,
-                                  ),
-                                )
-                                .toList()),
-                        const SizedBox(height: 10),
-                        selectedTicket == 'Others'
-                            ? Container(
-                                padding: const EdgeInsets.all(3),
-                                margin: contEdge,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(7),
-                                  color: Colors.white,
-                                  border: Border.all(color: Constants.getColorFromHex('EAE7E7')),
-                                ),
-                                child: TextField(
-                                  controller: othersController,
-                                  style: TextStyle(fontFamily: Constants.fontsFamily),
-                                  decoration: InputDecoration(
-                                      hoverColor: Constants.getColorFromHex('CDCDCD'),
-                                      hintText: '*Your Problem',
-                                      hintStyle: TextStyle(
-                                          color: Constants.getColorFromHex('CDCDCD'),
-                                          fontFamily: Constants.fontsFamily),
-                                      border: InputBorder.none),
-                                ),
-                              )
-                            : height(0),
-                        Container(
-                          padding: const EdgeInsets.all(3),
-                          margin: const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7),
-                            color: Constants.lightBg,
-                            border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
-                          ),
-                          child: TextField(
-                            controller: commentController,
-                            keyboardType: TextInputType.multiline,
-                            decoration: InputDecoration(
-                                hoverColor: Constants.hint, hintText: '*Your comments', border: InputBorder.none),
-                          ),
-                        ),
-                      ],
-                    ))),
-          );
-        });
   }
-
-  Future<void> likeProperty({required BuildContext context, required PropertyInfoModel propertyInfoModel}) async {
-    showProgressLoader(context);
-    String url = AppUrls.addFav;
-    final response = await apiService.postApiCall(endPoint: url, bodyParams: {
-      'listingId': propertyInfoModel.id.toString(),
-      'wishlist': propertyInfoModel.wishlist != null && propertyInfoModel.wishlist == 0 ? '1' : '0',
-    });
-    final data = response as Map<String, dynamic>;
-    cancelLoader();
-    if (data['message'].toString().toLowerCase().contains('success')) {
-      propertyInfoModel.wishlist = propertyInfoModel.wishlist == 0 ? 1 : 0;
-    } else {
-      RIEWidgets.getToast(message: '${data['message']}', color: CustomTheme.errorColor);
-    }
-    update();
-  }
-}

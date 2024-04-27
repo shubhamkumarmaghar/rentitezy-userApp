@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
 import 'package:rentitezy/home/home_view/home_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
-import 'package:rentitezy/ticket/view/get_all_ticket.dart';
+import 'package:rentitezy/ticket/view/tickets_list_screen.dart';
 
-import '../../fav/my_fav_screen.dart';
 import '../../utils/const/appConfig.dart';
+import '../../wishlist/wishlist_screen.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({super.key});
@@ -35,9 +35,9 @@ class DashboardView extends StatelessWidget {
     if (index == 0) {
       return MyHomePage();
     } else if (index == 1) {
-      return const FavScreen();
+      return const WishlistScreen();
     } else if (index == 2) {
-      return const GetAllTickets();
+      return const TicketsListScreen();
     } else {
       return const Text('RentsEasy');
     }

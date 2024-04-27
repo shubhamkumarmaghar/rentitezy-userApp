@@ -9,12 +9,14 @@ import 'package:rentitezy/utils/const/widgets.dart';
 import '../single_property_details/view/single_properties_screen_new.dart';
 import '../utils/const/appConfig.dart';
 import '../utils/model/property_model.dart';
+import '../utils/services/utils_api_service.dart';
 
 class PropertyViewWidget extends StatelessWidget {
   final PropertyInfoModel propertyInfoModel;
   final homeController = Get.find<HomeController>();
+  final Function onWishlist;
 
-  PropertyViewWidget({super.key, required this.propertyInfoModel});
+  PropertyViewWidget({super.key, required this.propertyInfoModel, required this.onWishlist});
 
   @override
   Widget build(BuildContext context) {
@@ -95,7 +97,11 @@ class PropertyViewWidget extends StatelessWidget {
                     bottom: screenHeight * 0.02,
                     child: GestureDetector(
                       onTap: () async {
-                        await homeController.likeProperty(context: context, propertyInfoModel: propertyInfoModel);
+                        final res = await UtilsApiService.wishlistProperty(
+                            context: context, propertyInfoModel: propertyInfoModel);
+                        if (res) {
+                          onWishlist();
+                        }
                       },
                       child: Container(
                         height: screenHeight * 0.045,

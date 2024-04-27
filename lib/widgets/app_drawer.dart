@@ -3,17 +3,14 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-
-import '../home/home_view/home_screen.dart';
 import '../login/view/login_screen.dart';
 import '../my_bookings/view/my_booking_screen_list.dart';
 import '../pdf/pdf_api.dart';
 import '../pdf/pdf_new.dart';
 import '../screen/faq_screen.dart';
-import '../screen/terms_conditions.dart/policy_data.dart';
-import '../screen/terms_conditions.dart/terms_and_condition.dart';
-import '../screen/update_profile/view/update_profile.dart';
-import '../theme/custom_theme.dart';
+import '../terms_conditions.dart/policy_data.dart';
+import '../terms_conditions.dart/terms_and_condition.dart';
+import '../update_profile/view/update_profile.dart';
 import '../utils/const/appConfig.dart';
 import '../utils/model/agreement_det.dart';
 import '../utils/styles/menu_text_style.dart';
@@ -21,7 +18,7 @@ import 'menu_side_bar_widget.dart';
 
 class AppDrawer extends StatelessWidget {
   final String userName = GetStorage().read(Constants.usernamekey);
-  final String userId = GetStorage().read(Constants.userId).toString() ?? "guest";
+  final String userId = GetStorage().read(Constants.userId) ?? "guest";
   final bool isTenant = GetStorage().read(Constants.isTenant);
 
   final AgreementDet tempPdf = AgreementDet(
@@ -162,7 +159,7 @@ class AppDrawer extends StatelessWidget {
           getMenuSideBar(
             leading: Icon(
               (userId.isNotEmpty || userId != 'null' || userId != 'guest') ? Icons.logout_rounded : Icons.login_rounded,
-              color: Constants.primaryColor.withOpacity(0.8),
+              color: Constants.primaryColor,
             ),
             title: Text((userId.isNotEmpty || userId != 'null' || userId != 'guest') ? 'Logout' : 'Login',
                 style: menuTextStyle()),
@@ -170,8 +167,7 @@ class AppDrawer extends StatelessWidget {
               if ((userId.isNotEmpty || userId != 'null' || userId != 'guest')) {
                 alertDialog(context, 'LOG OUT', 'do you want to Logout ?');
               } else {
-                Navigator.pushAndRemoveUntil(
-                    context, MaterialPageRoute(builder: (context) => const LoginScreen()), (route) => false);
+               Get.offAll(() => const LoginScreen());
               }
             },
           ),

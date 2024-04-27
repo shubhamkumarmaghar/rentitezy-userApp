@@ -9,9 +9,9 @@ import 'package:rentitezy/widgets/app_drawer.dart';
 import 'package:rentitezy/widgets/near_by_items.dart';
 import 'package:rentitezy/widgets/property_view_widget.dart';
 import 'package:rentitezy/widgets/recommend_items.dart';
+import '../../search/search_properties_screen.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../screen/search/all_properties_page.dart';
 
 class MyHomePage extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -65,7 +65,7 @@ class MyHomePage extends StatelessWidget {
   Widget searchView() {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const AllPropertiesPage());
+        Get.to(() => const SearchPropertiesScreen());
       },
       child: Container(
         height: screenHeight * 0.07,
@@ -101,7 +101,9 @@ class MyHomePage extends StatelessWidget {
               height: screenHeight * 0.04,
               width: screenWidth * 0.2,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => const SearchPropertiesScreen());
+                },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Constants.primaryColor,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1))),
@@ -158,7 +160,6 @@ class MyHomePage extends StatelessWidget {
             drawer: AppDrawer(),
             appBar: AppBar(
               centerTitle: true,
-              toolbarHeight: screenHeight * 0.07,
               elevation: 5,
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
@@ -188,14 +189,7 @@ class MyHomePage extends StatelessWidget {
               actions: [
                 GestureDetector(
                   onTap: () => Get.to(const ProfileScreenNew()),
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: screenHeight * 0.01),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(screenHeight*0.07),
-                      child: imgLoadWid(homeController.imageUrl, 'assets/images/user_vec.png', screenHeight * 0.04,
-                          screenWidth * 0.13, BoxFit.fill),
-                    ),
-                  ),
+                  child: const Icon(Icons.settings),
                 ),
                 const SizedBox(
                   width: 15,
@@ -245,7 +239,7 @@ class MyHomePage extends StatelessWidget {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: homeController.propertyInfoList?.length,
                                 itemBuilder: (context, index) {
-                                  return PropertyViewWidget(propertyInfoModel: homeController.propertyInfoList![index]);
+                                  return PropertyViewWidget(propertyInfoModel: homeController.propertyInfoList![index],onWishlist: ()=>controller.update());
                                 },
                               ),
                     height(0.02),
