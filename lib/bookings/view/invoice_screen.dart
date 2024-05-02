@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:rentitezy/my_bookings/model/booking_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 
 import '../../theme/custom_theme.dart';
 import '../appbar_widget.dart';
 import '../controller/my_booking_controller.dart';
+import '../model/booking_model.dart';
 
 class InvoiceScreen extends StatefulWidget {
   const InvoiceScreen({super.key});

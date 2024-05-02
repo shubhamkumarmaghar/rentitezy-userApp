@@ -1,23 +1,15 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:http/http.dart' as http;
-import 'package:rentitezy/model/property_model.dart';
+
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../model/assets_req_model.dart';
 import '../../utils/const/appConfig.dart';
-import '../../utils/const/widgets.dart';
 import '../../utils/model/property_model.dart';
 import '../../utils/services/rie_user_api_service.dart';
-import '../../widgets/const_widget.dart';
-import '../../widgets/custom_alert_dialogs.dart';
 import '../model/property_list_nodel.dart';
 
 class HomeController extends GetxController {
@@ -137,26 +129,18 @@ class HomeController extends GetxController {
 
   void fetchAddress() async {
     isLoadingLocation(true);
-    final response = await http.get(
-      Uri.parse(AppUrls.locations),
-      headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
-    );
-    if (response.statusCode == 200) {
-      var body = jsonDecode(response.body);
-      String success = body["message"];
-      try {
-        if (success.toLowerCase().contains('success')) {
-          List<dynamic> response = body['data'] as List;
-          for (var i in response) {
-            categories.add(i.toString());
-          }
+    final response = await apiService
+        .getApiCall(endPoint: AppUrls.locations, headers: {'Auth-Token': GetStorage().read(Constants.token)});
+    isLoadingLocation(false);
+    if (response["message"].toString().toLowerCase().contains('success')) {
+      if (response['data'] != null) {
+        List<dynamic> location = response['data'] as List;
+        for (var i in location) {
+          categories.add(i.toString());
         }
-      } catch (e) {
-        debugPrint(e.toString());
       }
-      isLoadingLocation(false);
     } else {
-      Get.snackbar("Error", 'Error during fetch api data');
+      RIEWidgets.getToast(message: response["message"] ?? 'Something went wrong!', color: CustomTheme.errorColor);
     }
   }
 
@@ -166,6 +150,4 @@ class HomeController extends GetxController {
     refresh();
     fetchProperties(false);
   }
-
-
-  }
+}

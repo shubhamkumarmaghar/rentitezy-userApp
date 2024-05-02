@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/my_bookings/view/booking_details_screen.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
 import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
@@ -10,6 +7,7 @@ import '../../../utils/const/widgets.dart';
 import '../../theme/custom_theme.dart';
 import '../appbar_widget.dart';
 import '../controller/my_booking_controller.dart';
+import 'booking_details_screen.dart';
 
 class MyBookingsScreenList extends StatelessWidget {
   MyBookingsScreenList({super.key, required this.from});

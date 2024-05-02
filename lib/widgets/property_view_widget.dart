@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
@@ -147,6 +148,7 @@ class PropertyViewWidget extends StatelessWidget {
               ),
               height(0.01),
               Container(
+                  width: screenWidth * 0.88,
                   padding: EdgeInsets.only(left: screenWidth * 0.023, right: screenWidth * 0.023),
                   child: Text(
                     '${propertyInfoModel.title}',
@@ -198,27 +200,44 @@ class PropertyViewWidget extends StatelessWidget {
                 ),
               ),
               height(0.008),
-              propertyInfoModel.availFrom == null
-                  ? Container(
-                      padding: EdgeInsets.only(left: screenWidth * 0.023),
-                      child: const Row(
-                        children: [
-                          Text('Not Available',
-                              style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500)),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Icon(
-                            Icons.info,
-                            color: Colors.grey,
-                            size: 18,
-                          )
-                        ],
-                      ))
-                  : Container(
-                      padding: EdgeInsets.only(left: screenWidth * 0.023),
-                      child: Text('Available From : ${getLocalTime(propertyInfoModel.availFrom!)}',
-                          style: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500)))
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Visibility(
+                        visible: propertyInfoModel.availFrom != null,
+                        replacement: const Row(
+                          children: [
+                            Text('Not Available',
+                                style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500)),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Icon(
+                              Icons.info,
+                              color: Colors.grey,
+                              size: 18,
+                            )
+                          ],
+                        ),
+                        child: Text('Available From : ${getLocalTime(propertyInfoModel.availFrom ?? '')}',
+                            style:
+                                const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))),
+                    Visibility(
+                      visible: propertyInfoModel.furnishType != null,
+                      replacement: const SizedBox.shrink(),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.015, vertical: screenHeight * 0.005),
+                        decoration: BoxDecoration(
+                            color: CustomTheme.appThemeContrast.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
+                        child: Text('${propertyInfoModel.furnishType.toString().capitalizeFirst}-Furnished',
+                            style: TextStyle(color: CustomTheme.appThemeContrast, fontSize: 12, fontWeight: FontWeight.w500)),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -227,13 +246,16 @@ class PropertyViewWidget extends StatelessWidget {
   }
 
   String getLocalTime(String dateTime) {
+    if (dateTime.isEmpty) {
+      return 'NA';
+    }
     var date = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(dateTime, true);
-    var showDate = '${date.toLocal().year}-${handleMonth(date.toLocal().month)}-${date.toLocal().day}';
+    var showDate = '${date.toLocal().year}-${handleZero(date.toLocal().month)}-${handleZero(date.toLocal().day)}';
     return showDate;
   }
 
-  String handleMonth(int month) {
-    return month < 10 ? '0$month' : month.toString();
+  String handleZero(int data) {
+    return data < 10 ? '0$data' : data.toString();
   }
 
   Widget iconWidget(String name) {

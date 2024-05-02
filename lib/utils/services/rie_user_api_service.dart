@@ -21,37 +21,16 @@ class RIEUserApiService {
     return {'user-auth-token': (registeredToken ?? await _getRegisteredToken()).toString()};
   }
 
-  Future<dynamic> getApiCall({
-    required String endPoint,
-  }) async {
-    log('URL :: $endPoint  -- ${await getHeaders}');
+  Future<dynamic> getApiCall({required String endPoint, Map<String, String>? headers}) async {
+    log('URL :: $endPoint  -- ${headers ?? await getHeaders}');
     try {
-      final response = await http.get(Uri.https(_baseURL, endPoint), headers: await getHeaders);
+      final response = await http.get(Uri.parse(endPoint), headers: headers ?? await getHeaders);
 
       return await _response(
         response,
-        url: Uri.https(_baseURL, endPoint).toString(),
-      );
-    } on SocketException {
-      log('SocketException Happened');
-    } catch (e) {
-      log('Error : ${e.toString()}');
-    }
-    return null;
-  }
-
-  Future<dynamic> getApiCallUserData() async {
-    log('URL ::  ${await getHeaders}');
-    try {
-      final response = await http.get(
-          Uri.parse(
-            'https://test-api.rentiseazy.com/user',
-          ),
-          headers: await getHeaders);
-
-      return await _response(
-        response,
-        url: Uri.https(_baseURL, '').toString(),
+        url: Uri.parse(
+          endPoint,
+        ).toString(),
       );
     } on SocketException {
       log('SocketException Happened');

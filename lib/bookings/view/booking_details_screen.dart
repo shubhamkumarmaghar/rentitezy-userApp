@@ -1,16 +1,13 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:rentitezy/my_bookings/appbar_widget.dart';
 import 'package:rentitezy/ticket/view/create_ticket_screen.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
 import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../theme/custom_theme.dart';
-import '../../ticket/view/tickets_list_screen.dart';
+import '../appbar_widget.dart';
 import '../controller/my_booking_controller.dart';
 import 'invoice_screen.dart';
 

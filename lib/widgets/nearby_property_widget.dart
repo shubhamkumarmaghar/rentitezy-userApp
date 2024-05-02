@@ -1,3 +1,4 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,10 +10,10 @@ import 'package:rentitezy/utils/services/utils_api_service.dart';
 import '../single_property_details/view/single_properties_screen_new.dart';
 import '../utils/const/widgets.dart';
 
-class NearByPropertyScreen extends StatelessWidget {
+class NearByPropertyWidget extends StatelessWidget {
   final PropertyInfoModel propertyInfoModel;
 
-  const NearByPropertyScreen({super.key, required this.propertyInfoModel});
+  const NearByPropertyWidget({super.key, required this.propertyInfoModel});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class NearByPropertyScreen extends StatelessWidget {
             );
           },
           child: Container(
+            padding: EdgeInsets.only(left: screenWidth * 0.005),
             decoration: BoxDecoration(
               color: Constants.primaryColor,
               borderRadius: const BorderRadius.only(
@@ -62,7 +64,7 @@ class NearByPropertyScreen extends StatelessWidget {
                         height: screenHeight * 0.01,
                       ),
                       SizedBox(
-                        width: screenWidth * 0.45,
+                        width: screenWidth * 0.48,
                         height: screenHeight * 0.2,
                         child: ClipRRect(
                             borderRadius: const BorderRadius.only(
@@ -87,11 +89,11 @@ class NearByPropertyScreen extends StatelessWidget {
                                     ))),
                       ),
                       Container(
-                          width: screenWidth * 0.45,
+                          width: screenWidth * 0.48,
                           padding: EdgeInsets.only(
                               left: screenWidth * 0.007, top: screenHeight * 0.01, right: screenWidth * 0.007),
                           child: Text(
-                            '${propertyInfoModel.title ?? ''},${propertyInfoModel.property?.location?.name ?? ''}',
+                            propertyInfoModel.title ?? '',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
@@ -101,11 +103,11 @@ class NearByPropertyScreen extends StatelessWidget {
                             ),
                           )),
                       Container(
-                          width: screenWidth * 0.45,
+                          width: screenWidth * 0.48,
                           padding: EdgeInsets.only(
                               left: screenWidth * 0.007, top: screenHeight * 0.01, right: screenWidth * 0.007),
                           child: Text(
-                            '${propertyInfoModel.property?.name ?? ''},${propertyInfoModel.property?.location?.name ?? ''}',
+                            propertyInfoModel.property?.location?.name ?? '',
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: const TextStyle(
@@ -115,19 +117,38 @@ class NearByPropertyScreen extends StatelessWidget {
                             ),
                           )),
                       Container(
-                          width: screenWidth * 0.4,
-                          padding: EdgeInsets.only(
-                              left: screenWidth * 0.007, top: screenHeight * 0.01, right: screenWidth * 0.007),
-                          child: Text(
-                            '${Constants.currency}${propertyInfoModel.price ?? ''}',
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 18,
-                              color: CustomTheme.appThemeContrast,
+                        width: screenWidth * 0.48,
+                        padding: EdgeInsets.only(
+                            left: screenWidth * 0.007, top: screenHeight * 0.01, right: screenWidth * 0.007),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              '${Constants.currency}${propertyInfoModel.price ?? ''}/M*',
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                                color: CustomTheme.appThemeContrast,
+                              ),
                             ),
-                          )),
+                            Visibility(
+                              visible: propertyInfoModel.furnishType != null,
+                              replacement: const SizedBox.shrink(),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01, vertical: screenHeight * 0.002),
+                                decoration: BoxDecoration(
+                                    color: CustomTheme.appThemeContrast.withOpacity(0.1),
+                                    borderRadius: BorderRadius.circular(2)
+                                ),
+                                child: Text('${propertyInfoModel.furnishType.toString().capitalizeFirst}-Furnished',
+                                    style: TextStyle(color: CustomTheme.appThemeContrast, fontSize: 12, fontWeight: FontWeight.w500)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   Positioned(

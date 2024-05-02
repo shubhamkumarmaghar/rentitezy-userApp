@@ -1,6 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
 
-// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,10 +9,9 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/tenant_model.dart';
 import 'package:rentitezy/model/user_model.dart';
 import 'package:rentitezy/web_view/webview.dart';
-import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../my_bookings/controller/my_booking_controller.dart';
+import '../bookings/controller/my_booking_controller.dart';
 import '../utils/const/app_urls.dart';
 import '../utils/const/widgets.dart';
 import 'faq_screen.dart';

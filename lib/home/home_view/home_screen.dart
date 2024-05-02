@@ -5,7 +5,7 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
 import 'package:rentitezy/screen/profile_screen_new.dart';
 import 'package:rentitezy/widgets/app_drawer.dart';
-import 'package:rentitezy/widgets/near_by_items.dart';
+import 'package:rentitezy/widgets/nearby_property_widget.dart';
 import 'package:rentitezy/widgets/property_view_widget.dart';
 import '../../search/search_properties_screen.dart';
 import '../../utils/const/widgets.dart';
@@ -83,7 +83,7 @@ class MyHomePage extends StatelessWidget {
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
                     ),
                     height(0.02),
-                    buildOnGoingList(),
+                    nearByPropertiesList(),
                     height(0.04),
                     Text(
                       "Recommended Properties",
@@ -106,7 +106,9 @@ class MyHomePage extends StatelessWidget {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: homeController.propertyInfoList?.length,
                                 itemBuilder: (context, index) {
-                                  return PropertyViewWidget(propertyInfoModel: homeController.propertyInfoList![index],onWishlist: ()=>controller.update());
+                                  return PropertyViewWidget(
+                                      propertyInfoModel: homeController.propertyInfoList![index],
+                                      onWishlist: () => controller.update());
                                 },
                               ),
                     height(0.02),
@@ -122,43 +124,43 @@ class MyHomePage extends StatelessWidget {
     return Obx(() => homeController.isLoadingLocation.value
         ? Center(child: RIEWidgets.getLoader())
         : ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        itemCount: homeController.categories.length,
-        itemBuilder: (ctx, index) {
-          return GestureDetector(
-              onTap: () {
-                homeController.selectedIndex.value = index;
-                homeController.locationFunc(homeController.categories[index]);
-              },
-              child: Obx(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: homeController.categories.length,
+            itemBuilder: (ctx, index) {
+              return GestureDetector(
+                  onTap: () {
+                    homeController.selectedIndex.value = index;
+                    homeController.locationFunc(homeController.categories[index]);
+                  },
+                  child: Obx(
                     () => AnimatedContainer(
-                    margin: EdgeInsets.fromLTRB(index == 0 ? 15 : 5, 0, 5, 0),
-                    width: screenWidth * 0.3,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      color: index == homeController.selectedIndex.value
-                          ? Constants.primaryColor
-                          : Constants.primaryColor.withOpacity(0.1),
-                    ),
-                    duration: const Duration(milliseconds: 300),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                      alignment: Alignment.center,
-                      child: Text(
-                        homeController.categories[index],
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.w500,
-                          color: index == homeController.selectedIndex.value ? Colors.white : Colors.black,
+                        margin: EdgeInsets.fromLTRB(index == 0 ? 15 : 5, 0, 5, 0),
+                        width: screenWidth * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          color: index == homeController.selectedIndex.value
+                              ? Constants.primaryColor
+                              : Constants.primaryColor.withOpacity(0.1),
                         ),
-                      ),
-                    )),
-              ));
-        }));
+                        duration: const Duration(milliseconds: 300),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          alignment: Alignment.center,
+                          child: Text(
+                            homeController.categories[index],
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 13.0,
+                              fontWeight: FontWeight.w500,
+                              color: index == homeController.selectedIndex.value ? Colors.white : Colors.black,
+                            ),
+                          ),
+                        )),
+                  ));
+            }));
   }
 
   Widget searchView() {
@@ -181,7 +183,7 @@ class MyHomePage extends StatelessWidget {
               height: screenHeight * 0.04,
               width: screenWidth * 0.09,
               decoration:
-              BoxDecoration(color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(2)),
+                  BoxDecoration(color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(2)),
               child: Icon(
                 Icons.location_on_outlined,
                 size: screenHeight * 0.025,
@@ -218,7 +220,7 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget buildOnGoingList() {
+  Widget nearByPropertiesList() {
     return FittedBox(
       child: SizedBox(
           height: Get.height * 0.33,
@@ -226,26 +228,26 @@ class MyHomePage extends StatelessWidget {
           child: homeController.propertyInfoList == null
               ? Center(child: RIEWidgets.getLoader())
               : homeController.propertyInfoList != null && homeController.propertyInfoList!.isEmpty
-              ? const Center(
-            child: Text(
-              'No Property Found!',
-              style: TextStyle(fontSize: 18, color: Colors.black),
-            ),
-          )
-              : ListView.separated(
-            shrinkWrap: false,
-            scrollDirection: Axis.horizontal,
-            itemCount:
-            homeController.propertyInfoList!.length > 5 ? 5 : homeController.propertyInfoList!.length,
-            itemBuilder: (context, index) {
-              return NearByPropertyScreen(
-                propertyInfoModel: homeController.propertyInfoList![index],
-              );
-            },
-            separatorBuilder: (context, index) => SizedBox(
-              width: screenWidth * 0.05,
-            ),
-          )),
+                  ? const Center(
+                      child: Text(
+                        'No Property Found!',
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                    )
+                  : ListView.separated(
+                      shrinkWrap: false,
+                      scrollDirection: Axis.horizontal,
+                      itemCount:
+                          homeController.propertyInfoList!.length > 5 ? 5 : homeController.propertyInfoList!.length,
+                      itemBuilder: (context, index) {
+                        return NearByPropertyWidget(
+                          propertyInfoModel: homeController.propertyInfoList![index],
+                        );
+                      },
+                      separatorBuilder: (context, index) => SizedBox(
+                        width: screenWidth * 0.04,
+                      ),
+                    )),
     );
   }
 }
