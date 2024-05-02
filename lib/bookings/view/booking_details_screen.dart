@@ -112,7 +112,7 @@ class BookingDetailsPage extends StatelessWidget {
                         ),
                         onPressed: () async {
                           showProgressLoader(context);
-                          await myBookingController.fetchBookingInvoices(bookingID: '${data?.id.toString()}');
+                          await myBookingController.fetchBookingInvoices(bookingID: data.id.toString());
                           cancelLoader();
                           Get.to(() => const InvoiceScreen());
                         },

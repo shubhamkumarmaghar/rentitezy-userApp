@@ -1,9 +1,5 @@
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/home/home_controller/home_controller.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
 import '../../../utils/const/app_urls.dart';
