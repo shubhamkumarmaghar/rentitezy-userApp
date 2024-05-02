@@ -20,7 +20,7 @@ class UpdateProfilePage extends StatelessWidget {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
             backgroundColor: Constants.primaryColor,
-            title: const Text('Update Account'),
+            title: const Text('Update Account',style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
           ),
           body: GestureDetector(
             onTap: () => FocusScope.of(context).requestFocus(FocusNode()),

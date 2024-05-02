@@ -68,6 +68,7 @@ class RazorpayController extends GetxController {
         ),
         textColor: CustomTheme.errorColor);
     await Future.delayed(const Duration(seconds: 4));
+
     Get.find<DashboardController>().setIndex(0);
     Get.offAll(() => const DashboardView());
   }
@@ -83,14 +84,15 @@ class RazorpayController extends GetxController {
       String? razorpayPaymentId,
       String? razorpaySignature}) async {
     final response = await apiService.postApiCall(endPoint: AppUrls.paymentCallback, bodyParams: {
-      'paymentId': paymentId,
+      'paymentId': paymentResponseModel.paymentId.toString(),
       'razorpayPaymentId': razorpayPaymentId,
       'razorpayOrderId': razorpayOrderId,
       'razorpaySignature': razorpaySignature,
     });
     if (response != null) {
-      Get.find<DashboardController>().setIndex(0);
-      Get.offAll(const DashboardView());
+      log('nnnnn $response');
+     Get.find<DashboardController>().setIndex(0);
+     Get.offAll(const DashboardView());
     }
   }
 

@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -180,184 +178,138 @@ class _CheckOutPageState extends State<CheckOutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 0,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
+        titleSpacing: -10,
         backgroundColor: Constants.primaryColor,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
+        title: const Text('Checkout', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
       ),
-      body: Stack(children: [
-        SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-        ),
-        Container(
-          height: 80,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              color: Constants.primaryColor,
-              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30))),
-          child: Stack(children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Colors.white,
+      body: Container(
+        width: screenWidth,
+        height: screenHeight,
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: columnTxt("Name", '${singlePropertyDetailsController.checkoutModel?.name}')),
+                    Expanded(child: columnTxt("Address", '${singlePropertyDetailsController.checkoutModel?.address}'))
+                  ],
                 ),
-                onPressed: () {
-                  Navigator.pop(context, true);
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: columnTxt("Move In", '${singlePropertyDetailsController.checkoutModel?.moveIn}')),
+                    Expanded(child: columnTxt("Move Out", '${widget.checkoutModel?.moveOut}'))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        child: columnTxt("Duration", '${singlePropertyDetailsController.checkoutModel?.duration}')),
+                    Expanded(
+                        child: columnTxt(
+                            "Rent", '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.rent}'))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        child: columnTxt("Deposit",
+                            '${Constants.currency} ${singlePropertyDetailsController.checkoutModel?.deposit}')),
+                    Expanded(
+                      child: columnTxt("OnBoarding", '${widget.checkoutModel?.onboarding}'),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(child: columnTxt("Guest", '${singlePropertyDetailsController.checkoutModel?.guest}')),
+                    Expanded(child: columnTxt("Lock In", '${singlePropertyDetailsController.checkoutModel?.lockIn}'))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        child: columnTxt("Amount",
+                            '${Constants.currency} ${singlePropertyDetailsController.checkoutModel?.amount}')),
+                    Expanded(
+                        child: columnTxt(
+                            "Total", '${Constants.currency} ${singlePropertyDetailsController.checkoutModel?.total}'))
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                        child: columnTxt("Maintenance",
+                            '${Constants.currency} ${singlePropertyDetailsController.checkoutModel?.maintenance}'))
+                  ],
+                ),
+              ),
+              height(0.25),
+              InkWell(
+                onTap: () async {
+                  showBottomDetails('${singlePropertyDetailsController.checkoutModel?.cardId}', context);
                 },
+                child: Container(
+                  width: screenWidth * 0.8,
+                  height: screenHeight * 0.065,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Constants.primaryColor,
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Submit',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontFamily: Constants.fontsFamily,
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
               ),
-            ),
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                'Checkout',
-                style: TextStyle(
-                    fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ]),
+            ],
+          ),
         ),
-        Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 150,
-                child: StatefulBuilder(
-                    builder: ((context, setState) => ListView(
-                          shrinkWrap: true,
-                          physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.all(10),
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child:
-                                          columnTxt("Name", '${singlePropertyDetailsController.checkoutModel?.name}')),
-                                  Expanded(
-                                      child: columnTxt(
-                                          "Address", '${singlePropertyDetailsController.checkoutModel?.address}'))
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: columnTxt(
-                                          "Move In", '${singlePropertyDetailsController.checkoutModel?.moveIn}')),
-                                  Expanded(child: columnTxt("Move Out", '${widget.checkoutModel?.moveOut}'))
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: columnTxt(
-                                          "Duration", '${singlePropertyDetailsController.checkoutModel?.duration}')),
-                                  Expanded(
-                                      child: columnTxt("Rent",
-                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.rent}'))
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: columnTxt("Deposit",
-                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.deposit}')),
-                                  Expanded(
-                                    child: columnTxt("OnBoarding", '${widget.checkoutModel?.onboarding}'),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: columnTxt(
-                                          "Guest", '${singlePropertyDetailsController.checkoutModel?.guest}')),
-                                  Expanded(
-                                      child: columnTxt(
-                                          "Lock In", '${singlePropertyDetailsController.checkoutModel?.lockIn}'))
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: columnTxt("Amount",
-                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.amount}')),
-                                  Expanded(
-                                      child: columnTxt("Total",
-                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.total}'))
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                      child: columnTxt("Maintenance",
-                                          '${Constants.currency}.${singlePropertyDetailsController.checkoutModel?.maintenance}'))
-                                ],
-                              ),
-                            ),
-                            height(0.05),
-                            InkWell(
-                              onTap: () async {
-                                showBottomDetails('${singlePropertyDetailsController.checkoutModel?.cardId}', context);
-                              },
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.70,
-                                height: 50,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Constants.primaryColor,
-                                  borderRadius: BorderRadius.circular(40),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'Submit',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontFamily: Constants.fontsFamily,
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        )))))
-      ]),
+      ),
     );
   }
 }

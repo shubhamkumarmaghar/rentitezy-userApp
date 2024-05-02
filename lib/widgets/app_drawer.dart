@@ -65,9 +65,9 @@ class AppDrawer extends StatelessWidget {
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(screenHeight*0.07),
-                    child: imgLoadWid(
-                        GetStorage().read(Constants.profileUrl), 'assets/images/user_vec.png', screenHeight*0.11, screenWidth*0.24, BoxFit.fill),
+                    borderRadius: BorderRadius.circular(screenHeight * 0.07),
+                    child: imgLoadWid(GetStorage().read(Constants.profileUrl), 'assets/images/user_vec.png',
+                        screenHeight * 0.11, screenWidth * 0.24, BoxFit.fill),
                   ),
                   height(0.015),
                   Text(
@@ -84,7 +84,11 @@ class AppDrawer extends StatelessWidget {
               ) //UserAccountDrawerHeader
               ), //DrawerHeaderRS
           getMenuSideBar(
-            leading: iconWidget('profile_edit', 24, 24, Constants.primaryColor),
+            leading: Icon(
+              Icons.edit,
+              size: 20,
+              color: Constants.primaryColor,
+            ),
             title: Text(' Profile Edit ', style: menuTextStyle()),
             onTap: () {
               Get.to(() => const UpdateProfilePage());
@@ -92,7 +96,11 @@ class AppDrawer extends StatelessWidget {
           ),
 
           getMenuSideBar(
-            leading: iconWidget('shopping_bag', 24, 24, Constants.primaryColor),
+            leading: Icon(
+              Icons.shopping_bag_rounded,
+              size: 20,
+              color: Constants.primaryColor,
+            ),
             title: Text('My Bookings ', style: menuTextStyle()),
             onTap: () {
               Get.to(() => MyBookingsScreenList(
@@ -101,10 +109,14 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           getMenuSideBar(
-            leading: iconWidget('help', 24, 24, Constants.primaryColor),
+            leading: Icon(
+              Icons.question_answer_rounded,
+              size: 20,
+              color: Constants.primaryColor,
+            ),
             title: Text(' Faq ', style: menuTextStyle()),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const FaqScreen()));
+              Get.to(() => const FaqScreen());
             },
           ),
 
@@ -118,7 +130,11 @@ class AppDrawer extends StatelessWidget {
                 }),
           ),
           getMenuSideBar(
-            leading: iconWidget('privacy_policy', 24, 24, Constants.primaryColor),
+            leading: Icon(
+              Icons.policy_rounded,
+              size: 20,
+              color: Constants.primaryColor,
+            ),
             title: Text(' Privacy Policy', style: menuTextStyle()),
             onTap: () {
               Navigator.push(
@@ -131,7 +147,11 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           getMenuSideBar(
-            leading: iconWidget('about_us', 24, 24, Constants.primaryColor),
+            leading: Icon(
+              Icons.library_books_rounded,
+              size: 20,
+              color: Constants.primaryColor,
+            ),
             title: Text(' Terms & Conditions ', style: menuTextStyle()),
             onTap: () async {
               Navigator.push(
@@ -144,7 +164,11 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           getMenuSideBar(
-            leading: iconWidget('about_us', 24, 24, Constants.primaryColor),
+            leading: Icon(
+              Icons.free_cancellation_rounded,
+              size: 20,
+              color: Constants.primaryColor,
+            ),
             title: Text(' Cancellation Policy ', textAlign: TextAlign.start, style: menuTextStyle()),
             onTap: () async {
               Navigator.push(
@@ -158,7 +182,8 @@ class AppDrawer extends StatelessWidget {
           ),
           getMenuSideBar(
             leading: Icon(
-              (userId.isNotEmpty || userId != 'null' || userId != 'guest') ? Icons.logout_rounded : Icons.login_rounded,
+              Icons.logout_rounded,
+              size: 20,
               color: Constants.primaryColor,
             ),
             title: Text((userId.isNotEmpty || userId != 'null' || userId != 'guest') ? 'Logout' : 'Login',
@@ -167,7 +192,7 @@ class AppDrawer extends StatelessWidget {
               if ((userId.isNotEmpty || userId != 'null' || userId != 'guest')) {
                 alertDialog(context, 'LOG OUT', 'do you want to Logout ?');
               } else {
-               Get.offAll(() => const LoginScreen());
+                Get.offAll(() => const LoginScreen());
               }
             },
           ),

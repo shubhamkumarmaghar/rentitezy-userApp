@@ -23,7 +23,6 @@ import '../model/single_property_details_model.dart';
 
 class SinglePropertyDetailsController extends GetxController {
   String? id = '';
-  String cfrom = '';
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
@@ -104,7 +103,6 @@ class SinglePropertyDetailsController extends GetxController {
     required String unitId,
   }) async {
     showProgressLoader(Get.context!);
-    cfrom = from;
     String duration = '';
     singlePage.value = true;
     final f = DateFormat('yyyy-MM-dd');
@@ -113,8 +111,9 @@ class SinglePropertyDetailsController extends GetxController {
     } else {
       duration = '${dropdownValueDaily}d';
     }
+    log('kkkkk $unitId');
     String url =
-        "${AppUrls.checkout}?checkin=${f.format(currentDate)}&duration=$duration&guest=$dropdownValueGuest&listingId=${singleProPerty?.data?.id}&unitId=$unitId}";
+        "${AppUrls.checkout}?checkin=${f.format(currentDate)}&duration=$duration&guest=$dropdownValueGuest&listingId=${singleProPerty?.data?.id}&unitId=$unitId";
     final response = await apiService.getApiCallWithURL(endPoint: url);
     String success = response["message"];
     if (success.toLowerCase() == 'success') {
@@ -131,9 +130,7 @@ class SinglePropertyDetailsController extends GetxController {
   }
 
   void submitSiteVisit(String from) async {
-    cfrom = from;
     singlePage.value = true;
-    final f = DateFormat('yyyy-MM-dd');
     String url = AppUrls.siteVisit;
     final response = await apiService.postApiCall(endPoint: url, bodyParams: {
       'phone': phoneController.text,
@@ -143,9 +140,6 @@ class SinglePropertyDetailsController extends GetxController {
       'source': 'app'
     });
 
-    /* dynamic result = await getCheckOut(
-        url, GetStorage().read(Constants.token).toString());*/
-    debugPrint(response.toString());
     String success = response["message"];
     if (success.toString().toLowerCase() == 'success') {
       RIEWidgets.getToast(message: 'You have successfully scheduled site visit', color: CustomTheme.white);
@@ -174,35 +168,6 @@ class SinglePropertyDetailsController extends GetxController {
       Get.back();
 
       Get.to(RazorpayPaymentView(paymentResponseModel: RazorpayPaymentResponseModel.fromJson(data)));
-    }
-  }
-
-  void leadsRequest() async {
-    var data = singleProPerty?.data;
-    var propertyData = data?.property;
-    if (propertyData != null) {
-      try {
-        dynamic result = await createLeadsApi(
-          GetStorage().read(Constants.usernamekey).toString(),
-          GetStorage().read(Constants.phonekey).toString(),
-          propertyData.address == '' ? 'NA' : '${propertyData.address}',
-          'NA',
-          '${propertyData.facilities}',
-          DateFormat.yMMMd().format(currentDate),
-          '${data?.price}',
-          GetStorage().read(Constants.userId).toString(),
-          '${propertyData.id}',
-          '${data?.listingType}',
-        );
-        if (result['success']) {
-          RIEWidgets.getToast(message: result['message'], color: CustomTheme.white);
-          Get.back();
-        } else {
-          RIEWidgets.getToast(message: result['message'], color: CustomTheme.white);
-        }
-      } on Exception catch (error) {
-        RIEWidgets.getToast(message: error.toString(), color: CustomTheme.white);
-      }
     }
   }
 }

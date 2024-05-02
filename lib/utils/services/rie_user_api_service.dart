@@ -100,7 +100,7 @@ class RIEUserApiService {
           headers: await getHeaders);
       return await _response(
         response,
-        url: Uri.parse(endPoint).toString(),
+        url: Uri.parse(endPoint).path,
       );
     } on SocketException {
       log('SocketException Happened');
@@ -215,7 +215,7 @@ class RIEUserApiService {
 
   Map<String, dynamic> _getErrorResponse(decode) {
     final error = decode as Map<String, dynamic>;
-    RIEWidgets.getToast(message: 'Error :: ${error['message']}', color: const Color(0xffFF0000));
+    RIEWidgets.getToast(message: 'Error : ${error['message']}', color: const Color(0xffFF0000));
     return {'message': 'failure ${error['message']}'};
   }
 

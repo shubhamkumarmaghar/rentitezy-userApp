@@ -19,137 +19,6 @@ class MyHomePage extends StatelessWidget {
 
   MyHomePage({super.key});
 
-  Widget buildTabBar() {
-    return Obx(() => homeController.isLoadingLocation.value
-        ? Center(child: RIEWidgets.getLoader())
-        : ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: homeController.categories.length,
-            itemBuilder: (ctx, index) {
-              return GestureDetector(
-                  onTap: () {
-                    homeController.selectedIndex.value = index;
-                    homeController.locationFunc(homeController.categories[index]);
-                  },
-                  child: Obx(
-                    () => AnimatedContainer(
-                        margin: EdgeInsets.fromLTRB(index == 0 ? 15 : 5, 0, 5, 0),
-                        width: screenWidth * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                          color: index == homeController.selectedIndex.value
-                              ? Constants.primaryColor
-                              : Constants.primaryColor.withOpacity(0.1),
-                        ),
-                        duration: const Duration(milliseconds: 300),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          alignment: Alignment.center,
-                          child: Text(
-                            homeController.categories[index],
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w500,
-                              color: index == homeController.selectedIndex.value ? Colors.white : Colors.black,
-                            ),
-                          ),
-                        )),
-                  ));
-            }));
-  }
-
-  Widget searchView() {
-    return GestureDetector(
-      onTap: () {
-        Get.to(() => const SearchPropertiesScreen());
-      },
-      child: Container(
-        height: screenHeight * 0.07,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey.shade300),
-            borderRadius: BorderRadius.circular(10)),
-        child: Row(
-          children: [
-            SizedBox(
-              width: screenWidth * 0.03,
-            ),
-            Container(
-              height: screenHeight * 0.04,
-              width: screenWidth * 0.09,
-              decoration:
-                  BoxDecoration(color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(2)),
-              child: Icon(
-                Icons.location_on_outlined,
-                size: screenHeight * 0.025,
-                color: Constants.primaryColor,
-              ),
-            ),
-            SizedBox(
-              width: screenWidth * 0.03,
-            ),
-            const Text(
-              'Search Location',
-              style: TextStyle(color: Colors.grey, fontSize: 16),
-            ),
-            const Spacer(),
-            SizedBox(
-              height: screenHeight * 0.04,
-              width: screenWidth * 0.2,
-              child: ElevatedButton(
-                onPressed: () {
-                  Get.to(() => const SearchPropertiesScreen());
-                },
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Constants.primaryColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1))),
-                child: const Text('Search', style: TextStyle(color: Colors.white)),
-              ),
-            ),
-            SizedBox(
-              width: screenWidth * 0.03,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget buildOnGoingList() {
-    return FittedBox(
-      child: SizedBox(
-          height: Get.height * 0.33,
-          width: Get.width,
-          child: homeController.propertyInfoList == null
-              ? Center(child: RIEWidgets.getLoader())
-              : homeController.propertyInfoList != null && homeController.propertyInfoList!.isEmpty
-                  ? const Center(
-                      child: Text(
-                        'No Property Found!',
-                        style: TextStyle(fontSize: 18, color: Colors.black),
-                      ),
-                    )
-                  : ListView.separated(
-                      shrinkWrap: false,
-                      scrollDirection: Axis.horizontal,
-                      itemCount:
-                          homeController.propertyInfoList!.length > 5 ? 5 : homeController.propertyInfoList!.length,
-                      itemBuilder: (context, index) {
-                        return NearByPropertyScreen(
-                          propertyInfoModel: homeController.propertyInfoList![index],
-                        );
-                      },
-                      separatorBuilder: (context, index) => SizedBox(
-                        width: screenWidth * 0.05,
-                      ),
-                    )),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
@@ -170,18 +39,18 @@ class MyHomePage extends StatelessWidget {
                     WidgetSpan(
                       child: Text("Hi, ",
                           style: TextStyle(
-                              color: Constants.lightSearch,
+                              color: Colors.white,
                               fontSize: 20,
                               fontFamily: Constants.fontsFamily,
-                              fontWeight: FontWeight.bold)),
+                              fontWeight: FontWeight.w500)),
                     ),
                     WidgetSpan(
                       child: Text(homeController.userName,
                           style: TextStyle(
-                              color: Constants.lightSearch,
+                              color: Colors.white,
                               fontSize: 20,
                               fontFamily: Constants.fontsFamily,
-                              fontWeight: FontWeight.normal)),
+                              fontWeight: FontWeight.w500)),
                     ),
                   ],
                 ),
@@ -248,6 +117,137 @@ class MyHomePage extends StatelessWidget {
               ),
             ));
       },
+    );
+  }
+
+  Widget buildTabBar() {
+    return Obx(() => homeController.isLoadingLocation.value
+        ? Center(child: RIEWidgets.getLoader())
+        : ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        scrollDirection: Axis.horizontal,
+        itemCount: homeController.categories.length,
+        itemBuilder: (ctx, index) {
+          return GestureDetector(
+              onTap: () {
+                homeController.selectedIndex.value = index;
+                homeController.locationFunc(homeController.categories[index]);
+              },
+              child: Obx(
+                    () => AnimatedContainer(
+                    margin: EdgeInsets.fromLTRB(index == 0 ? 15 : 5, 0, 5, 0),
+                    width: screenWidth * 0.3,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      color: index == homeController.selectedIndex.value
+                          ? Constants.primaryColor
+                          : Constants.primaryColor.withOpacity(0.1),
+                    ),
+                    duration: const Duration(milliseconds: 300),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                      alignment: Alignment.center,
+                      child: Text(
+                        homeController.categories[index],
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 13.0,
+                          fontWeight: FontWeight.w500,
+                          color: index == homeController.selectedIndex.value ? Colors.white : Colors.black,
+                        ),
+                      ),
+                    )),
+              ));
+        }));
+  }
+
+  Widget searchView() {
+    return GestureDetector(
+      onTap: () {
+        Get.to(() => const SearchPropertiesScreen());
+      },
+      child: Container(
+        height: screenHeight * 0.07,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: Colors.grey.shade300),
+            borderRadius: BorderRadius.circular(10)),
+        child: Row(
+          children: [
+            SizedBox(
+              width: screenWidth * 0.03,
+            ),
+            Container(
+              height: screenHeight * 0.04,
+              width: screenWidth * 0.09,
+              decoration:
+              BoxDecoration(color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(2)),
+              child: Icon(
+                Icons.location_on_outlined,
+                size: screenHeight * 0.025,
+                color: Constants.primaryColor,
+              ),
+            ),
+            SizedBox(
+              width: screenWidth * 0.03,
+            ),
+            const Text(
+              'Search Location',
+              style: TextStyle(color: Colors.grey, fontSize: 16),
+            ),
+            const Spacer(),
+            SizedBox(
+              height: screenHeight * 0.04,
+              width: screenWidth * 0.2,
+              child: ElevatedButton(
+                onPressed: () {
+                  Get.to(() => const SearchPropertiesScreen());
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Constants.primaryColor,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1))),
+                child: const Text('Search', style: TextStyle(color: Colors.white)),
+              ),
+            ),
+            SizedBox(
+              width: screenWidth * 0.03,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildOnGoingList() {
+    return FittedBox(
+      child: SizedBox(
+          height: Get.height * 0.33,
+          width: Get.width,
+          child: homeController.propertyInfoList == null
+              ? Center(child: RIEWidgets.getLoader())
+              : homeController.propertyInfoList != null && homeController.propertyInfoList!.isEmpty
+              ? const Center(
+            child: Text(
+              'No Property Found!',
+              style: TextStyle(fontSize: 18, color: Colors.black),
+            ),
+          )
+              : ListView.separated(
+            shrinkWrap: false,
+            scrollDirection: Axis.horizontal,
+            itemCount:
+            homeController.propertyInfoList!.length > 5 ? 5 : homeController.propertyInfoList!.length,
+            itemBuilder: (context, index) {
+              return NearByPropertyScreen(
+                propertyInfoModel: homeController.propertyInfoList![index],
+              );
+            },
+            separatorBuilder: (context, index) => SizedBox(
+              width: screenWidth * 0.05,
+            ),
+          )),
     );
   }
 }

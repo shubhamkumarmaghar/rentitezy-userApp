@@ -8,11 +8,11 @@ import '../dashboard/controller/dashboard_controller.dart';
 
 PreferredSizeWidget appBarBooking(String title, BuildContext context, bool from, Function() onTap) {
   return AppBar(
-    toolbarHeight: 70,
+
     title: Text(
       title,
       style:
-          TextStyle(fontFamily: Constants.fontsFamily, color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+          TextStyle(fontFamily: Constants.fontsFamily, color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20),
     ),
     centerTitle: true,
     leading: IconButton(

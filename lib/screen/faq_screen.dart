@@ -83,10 +83,11 @@ class _FaqState extends State<FaqScreen> {
 
 //faqApi
   Widget listFaq() {
-    return ListView.builder(
+    return ListView.separated(
       itemBuilder: (BuildContext context, int index) => expandItemFaq(faqModelList[index]),
       itemCount: faqModelList.length,
       shrinkWrap: true,
+      separatorBuilder: (context, index) => const SizedBox(height: 15,),
       physics: const BouncingScrollPhysics(),
     );
   }
@@ -97,26 +98,41 @@ class _FaqState extends State<FaqScreen> {
       child: Theme(
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          leading: Padding(
+          title: Container(
             padding: const EdgeInsets.only(left: 5),
-            child: Text(
-              '${faqModel.id}.',
-              style: TextStyle(fontFamily: Constants.fontsFamily),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${faqModel.id}.',
+                  style: TextStyle(fontFamily: Constants.fontsFamily,color: Colors.black,fontSize: 14),
+                ),
+                SizedBox(
+                  width: screenWidth * 0.025,
+                ),
+                SizedBox(
+                  width: screenWidth * 0.68,
+                  child: Text(
+                    faqModel.question,
+                    maxLines: 4,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontFamily: Constants.fontsFamily,color: Colors.blueGrey,fontSize: 14),
+                  ),
+                ),
+              ],
             ),
           ),
-          title: Text(
-            faqModel.question,
-            style: TextStyle(fontFamily: Constants.fontsFamily),
-          ),
-          expandedAlignment: Alignment.topLeft,
-          expandedCrossAxisAlignment: CrossAxisAlignment.start,
           childrenPadding: const EdgeInsets.all(5),
           tilePadding: const EdgeInsets.all(5),
           children: [
-            Text(
-              faqModel.ans,
-              style: TextStyle(fontFamily: Constants.fontsFamily),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+              child: Text(
+                faqModel.ans,
+                style: TextStyle(fontFamily: Constants.fontsFamily),
+              ),
             ),
+            SizedBox(height: screenHeight*0.025,),
           ],
         ),
       ),
@@ -135,10 +151,14 @@ class _FaqState extends State<FaqScreen> {
         title: Text(
           'Faq',
           style: TextStyle(
-              fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
+              fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
         ),
       ),
-      body: SizedBox(width: screenWidth, height: screenHeight, child: listFaq()),
+      body: Container(
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+          width: screenWidth,
+          height: screenHeight,
+          child: listFaq()),
     );
   }
 }

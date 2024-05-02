@@ -14,7 +14,7 @@ class TicketsListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (invoked){
+      onPopInvoked: (invoked) {
         Get.find<DashboardController>().setIndex(0);
       },
       child: GetBuilder<TicketsController>(
@@ -32,10 +32,7 @@ class TicketsListScreen extends StatelessWidget {
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
               titleSpacing: -10,
               backgroundColor: Constants.primaryColor,
-              title: const Padding(
-                padding: EdgeInsets.all(10),
-                child: Text('All Tickets '),
-              ),
+              title: const Text('All Tickets', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
             ),
             backgroundColor: Colors.white,
             body: Container(

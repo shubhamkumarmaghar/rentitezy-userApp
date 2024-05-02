@@ -32,8 +32,7 @@ class WishlistScreen extends StatelessWidget {
                     style: TextStyle(
                         fontFamily: Constants.fontsFamily,
                         color: Colors.white,
-                        fontSize: 23,
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.w500, fontSize: 20),
                   ),
                   leading: IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new_rounded),
