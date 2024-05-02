@@ -1,21 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_getx_widget.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
-import 'package:path_provider/path_provider.dart';
-import '../../login/view/login_screen.dart';
 import '../const/appConfig.dart';
 import '../const/app_urls.dart';
 import '../view/rie_widgets.dart';
 
 class RIEUserApiService {
   final String _baseURL = AppUrls.baseUrl;
-  final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
   String? registeredToken;
 
   Future<String?> _getRegisteredToken() async {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/home/home_view/home_screen.dart';
 
 import '../dashboard/controller/dashboard_controller.dart';
 

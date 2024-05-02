@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -6,19 +5,15 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
-import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
-import '../../home/home_controller/home_controller.dart';
 import '../../model/checkout_model.dart';
 import '../../razorpay_payment/model/razorpay_payment_response_model.dart';
 import '../../razorpay_payment/view/razorpay_payment_view.dart';
 import '../../screen/checkout_screen.dart';
 import '../../theme/custom_theme.dart';
-import '../../utils/const/api.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../web_view/webview_payment.dart';
 import '../model/single_property_details_model.dart';
 
 class SinglePropertyDetailsController extends GetxController {

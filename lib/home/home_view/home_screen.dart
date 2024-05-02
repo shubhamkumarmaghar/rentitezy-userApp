@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/model/property_model.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
@@ -8,7 +7,6 @@ import 'package:rentitezy/screen/profile_screen_new.dart';
 import 'package:rentitezy/widgets/app_drawer.dart';
 import 'package:rentitezy/widgets/near_by_items.dart';
 import 'package:rentitezy/widgets/property_view_widget.dart';
-import 'package:rentitezy/widgets/recommend_items.dart';
 import '../../search/search_properties_screen.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';

@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:intl/intl.dart';
 import 'package:rentitezy/single_property_details/controller/single_property_details_controller.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
-import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/checkout_model.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
