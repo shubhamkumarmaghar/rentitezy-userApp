@@ -4,21 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
 // Import for Android features.
 import 'package:webview_flutter_android/webview_flutter_android.dart';
+
 // Import for iOS features.
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 class WebViewPage extends StatefulWidget {
   final String title, uri;
 
-  const WebViewPage({Key? key, required this.title, required this.uri})
-      : super(key: key);
+  const WebViewPage({Key? key, required this.title, required this.uri}) : super(key: key);
 
   @override
   InAppWebViewPageState createState() => InAppWebViewPageState();
 }
-
 
 class InAppWebViewPageState extends State<WebViewPage> {
   @override
@@ -35,8 +35,7 @@ class InAppWebViewPageState extends State<WebViewPage> {
       params = const PlatformWebViewControllerCreationParams();
     }
 
-    final WebViewController controller =
-    WebViewController.fromPlatformCreationParams(params);
+    final WebViewController controller = WebViewController.fromPlatformCreationParams(params);
     // #enddocregion platform_features
 
     controller
@@ -54,7 +53,7 @@ class InAppWebViewPageState extends State<WebViewPage> {
             debugPrint('Page finished loading: $url');
           },
           onWebResourceError: (WebResourceError error) {
-            debugPrint('''
+            log('''
 Page resource error:
   code: ${error.errorCode}
   description: ${error.description}
@@ -67,7 +66,8 @@ Page resource error:
             return NavigationDecision.navigate;
           },
           onUrlChange: (UrlChange change) {
-            debugPrint('url change to ${change.url}');},
+            debugPrint('url change to ${change.url}');
+          },
         ),
       )
       ..addJavaScriptChannel(
@@ -78,14 +78,14 @@ Page resource error:
           );
         },
       )
-      ..loadRequest(Uri.parse(widget.uri),
+      ..loadRequest(
+        Uri.parse(widget.uri),
       );
 
     // #docregion platform_features
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
-      (controller.platform as AndroidWebViewController)
-          .setMediaPlaybackRequiresUserGesture(false);
+      (controller.platform as AndroidWebViewController).setMediaPlaybackRequiresUserGesture(false);
     }
     // #enddocregion platform_features
 
@@ -93,6 +93,7 @@ Page resource error:
   }
 
   late final WebViewController _controller;
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(

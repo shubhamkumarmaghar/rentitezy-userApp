@@ -81,16 +81,13 @@ class SignUpScreen extends StatelessWidget {
                                 await controller.signUp();
                               }
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 15, bottom: 15, left: 27, right: 27),
-                              child: Text(
-                                'Sign Up',
-                                style: TextStyle(
-                                    fontFamily: Constants.fontsFamily,
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600),
-                              ),
+                            child: Text(
+                              'Sign Up',
+                              style: TextStyle(
+                                  fontFamily: Constants.fontsFamily,
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
                             )),
                       ),
                       height(0.025),

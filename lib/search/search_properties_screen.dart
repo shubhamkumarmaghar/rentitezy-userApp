@@ -135,7 +135,7 @@ class SearchPropertiesScreen extends StatelessWidget {
                                             ),
                                             height: screenHeight * 0.055,
                                             child: Text(
-                                              controller.searchedLocation[index],
+                                              controller.searchedLocation[index].capitalizeFirst.toString(),
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(

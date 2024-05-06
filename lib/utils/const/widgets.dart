@@ -126,7 +126,7 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
       imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
-              image: DecorationImage(image: imageProvider, fit: BoxFit.fill),
+              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
             ),
           ),
       placeholder: (context, url) => loading(),

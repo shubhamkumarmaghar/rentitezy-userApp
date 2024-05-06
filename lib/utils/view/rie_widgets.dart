@@ -16,7 +16,6 @@ class RIEWidgets {
             ),
             Text(
               '$message...',
-              style: TextStyle(fontFamily: 'HKGrotesk'),
             ),
           ],
         ),

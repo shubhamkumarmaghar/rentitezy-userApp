@@ -23,7 +23,7 @@ class TicketsListScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                icon: const Icon(Icons.arrow_back_ios_new_rounded,size: 18,),
                 onPressed: () {
                   Get.find<DashboardController>().setIndex(0);
                 },
@@ -31,6 +31,7 @@ class TicketsListScreen extends StatelessWidget {
               shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
               titleSpacing: -10,
+              centerTitle: true,
               backgroundColor: Constants.primaryColor,
               title: const Text('All Tickets', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
             ),
@@ -38,7 +39,7 @@ class TicketsListScreen extends StatelessWidget {
             body: Container(
               height: screenHeight,
               width: screenWidth,
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 20,bottom: 20),
               child: controller.ticketsList == null
                   ? const Center(child: CircularProgressIndicator.adaptive())
                   : controller.ticketsList != null && controller.ticketsList!.isEmpty

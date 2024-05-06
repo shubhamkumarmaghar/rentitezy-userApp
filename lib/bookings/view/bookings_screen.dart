@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
+import 'package:rentitezy/utils/functions/util_functions.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
 import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../../utils/const/widgets.dart';
 import '../../theme/custom_theme.dart';
 import '../appbar_widget.dart';
-import '../controller/my_booking_controller.dart';
+import '../controller/bookings_controller.dart';
 import 'booking_details_screen.dart';
 
-class MyBookingsScreenList extends StatelessWidget {
-  MyBookingsScreenList({super.key, required this.from});
+class BookingsScreen extends StatelessWidget {
+  BookingsScreen({super.key, required this.from});
 
   final bool from;
-  final MyBookingController bookingController = Get.put(MyBookingController());
+  final BookingsController bookingController = Get.put(BookingsController());
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<MyBookingController>(
+    return GetBuilder<BookingsController>(
       builder: (controller) {
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: appBarBooking('My Bookings', context, from, (() => refresh())),
+          appBar: appBarBooking('My Bookings', context, from, (() => bookingController.fetchMyBooking())),
           body: Container(
             height: screenHeight,
             width: screenWidth,
@@ -67,8 +68,8 @@ class MyBookingsScreenList extends StatelessWidget {
                                   ),
                                   children: [
                                     rowTxt('Amount Paid', item.amountPaid.toString()),
-                                    rowTxt('From', '${item.from?.split('T')[0]}'),
-                                    rowTxt('Till', '${item.till?.split('T')[0]}'),
+                                    rowTxt('From', getLocalTime(item.from)),
+                                    rowTxt('Till', getLocalTime(item.till)),
                                     rowTxt('No. of Guest', item.guest.toString()),
                                     Visibility(
                                       visible: item.propUnit?.listing?.property != null,
@@ -96,7 +97,7 @@ class MyBookingsScreenList extends StatelessWidget {
                                     showProgressLoader(context);
                                     await bookingController.getBookingDetails(bookingId: '${item.id}');
                                     cancelLoader();
-                                    Get.to(() => BookingDetailsPage());
+                                    Get.to(() => const BookingDetailsPage());
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -130,10 +131,6 @@ class MyBookingsScreenList extends StatelessWidget {
         );
       },
     );
-  }
-
-  void refresh() {
-    bookingController.fetchMyBooking();
   }
 
   Widget rowTxt(String title, String value) {

@@ -1,10 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/ticket/controller/create_ticket_controller.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import '../../../theme/custom_theme.dart';
-import '../../../utils/view/custom_textField_title.dart';
 import '../../utils/view/rie_widgets.dart';
 
 class CreateTicketScreen extends StatelessWidget {
@@ -25,11 +25,9 @@ class CreateTicketScreen extends StatelessWidget {
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15))),
             titleSpacing: -10,
+            centerTitle: true,
             backgroundColor: Constants.primaryColor,
-            title: const Padding(
-              padding: EdgeInsets.all(10),
-              child: Text('Create Ticket '),
-            ),
+            title: const Text('Create Ticket '),
           ),
           body: controller.isLoading
               ? const Center(child: CircularProgressIndicator.adaptive())
@@ -49,8 +47,7 @@ class CreateTicketScreen extends StatelessWidget {
                         const Text(
                           'Select Category',
                           style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                             color: Colors.black,
                           ),
                         ),
@@ -93,68 +90,91 @@ class CreateTicketScreen extends StatelessWidget {
                                     )
                                   ],
                                 ))),
-                        SizedBox(height: screenHeight * 0.02),
+                        SizedBox(height: screenHeight * 0.04),
+
+                        // const Text(
+                        //   'Select Status',
+                        //   style: TextStyle(
+                        //     fontSize: 13,
+                        //     fontWeight: FontWeight.bold,
+                        //     color: Colors.black,
+                        //   ),
+                        // ),
+                        // SizedBox(height: screenHeight * 0.01),
+                        // GestureDetector(
+                        //     onTap: () async {
+                        //       final status = await showTicketOptionsList(
+                        //           title: 'Select Status',
+                        //           context: context,
+                        //           statusList: controller.ticketStatusList ?? []);
+                        //       if (status != null) {
+                        //         controller.updateTicketStatus(status);
+                        //       }
+                        //     },
+                        //     child: Container(
+                        //         height: screenHeight * 0.06,
+                        //         padding: EdgeInsets.only(left: screenWidth * 0.04),
+                        //         alignment: Alignment.centerLeft,
+                        //         width: screenWidth,
+                        //         decoration: BoxDecoration(
+                        //           color: Colors.white,
+                        //           border: Border.all(color: Colors.grey.shade400, width: 0.5),
+                        //           borderRadius: BorderRadius.circular(10),
+                        //         ),
+                        //         child: Row(
+                        //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //           children: [
+                        //             Text(
+                        //               controller.selectedStatus ?? '',
+                        //               style: TextStyle(
+                        //                   fontSize: 16,
+                        //                   fontWeight: FontWeight.w500,
+                        //                   color: controller.selectedStatus?.toLowerCase() == 'select status'
+                        //                       ? Colors.grey
+                        //                       : Colors.black),
+                        //             ),
+                        //             const Icon(
+                        //               Icons.arrow_drop_down,
+                        //               color: Colors.grey,
+                        //             )
+                        //           ],
+                        //         ))),
+                        // SizedBox(height: screenHeight * 0.02),
                         const Text(
-                          'Select Status',
+                          'Ticket Description',
                           style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
                             color: Colors.black,
                           ),
                         ),
                         SizedBox(height: screenHeight * 0.01),
-                        GestureDetector(
-                            onTap: () async {
-                              final status = await showTicketOptionsList(
-                                  title: 'Select Status',
-                                  context: context,
-                                  statusList: controller.ticketStatusList ?? []);
-                              if (status != null) {
-                                controller.updateTicketStatus(status);
-                              }
-                            },
-                            child: Container(
-                                height: screenHeight * 0.06,
-                                padding: EdgeInsets.only(left: screenWidth * 0.04),
-                                alignment: Alignment.centerLeft,
-                                width: screenWidth,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(color: Colors.grey.shade400, width: 0.5),
-                                  borderRadius: BorderRadius.circular(10),
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                          //  color: Constants.primaryColor.withOpacity(0.1),
+                            border: Border.all(color: Colors.grey,width: 0.5)
+                          ),
+                          height: screenHeight * 0.15,
+                          child: TextField(
+                            controller: controller.ticketDescriptionController,
+                            focusNode: controller.descriptionFocusNode,
+                              keyboardType: TextInputType.multiline,
+                            maxLines: null,
+                            decoration: InputDecoration(
+                                hoverColor: Constants.hint,
+                                contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                                hintText: 'Please enter an ticket description',
+                                hintStyle: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.grey.shade400
                                 ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      controller.selectedStatus ?? '',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          color: controller.selectedStatus?.toLowerCase() == 'select status'
-                                              ? Colors.grey
-                                              : Colors.black),
-                                    ),
-                                    const Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.grey,
-                                    )
-                                  ],
-                                ))),
-                        SizedBox(height: screenHeight * 0.02),
-                        TextFieldWithTitle(
-                          title: 'Ticket  Description',
-                          controller: controller.ticketDescriptionController,
-                          inputType: TextInputType.text,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter an ticket description';
-                            } else {
-                              return null;
-                            }
-                          },
+                                border: InputBorder.none),
+                          ),
                         ),
-                        SizedBox(height: screenHeight * 0.42),
+
+                        SizedBox(height: screenHeight * 0.44),
                         Center(
                           child: GestureDetector(
                             onTap: () async {
@@ -172,25 +192,25 @@ class CreateTicketScreen extends StatelessWidget {
                                 return;
                               }
 
-                              if (controller.ticketDescriptionController.text.isEmpty) {
+                              if (controller.ticketDescriptionController.text.length < 3) {
                                 RIEWidgets.getToast(
                                     message: 'Please enter description about the ticket',
                                     color: CustomTheme.errorColor);
+                                FocusScope.of(context).requestFocus(controller.descriptionFocusNode);
                                 return;
                               }
 
-                              if (controller.selectedStatus == null || controller.selectedStatus == 'Select Status') {
-                                RIEWidgets.getToast(
-                                    message: 'Please select ticket status', color: CustomTheme.errorColor);
-                                return;
-                              }
+                              // if (controller.selectedStatus == null || controller.selectedStatus == 'Select Status') {
+                              //   RIEWidgets.getToast(
+                              //       message: 'Please select ticket status', color: CustomTheme.errorColor);
+                              //   return;
+                              // }
 
                               await controller.createTicket(
                                   ticketCate: controller.selectedCategory.toString(),
                                   ticketDesc: controller.ticketDescriptionController.text,
-                                  ticketStat: controller.selectedStatus.toString());
-
-                              Get.back();
+                                 // ticketStat: controller.selectedStatus.toString()
+                               );
                             },
                             child: Container(
                               alignment: Alignment.center,

@@ -51,7 +51,7 @@ class UpdateProfilePage extends StatelessWidget {
                                         )
                                       : Image.network(
                                           controller.imagePath!,
-                                          fit: BoxFit.fill,
+                                          fit: BoxFit.cover,
                                         )),
                             ),
                             Positioned(

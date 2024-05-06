@@ -53,15 +53,6 @@ class MyHomePage extends StatelessWidget {
                   ],
                 ),
               ),
-              actions: [
-                GestureDetector(
-                  onTap: () => Get.to(const ProfileScreenNew()),
-                  child: const Icon(Icons.settings),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-              ],
             ),
             body: Container(
               height: screenHeight,

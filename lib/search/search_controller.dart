@@ -33,6 +33,7 @@ class SearchPropertiesController extends GetxController {
   }
 
   void onLocationTextChanged(String text) {
+    searchedLocation.clear();
     searchedLocation.add(text);
     showSuggestion = true;
     if (text.isEmpty) {

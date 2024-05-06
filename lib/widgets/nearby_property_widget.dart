@@ -97,8 +97,8 @@ class NearByPropertyWidget extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,
                             style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
                               color: Constants.primaryColor,
                             ),
                           )),

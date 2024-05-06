@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
 import 'package:rentitezy/home/home_view/home_screen.dart';
+import 'package:rentitezy/social/view/app_social_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/ticket/view/tickets_list_screen.dart';
+import 'package:unicons/unicons.dart';
 
 import '../../utils/const/appConfig.dart';
 import '../../wishlist/wishlist_screen.dart';
@@ -21,8 +23,10 @@ class DashboardView extends StatelessWidget {
           bottomNavigationBar: BottomNavigationBar(
             elevation: 0,
             onTap: (value) => controller.setIndex(value),
+            type: BottomNavigationBarType.fixed,
             currentIndex: controller.selectedIndex,
-            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
+            fixedColor: Constants.primaryColor,
+            selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15),
             unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
             items: barItemsList(selectedIndex: controller.selectedIndex),
           ),
@@ -38,6 +42,8 @@ class DashboardView extends StatelessWidget {
       return const WishlistScreen();
     } else if (index == 2) {
       return const TicketsListScreen();
+    } else if (index == 3) {
+      return const AppSocialScreen();
     } else {
       return const Text('RentsEasy');
     }
@@ -47,7 +53,8 @@ class DashboardView extends StatelessWidget {
     return [
       barItem(icon: Icons.home, label: 'Home', selected: selectedIndex == 0),
       barItem(icon: Icons.favorite_border, label: 'Wishlist', selected: selectedIndex == 1),
-      barItem(icon: Icons.add_chart_sharp, label: 'Tickets', selected: selectedIndex == 2),
+      barItem(icon: UniconsLine.ticket, label: 'Tickets', selected: selectedIndex == 2),
+      barItem(icon: UniconsLine.webcam, label: 'Social', selected: selectedIndex == 3),
     ];
   }
 
@@ -58,7 +65,7 @@ class DashboardView extends StatelessWidget {
         child: Icon(
           icon,
           size: 24,
-          color: selected ? Colors.white : CustomTheme.appThemeContrast.withOpacity(0.8),
+          color: selected ? Colors.white : CustomTheme.appThemeContrast.withOpacity(0.7),
         ),
       ),
       label: label,

@@ -11,9 +11,10 @@ import 'package:rentitezy/model/user_model.dart';
 import 'package:rentitezy/web_view/webview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../bookings/controller/my_booking_controller.dart';
+import '../bookings/controller/bookings_controller.dart';
 import '../utils/const/app_urls.dart';
 import '../utils/const/widgets.dart';
+import '../utils/functions/util_functions.dart';
 import 'faq_screen.dart';
 
 class ProfileScreenNew extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
   final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
   TextEditingController askQController = TextEditingController();
   TenantModel? tenantModel;
-  final bookingController = Get.put(MyBookingController());
+  final bookingController = Get.put(BookingsController());
 
   bool isTenant = false;
   String userId = GetStorage().read(Constants.userId);
@@ -319,7 +320,7 @@ class _MyProfileState extends State<ProfileScreenNew> {
         ),
         leading: IconButton(
             onPressed: () {
-              openDialPad(title, context);
+              openDialPad(title);
             },
             icon: Container(
               height: 30,

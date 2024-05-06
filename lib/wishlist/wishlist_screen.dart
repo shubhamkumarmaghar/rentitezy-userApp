@@ -28,14 +28,15 @@ class WishlistScreen extends StatelessWidget {
                           BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
                   backgroundColor: Constants.primaryColor,
                   title: Text(
-                    'My Favorite',
+                    'Wishlist',
                     style: TextStyle(
                         fontFamily: Constants.fontsFamily,
                         color: Colors.white,
+                        letterSpacing: 1,
                         fontWeight: FontWeight.w500, fontSize: 20),
                   ),
                   leading: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                    icon: const Icon(Icons.arrow_back_ios_new_rounded,size: 18,),
                     onPressed: () {
                       Get.find<DashboardController>().setIndex(0);
                     },
@@ -43,7 +44,7 @@ class WishlistScreen extends StatelessWidget {
               body: Container(
                 height: screenHeight,
                 width: screenWidth,
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 20,bottom: 20),
                 child: controller.wishListedPropertyList == null
                     ? const Center(child: CircularProgressIndicator.adaptive())
                     : controller.wishListedPropertyList != null && controller.wishListedPropertyList!.isEmpty

@@ -36,8 +36,8 @@ Widget getMenuSideBar({required Widget leading, required Text title, required Fu
           const Spacer(),
           trailing ??
               Icon(
-                Icons.arrow_forward_ios_rounded,
-                size: 16,
+                Icons.arrow_right,
+                size: 22,
                 color: Colors.grey.shade400,
               ),
           SizedBox(

@@ -6,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/login/view/login_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
+import 'package:rentitezy/utils/view/rie_widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -265,11 +266,3 @@ getDayCount(dateVal) {
           : (addFive.difference(dateCurrent).inDays).toString();
 }
 
-openDialPad(String phoneNumber, BuildContext context) async {
-  Uri url = Uri(scheme: "tel", path: phoneNumber);
-  if (await canLaunchUrl(url)) {
-    await launchUrl(url);
-  } else {
-    showSnackBar(context, 'Can not open dial pad.');
-  }
-}

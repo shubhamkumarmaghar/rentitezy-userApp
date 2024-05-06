@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-import '../bookings/view/my_booking_screen_list.dart';
+import 'package:unicons/unicons.dart';
+import '../bookings/view/bookings_screen.dart';
 import '../login/view/login_screen.dart';
 import '../pdf/pdf_api.dart';
 import '../pdf/pdf_new.dart';
@@ -17,9 +18,9 @@ import '../utils/styles/menu_text_style.dart';
 import 'menu_side_bar_widget.dart';
 
 class AppDrawer extends StatelessWidget {
-  final String userName = GetStorage().read(Constants.usernamekey);
+  final String userName = GetStorage().read(Constants.usernamekey) ??'';
   final String userId = GetStorage().read(Constants.userId) ?? "guest";
-  final bool isTenant = GetStorage().read(Constants.isTenant);
+  final bool isTenant = GetStorage().read(Constants.isTenant) ?? false;
 
   final AgreementDet tempPdf = AgreementDet(
       'Residential Rental Agreement',
@@ -67,9 +68,10 @@ class AppDrawer extends StatelessWidget {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(screenHeight * 0.07),
                     child: imgLoadWid(GetStorage().read(Constants.profileUrl), 'assets/images/user_vec.png',
-                        screenHeight * 0.11, screenWidth * 0.24, BoxFit.fill),
+                        screenHeight * 0.11, screenWidth * 0.24, BoxFit.cover),
                   ),
                   height(0.015),
+
                   Text(
                     userName,
                     maxLines: 2,
@@ -103,7 +105,7 @@ class AppDrawer extends StatelessWidget {
             ),
             title: Text('My Bookings ', style: menuTextStyle()),
             onTap: () {
-              Get.to(() => MyBookingsScreenList(
+              Get.to(() => BookingsScreen(
                     from: false,
                   ));
             },

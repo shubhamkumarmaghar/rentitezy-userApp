@@ -11,14 +11,16 @@ import '../../utils/const/app_urls.dart';
 
 class CreateTicketScreenController extends GetxController {
   List<String> ticketCategoriesList = [];
-  List<String> ticketStatusList = [];
+
+  //List<String> ticketStatusList = [];
   bool isLoading = false;
   final RIEUserApiService _apiService = RIEUserApiService();
   final String bookingId;
   String? selectedCategory = 'Select Category';
-  String? selectedStatus = 'Select Status';
-  final ticketDescriptionController = TextEditingController();
 
+  //String? selectedStatus = 'Select Status';
+  final ticketDescriptionController = TextEditingController();
+  FocusNode descriptionFocusNode = FocusNode();
   CreateTicketScreenController({required this.bookingId});
 
   @override
@@ -27,10 +29,15 @@ class CreateTicketScreenController extends GetxController {
     fetchTicketConfigListDetails();
   }
 
-  void updateTicketStatus(String? status) {
-    selectedStatus = status?.capitalizeFirst;
-    update();
-  }
+  // void updateTicketStatus(String? status) {
+  //   selectedStatus = status?.capitalizeFirst;
+  //   update();
+  // }
+
+  // void onStatusChange(String? status) {
+  //   selectedStatus = status;
+  //   update();
+  // }
 
   void updateTicketCategory(String? category) {
     selectedCategory = category?.capitalizeFirst;
@@ -47,7 +54,7 @@ class CreateTicketScreenController extends GetxController {
     if (data['message'].toString().toLowerCase().contains('success')) {
       final configModel = TicketDetailsModel.fromJson(data['data']);
       ticketCategoriesList = configModel.categories ?? [];
-      ticketStatusList = configModel.status ?? [];
+      //ticketStatusList = configModel.status ?? [];
       update();
     } else {
       isLoading = false;
@@ -60,15 +67,10 @@ class CreateTicketScreenController extends GetxController {
     update();
   }
 
-  void onStatusChange(String? status) {
-    selectedStatus = status;
-    update();
-  }
-
   Future<void> createTicket({
     required String ticketCate,
     required String ticketDesc,
-    required String ticketStat,
+    //required String ticketStat,
   }) async {
     showProgressLoader(Get.context!);
     String url = AppUrls.ticket;
@@ -76,7 +78,7 @@ class CreateTicketScreenController extends GetxController {
       "bookingId": bookingId,
       "category": ticketCate,
       "description": ticketDesc,
-      "status": ticketStat.toLowerCase(),
+      "status": 'active',
     });
     cancelLoader();
 

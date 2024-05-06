@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import '../single_property_details/view/single_properties_screen_new.dart';
 import '../utils/const/appConfig.dart';
+import '../utils/functions/util_functions.dart';
 import '../utils/model/property_model.dart';
 import '../utils/services/utils_api_service.dart';
 
@@ -21,11 +24,18 @@ class PropertyViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool navigateToMap = false;
     List<String> images = [
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmcZfrx5HCXD6E0ROTB5onJjhxJp7u-ntyo2BbyVTgPw&s'
     ];
     if (propertyInfoModel.images != null && propertyInfoModel.images!.isNotEmpty) {
       images = propertyInfoModel.images!.map((e) => e.url ?? '').toList();
+    }
+    if (propertyInfoModel.property?.latlng != null) {
+      if (propertyInfoModel.property?.latlng != '' &&
+          propertyInfoModel.property?.latlng!.contains('undefined') == false) {
+        navigateToMap = true;
+      }
     }
     return Container(
       color: Colors.white,
@@ -147,16 +157,53 @@ class PropertyViewWidget extends StatelessWidget {
                 ],
               ),
               height(0.01),
-              Container(
-                  width: screenWidth * 0.88,
-                  padding: EdgeInsets.only(left: screenWidth * 0.023, right: screenWidth * 0.023),
-                  child: Text(
-                    '${propertyInfoModel.title}',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style:
-                        const TextStyle(fontSize: 20, color: Colors.black, wordSpacing: 3, fontWeight: FontWeight.w500),
-                  )),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      width: screenWidth * 0.7,
+                      padding: EdgeInsets.only(left: screenWidth * 0.023, right: screenWidth * 0.023),
+                      child: Text(
+                        '${propertyInfoModel.title}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 20, color: Colors.black, wordSpacing: 3, fontWeight: FontWeight.w500),
+                      )),
+                  Visibility(
+                    visible: navigateToMap,
+                    replacement: const SizedBox.shrink(),
+                    child: GestureDetector(
+                      onTap: () => homeController.navigateToMap(propertyInfoModel.property?.latlng),
+                      child: Container(
+                        margin: EdgeInsets.only(
+                          right: screenWidth * 0.015
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01, vertical: screenHeight * 0.002),
+                        decoration: BoxDecoration(
+                            color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              size: getScreenWidth * 0.04,
+                              color: Constants.primaryColor,
+                            ),
+                            SizedBox(
+                              width: getScreenWidth * 0.01,
+                            ),
+                            Text(
+                              'Map',
+                              style:
+                                  TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Constants.primaryColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               height(0.006),
               Container(
                 padding: EdgeInsets.only(left: screenWidth * 0.023),
@@ -221,18 +268,19 @@ class PropertyViewWidget extends StatelessWidget {
                             )
                           ],
                         ),
-                        child: Text('Available From : ${getLocalTime(propertyInfoModel.availFrom ?? '')}',
-                            style:
-                                const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))),
+                        child: Text('Available From : ${getLocalTime(propertyInfoModel.availFrom)}',
+                            style: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))),
                     Visibility(
                       visible: propertyInfoModel.furnishType != null,
                       replacement: const SizedBox.shrink(),
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.015, vertical: screenHeight * 0.005),
                         decoration: BoxDecoration(
-                            color: CustomTheme.appThemeContrast.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
+                            color: CustomTheme.appThemeContrast.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(5)),
                         child: Text('${propertyInfoModel.furnishType.toString().capitalizeFirst}-Furnished',
-                            style: TextStyle(color: CustomTheme.appThemeContrast, fontSize: 12, fontWeight: FontWeight.w500)),
+                            style: TextStyle(
+                                color: CustomTheme.appThemeContrast, fontSize: 12, fontWeight: FontWeight.w500)),
                       ),
                     ),
                   ],
@@ -243,19 +291,6 @@ class PropertyViewWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String getLocalTime(String dateTime) {
-    if (dateTime.isEmpty) {
-      return 'NA';
-    }
-    var date = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(dateTime, true);
-    var showDate = '${date.toLocal().year}-${handleZero(date.toLocal().month)}-${handleZero(date.toLocal().day)}';
-    return showDate;
-  }
-
-  String handleZero(int data) {
-    return data < 10 ? '0$data' : data.toString();
   }
 
   Widget iconWidget(String name) {
