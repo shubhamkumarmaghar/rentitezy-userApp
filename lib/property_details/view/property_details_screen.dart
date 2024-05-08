@@ -10,6 +10,7 @@ import 'package:rentitezy/property_details/controller/property_details_controlle
 import 'package:rentitezy/property_details/model/property_details_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:rentitezy/utils/enums/rent_type.dart';
+import 'package:rentitezy/utils/view/rie_widgets.dart';
 import 'package:unicons/unicons.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
@@ -26,6 +27,33 @@ class PropertyDetailsScreen extends StatelessWidget {
       init: PropertyDetailsController(propertyId: propertyId),
       builder: (controller) {
         final data = controller.propertyDetailsModel;
+        if (data == null) {
+          return Scaffold(
+            body: SizedBox(
+                height: screenHeight,
+                width: screenWidth,
+                child: const Center(child: CircularProgressIndicator.adaptive())),
+          );
+        } else if (data.propId == null) {
+          return Scaffold(
+            body: Container(
+              height: screenHeight * 0.55,
+              width: screenWidth,
+              padding: const EdgeInsets.only(left: 15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: screenHeight * 0.06,
+                  ),
+                  goBackWidget(arrowColor: Colors.white, backgroundColor: Constants.primaryColor),
+                  const Spacer(),
+                  RIEWidgets.noData(message: 'No Details found !'),
+                ],
+              ),
+            ),
+          );
+        }
         return Scaffold(
           appBar: AppBar(
             toolbarHeight: 0,
@@ -85,14 +113,14 @@ class PropertyDetailsScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
-                      data?.title ?? '',
+                      data.title ?? '',
                       style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Text(
-                      data?.property?.name ?? '',
+                      data.property?.name ?? '',
                       style: const TextStyle(
                           fontWeight: FontWeight.w400, fontSize: 14, color: CustomTheme.propertyTextColor),
                     ),
@@ -115,7 +143,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Visibility(
-                        visible: data?.availFrom != null,
+                        visible: data.availFrom != null,
                         replacement: const Row(
                           children: [
                             Text('Not Available',
@@ -135,7 +163,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                           children: [
                             const Text('Available From',
                                 style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500)),
-                            Text(getLocalTime(data?.availFrom),
+                            Text(getLocalTime(data.availFrom),
                                 style: TextStyle(
                                     color: Colors.blueGrey.shade500, fontSize: 16, fontWeight: FontWeight.w500)),
                           ],
@@ -512,24 +540,7 @@ class PropertyDetailsScreen extends StatelessWidget {
         Positioned(
           left: screenWidth * 0.03,
           top: screenHeight * 0.015,
-          child: GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              height: screenHeight * 0.045,
-              width: screenWidth * 0.1,
-              decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Platform.isIOS ? Icons.arrow_back_ios_new : Icons.arrow_back,
-                    color: Constants.primaryColor,
-                    size: 18,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          child: goBackWidget(),
         ),
         Positioned(
           right: screenWidth * 0.03,
@@ -644,34 +655,62 @@ class PropertyDetailsScreen extends StatelessWidget {
     );
   }
 
+  Widget goBackWidget({Color? arrowColor, Color? backgroundColor}) {
+    return GestureDetector(
+      onTap: () => Get.back(),
+      child: Container(
+        height: screenHeight * 0.045,
+        width: screenWidth * 0.1,
+        decoration: BoxDecoration(color: backgroundColor ?? Colors.white, borderRadius: BorderRadius.circular(50)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Icon(
+              Platform.isIOS ? Icons.arrow_back_ios_new : Icons.arrow_back,
+              color: arrowColor ?? Constants.primaryColor,
+              size: 18,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget propertyLocation({required PropertyDetailsController controller, PropertyDetailsModel? model}) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Row(
-        children: [
-          Icon(UniconsLine.map_pin_alt, size: 20, color: Constants.primaryColor),
-          SizedBox(
-            width: screenWidth * 0.01,
+    return Visibility(
+      visible: model?.property?.address != null,
+      replacement: const SizedBox.shrink(),
+      child: GestureDetector(
+        onTap:() => controller.navigateToMap(model?.property?.latlng),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Row(
+            children: [
+              Icon(UniconsLine.map_pin_alt, size: 20, color: Constants.primaryColor),
+              SizedBox(
+                width: screenWidth * 0.01,
+              ),
+              SizedBox(
+                width: screenWidth * 0.7,
+                child: Text(
+                  model?.property?.address ?? '',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.blueGrey.shade500),
+                ),
+              ),
+              const Spacer(),
+              Container(
+                padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
+                decoration:
+                    BoxDecoration(color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
+                child: Icon(
+                  Icons.arrow_forward_rounded,
+                  color: Constants.primaryColor,
+                  size: 20,
+                ),
+              )
+            ],
           ),
-          SizedBox(
-            width: screenWidth * 0.7,
-            child: Text(
-              model?.property?.address ?? '',
-              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.blueGrey.shade500),
-            ),
-          ),
-          const Spacer(),
-          Container(
-            padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-            decoration:
-                BoxDecoration(color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
-            child: Icon(
-              Icons.arrow_forward_rounded,
-              color: Constants.primaryColor,
-              size: 20,
-            ),
-          )
-        ],
+        ),
       ),
     );
   }

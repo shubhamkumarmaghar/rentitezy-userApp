@@ -11,6 +11,9 @@ import 'package:http/http.dart' as http;
 
 import '../../utils/const/app_urls.dart';
 import '../../utils/model/property_model.dart';
+import '../theme/custom_theme.dart';
+import '../utils/services/rie_user_api_service.dart';
+import '../utils/view/rie_widgets.dart';
 
 class SearchPropertiesController extends GetxController {
   var isLoading = false;
@@ -20,6 +23,17 @@ class SearchPropertiesController extends GetxController {
   List<PropertyInfoModel>? searchedPropertyList;
   var apiPropertyList = <PropertySingleData>[].obs;
   List<String> searchedLocation = [];
+  final List<String> locationsList;
+  final RIEUserApiService apiService = RIEUserApiService();
+
+  SearchPropertiesController(this.locationsList);
+
+  @override
+  void onInit() {
+    super.onInit();
+    searchedLocation.addAll(locationsList);
+    fetchProperties();
+  }
 
   @override
   void onClose() {
@@ -33,11 +47,13 @@ class SearchPropertiesController extends GetxController {
   }
 
   void onLocationTextChanged(String text) {
-    searchedLocation.clear();
-    searchedLocation.add(text);
+    //searchedLocation.clear();
+    // searchedLocation.add(text);
+    searchedLocation[0] = text;
     showSuggestion = true;
     if (text.isEmpty) {
-      searchedLocation.clear();
+      //searchedLocation.clear();
+      fetchProperties();
       showSuggestion = false;
     }
     update();
@@ -46,30 +62,22 @@ class SearchPropertiesController extends GetxController {
   void fetchProperties() async {
     isLoading = true;
     update();
-    String searchUrl = '${AppUrls.listing}?location=${searchQuery.text}';
-    log('param :: $searchUrl');
-    final response = await http.get(
-      Uri.parse(searchUrl),
-      headers: <String, String>{"Auth-Token": GetStorage().read(Constants.token).toString()},
-    );
-    isLoading = false;
-    if (response.statusCode == 200) {
-      var body = jsonDecode(response.body);
-      String success = body["message"];
-      if (success.toString().toLowerCase() == 'success') {
-        if (body['data'] != null) {
-          Iterable iterable = body['data'];
-
-          searchedPropertyList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
-        } else {
-          searchedPropertyList = [];
-        }
-      }
-      showSuggestion = false;
-      update();
-    } else {
-      Get.snackbar("Error", 'Error during fetch api data');
+    String url = '${AppUrls.listing}?available=true&location=${searchQuery.text}';
+    if (searchQuery.text.trim().isEmpty) {
+      url = '${AppUrls.listing}?available=true';
     }
+    final response = await apiService.getApiCallWithURL(endPoint: url);
+
+    isLoading = false;
+    if (response["message"].toString().toLowerCase().contains('success') && response['data'] != null) {
+      Iterable iterable = response['data'];
+      searchedPropertyList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
+    } else {
+      searchedPropertyList = [];
+      RIEWidgets.getToast(message: response["message"] ?? 'Something went wrong!', color: CustomTheme.errorColor);
+    }
+    log('length ${searchedPropertyList?.length}');
+    update();
   }
 
   @override

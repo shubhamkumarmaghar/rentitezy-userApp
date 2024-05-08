@@ -14,6 +14,7 @@ import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/const/widgets.dart';
+import '../../utils/functions/util_functions.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/view/rie_widgets.dart';
 
@@ -42,7 +43,6 @@ class PropertyDetailsController extends GetxController {
 
   Future<void> fetchPropertyDetails() async {
     String url = '${AppUrls.listingDetail}?id=$propertyId';
-
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
     if (response['message'].toLowerCase().contains('success') && response['data'] != null) {
@@ -52,8 +52,19 @@ class PropertyDetailsController extends GetxController {
           propertyDetailsModel!.images!.isNotEmpty) {
         propertyImages = propertyDetailsModel!.images!.map((e) => e.url ?? '').toList();
       }
-      update();
-    } else {}
+    } else {
+      propertyDetailsModel = PropertyDetailsModel(propId: null);
+      RIEWidgets.getToast(message: response["message"].toString(), color: CustomTheme.errorColor);
+    }
+    update();
+  }
+
+  Future<void> navigateToMap(String? latLang) async {
+    if (latLang == null || latLang.isEmpty) {
+      return;
+    }
+    List<String> locationList = latLang.split(',');
+    navigateToNativeMap(lat: locationList[0], long: locationList[1]);
   }
 
   void submitSiteVisit() async {
@@ -66,13 +77,6 @@ class PropertyDetailsController extends GetxController {
       'type': radioGroupValue.toLowerCase(),
       'source': 'app'
     });
-    log('ggg ${{
-      'phone': phoneController.text,
-      'listingId': propertyId,
-      'date': selectedDate.toString(),
-      'type': radioGroupValue.toLowerCase(),
-      'source': 'app'
-    }.toString()}');
     cancelLoader();
     if (response["message"].toString().toLowerCase() == 'success') {
       RIEWidgets.getToast(message: 'You have successfully scheduled site visit', color: CustomTheme.myFavColor);

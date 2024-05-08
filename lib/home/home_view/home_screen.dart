@@ -157,7 +157,7 @@ class MyHomePage extends StatelessWidget {
   Widget searchView() {
     return GestureDetector(
       onTap: () {
-        Get.to(() => const SearchPropertiesScreen());
+        Get.to(() => SearchPropertiesScreen(locationsList: homeController.categories,));
       },
       child: Container(
         height: screenHeight * 0.07,
@@ -194,7 +194,7 @@ class MyHomePage extends StatelessWidget {
               width: screenWidth * 0.2,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => const SearchPropertiesScreen());
+                  Get.to(() => SearchPropertiesScreen(locationsList: homeController.categories));
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Constants.primaryColor,
