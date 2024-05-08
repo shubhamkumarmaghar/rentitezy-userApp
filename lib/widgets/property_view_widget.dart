@@ -1,14 +1,11 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
+import '../property_details/view/property_details_screen.dart';
 import '../single_property_details/view/single_properties_screen_new.dart';
 import '../utils/const/appConfig.dart';
 import '../utils/functions/util_functions.dart';
@@ -43,11 +40,7 @@ class PropertyViewWidget extends StatelessWidget {
       padding: EdgeInsets.only(bottom: screenHeight * 0.015),
       child: GestureDetector(
         onTap: () {
-          Get.to(
-              () => PropertiesDetailsPageNew(
-                    propertyId: '${propertyInfoModel.id}',
-                  ),
-              arguments: '${propertyInfoModel.id}');
+          Get.to(()=>PropertyDetailsScreen(propertyId: propertyInfoModel.id?.toString() ??''));
         },
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -92,7 +85,13 @@ class PropertyViewWidget extends StatelessWidget {
                                           image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                                         ),
                                       ),
-                                  placeholder: (context, url) => loading(),
+                                  placeholder: (context, url) => Container(
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          image: DecorationImage(
+                                              image: AssetImage('assets/images/dummy_image.png'), fit: BoxFit.contain),
+                                        ),
+                                      ),
                                   errorWidget: (context, url, error) => Container(
                                         decoration: const BoxDecoration(
                                           shape: BoxShape.rectangle,
@@ -142,7 +141,7 @@ class PropertyViewWidget extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           const Icon(
-                            Icons.photo_camera,
+                            Icons.image_outlined,
                             color: Colors.white,
                             size: 16,
                           ),
@@ -176,9 +175,7 @@ class PropertyViewWidget extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () => homeController.navigateToMap(propertyInfoModel.property?.latlng),
                       child: Container(
-                        margin: EdgeInsets.only(
-                          right: screenWidth * 0.015
-                        ),
+                        margin: EdgeInsets.only(right: screenWidth * 0.015),
                         padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01, vertical: screenHeight * 0.002),
                         decoration: BoxDecoration(
                             color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),

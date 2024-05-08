@@ -7,7 +7,7 @@ import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/model/property_model.dart';
 import 'package:rentitezy/utils/services/utils_api_service.dart';
-import '../single_property_details/view/single_properties_screen_new.dart';
+import '../property_details/view/property_details_screen.dart';
 import '../utils/const/widgets.dart';
 
 class NearByPropertyWidget extends StatelessWidget {
@@ -27,12 +27,7 @@ class NearByPropertyWidget extends StatelessWidget {
       builder: (controller) {
         return GestureDetector(
           onTap: () async {
-            Get.to(
-              () => PropertiesDetailsPageNew(
-                propertyId: propertyInfoModel.id.toString(),
-              ),
-              arguments: propertyInfoModel.id.toString(),
-            );
+            Get.to(()=>PropertyDetailsScreen(propertyId: propertyInfoModel.id?.toString() ??''));
           },
           child: Container(
             padding: EdgeInsets.only(left: screenWidth * 0.005),

@@ -114,6 +114,7 @@ class Constants {
   static Color greyLight = getColorFromHex('CDCDCD');
   static Color navBg = getColorFromHex('D9D9D9');
   static Color green = getColorFromHex('26C000');
+
   static Color getColorFromHex(String colors) {
     var color = "0xFF$colors";
     try {

@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         ),
         //primarySwatch: Colors.blue,
         appBarTheme: AppBarTheme(
-          backgroundColor: CustomTheme.blue,
+          backgroundColor: Constants.primaryColor,
         ),
       ),
       //home: const ForgotScreen(),
