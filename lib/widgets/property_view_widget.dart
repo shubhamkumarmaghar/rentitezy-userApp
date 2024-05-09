@@ -36,7 +36,7 @@ class PropertyViewWidget extends StatelessWidget {
     }
     return Container(
       color: Colors.white,
-      height: screenHeight * 0.46,
+      height: screenHeight * 0.49,
       padding: EdgeInsets.only(bottom: screenHeight * 0.015),
       child: GestureDetector(
         onTap: () {

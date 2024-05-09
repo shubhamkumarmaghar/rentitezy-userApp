@@ -214,7 +214,7 @@ class MyHomePage extends StatelessWidget {
   Widget nearByPropertiesList() {
     return FittedBox(
       child: SizedBox(
-          height: Get.height * 0.33,
+          height: Get.height * 0.35,
           width: Get.width,
           child: homeController.propertyInfoList == null
               ? Center(child: RIEWidgets.getLoader())
