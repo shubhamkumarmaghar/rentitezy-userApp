@@ -8,6 +8,7 @@ import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/functions/util_functions.dart';
 import '../../web_view/webview.dart';
+import '../../widgets/app_bar.dart';
 
 class AppSocialScreen extends StatelessWidget {
   const AppSocialScreen({super.key});
@@ -20,22 +21,10 @@ class AppSocialScreen extends StatelessWidget {
         Get.find<DashboardController>().setIndex(0);
       },
       child: Scaffold(
-        appBar: AppBar(
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-            backgroundColor: Constants.primaryColor,
-            titleSpacing: -7,
-            centerTitle: true,
-            title: const Text(
-              'Social',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20),
-            ),
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded,size: 18,),
-              onPressed: () {
-                Get.find<DashboardController>().setIndex(0);
-              },
-            )),
+        appBar: appBarWidget(
+          title: 'Social',
+          onBack: () => Get.find<DashboardController>().setIndex(0),
+        ),
         body: Container(
           height: screenHeight,
           width: screenWidth,

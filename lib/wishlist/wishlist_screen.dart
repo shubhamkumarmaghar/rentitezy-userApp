@@ -4,6 +4,7 @@ import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import '../../utils/const/widgets.dart';
 import '../utils/view/rie_widgets.dart';
+import '../widgets/app_bar.dart';
 import '../widgets/property_view_widget.dart';
 import 'wishlist_controller.dart';
 
@@ -21,30 +22,14 @@ class WishlistScreen extends StatelessWidget {
         init: WishlistController(),
         builder: (controller) {
           return Scaffold(
-              appBar: AppBar(
-                  centerTitle: true,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-                  backgroundColor: Constants.primaryColor,
-                  title: Text(
-                    'Wishlist',
-                    style: TextStyle(
-                        fontFamily: Constants.fontsFamily,
-                        color: Colors.white,
-                        letterSpacing: 1,
-                        fontWeight: FontWeight.w500, fontSize: 20),
-                  ),
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded,size: 18,),
-                    onPressed: () {
-                      Get.find<DashboardController>().setIndex(0);
-                    },
-                  )),
+              appBar: appBarWidget(
+                title: 'Wishlist',
+                onBack: () => Get.find<DashboardController>().setIndex(0),
+              ),
               body: Container(
                 height: screenHeight,
                 width: screenWidth,
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 20,bottom: 20),
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 20, bottom: 20),
                 child: controller.wishListedPropertyList == null
                     ? const Center(child: CircularProgressIndicator.adaptive())
                     : controller.wishListedPropertyList != null && controller.wishListedPropertyList!.isEmpty

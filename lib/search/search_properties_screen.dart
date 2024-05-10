@@ -4,6 +4,7 @@ import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import '../../widgets/property_view_widget.dart';
+import '../widgets/app_bar.dart';
 import 'search_controller.dart';
 
 class SearchPropertiesScreen extends StatelessWidget {
@@ -17,30 +18,9 @@ class SearchPropertiesScreen extends StatelessWidget {
       init: SearchPropertiesController(locationsList),
       builder: (controller) {
         return Scaffold(
-          appBar: AppBar(
-              centerTitle: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(20),
-                ),
-              ),
-              backgroundColor: Constants.primaryColor,
-              title: Text(
-                'Search Properties',
-                style: TextStyle(
-                    fontFamily: Constants.fontsFamily,
-                    color: Colors.white,
-                    letterSpacing: 1,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20),
-              ),
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  size: 18,
-                ),
-                onPressed: () => Get.back(),
-              )),
+          appBar: appBarWidget(
+            title: 'Search Properties',
+          ),
           body: Container(
             padding: EdgeInsets.only(
               left: screenWidth * 0.03,

@@ -4,6 +4,8 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/faq_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 
+import '../widgets/app_bar.dart';
+
 class FaqScreen extends StatefulWidget {
   const FaqScreen({super.key});
 
@@ -81,13 +83,29 @@ class _FaqState extends State<FaqScreen> {
     super.initState();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appBarWidget(
+        title: 'Faq',
+      ),
+      body: Container(
+          padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+          width: screenWidth,
+          height: screenHeight,
+          child: listFaq()),
+    );
+  }
+
 //faqApi
   Widget listFaq() {
     return ListView.separated(
       itemBuilder: (BuildContext context, int index) => expandItemFaq(faqModelList[index]),
       itemCount: faqModelList.length,
       shrinkWrap: true,
-      separatorBuilder: (context, index) => const SizedBox(height: 15,),
+      separatorBuilder: (context, index) => const SizedBox(
+        height: 15,
+      ),
       physics: const BouncingScrollPhysics(),
     );
   }
@@ -105,7 +123,7 @@ class _FaqState extends State<FaqScreen> {
               children: [
                 Text(
                   '${faqModel.id}.',
-                  style: TextStyle(fontFamily: Constants.fontsFamily,color: Colors.black,fontSize: 14),
+                  style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.black, fontSize: 14),
                 ),
                 SizedBox(
                   width: screenWidth * 0.025,
@@ -116,7 +134,7 @@ class _FaqState extends State<FaqScreen> {
                     faqModel.question,
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontFamily: Constants.fontsFamily,color: Colors.blueGrey,fontSize: 14),
+                    style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.blueGrey, fontSize: 14),
                   ),
                 ),
               ],
@@ -132,33 +150,12 @@ class _FaqState extends State<FaqScreen> {
                 style: TextStyle(fontFamily: Constants.fontsFamily),
               ),
             ),
-            SizedBox(height: screenHeight*0.025,),
+            SizedBox(
+              height: screenHeight * 0.025,
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Constants.primaryColor,
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-        titleSpacing: -10,
-        title: Text(
-          'Faq',
-          style: TextStyle(
-              fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-        ),
-      ),
-      body: Container(
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-          width: screenWidth,
-          height: screenHeight,
-          child: listFaq()),
     );
   }
 }

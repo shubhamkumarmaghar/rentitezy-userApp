@@ -6,7 +6,6 @@ import 'package:rentitezy/home/home_controller/home_controller.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import '../property_details/view/property_details_screen.dart';
-import '../single_property_details/view/single_properties_screen_new.dart';
 import '../utils/const/appConfig.dart';
 import '../utils/functions/util_functions.dart';
 import '../utils/model/property_model.dart';

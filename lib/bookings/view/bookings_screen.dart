@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/functions/util_functions.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
+import 'package:rentitezy/widgets/app_bar.dart';
 import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../../utils/const/widgets.dart';
 import '../../theme/custom_theme.dart';
-import '../appbar_widget.dart';
 import '../controller/bookings_controller.dart';
 import 'booking_details_screen.dart';
 
@@ -22,7 +22,9 @@ class BookingsScreen extends StatelessWidget {
       builder: (controller) {
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: appBarBooking('My Bookings', context, from, (() => bookingController.fetchMyBooking())),
+          appBar: appBarWidget(
+              title: 'My Bookings',
+              onRefresh: () => bookingController.fetchMyBooking(showLoader: true)),
           body: Container(
             height: screenHeight,
             width: screenWidth,

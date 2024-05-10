@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -129,13 +131,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                     height: screenHeight * 0.02,
                   ),
                   propertyLocation(controller: controller, model: data),
-                  SizedBox(
-                    height: screenHeight * 0.025,
-                  ),
                   propertyRent(controller: controller, model: data),
-                  SizedBox(
-                    height: screenHeight * 0.03,
-                  ),
                   propertyFeatures(controller: controller, model: data),
                   SizedBox(
                     height: screenHeight * 0.03,
@@ -169,14 +165,9 @@ class PropertyDetailsScreen extends StatelessWidget {
                           ],
                         )),
                   ),
-                  SizedBox(
-                    height: screenHeight * 0.03,
-                  ),
                   propertyDescription(controller: controller, model: data),
                   propertyAmenities(controller: controller, model: data),
-                  SizedBox(
-                    height: screenHeight * 0.03,
-                  ),
+                  propertyEnquiry(controller: controller, model: data),
                   showGoogleMaps(controller: controller, model: data),
                   SizedBox(
                     height: screenHeight * 0.05,
@@ -205,6 +196,9 @@ class PropertyDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(
+              height: screenHeight * 0.03,
+            ),
             Text(
               'Map',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
@@ -251,45 +245,117 @@ class PropertyDetailsScreen extends StatelessWidget {
     if (model == null || model.listingAmenities == null) {
       return const SizedBox.shrink();
     }
+    return Visibility(
+      visible: model.listingAmenities!.isNotEmpty,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: screenHeight * 0.01,
+            ),
+            Text(
+              'Property Amenities',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
+            ),
+            SizedBox(
+              height: screenHeight * 0.005,
+            ),
+            GridView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: model.listingAmenities?.length ?? 0,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2, crossAxisSpacing: 20, childAspectRatio: 5),
+                itemBuilder: (BuildContext context, int index) {
+                  final data = model.listingAmenities![index];
+                  return Row(
+                    children: [
+                      SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: SvgPicture.network(
+                          data.amenity?.appIcon ?? '',
+                          color: CustomTheme.appThemeContrast,
+                        ),
+                      ),
+                      SizedBox(
+                        width: screenWidth * 0.01,
+                      ),
+                      Text(data.amenity?.name ?? '',
+                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black54))
+                    ],
+                  );
+                })
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget propertyEnquiry({required PropertyDetailsController controller, PropertyDetailsModel? model}) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: screenHeight * 0.03,
+          ),
           Text(
-            'Property Amenities',
+            'Property Enquiry',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
           ),
-          SizedBox(
-            height: screenHeight * 0.005,
+          SizedBox(height: screenHeight * 0.01),
+          Container(
+            padding: const EdgeInsets.all(5),
+            width: screenWidth,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                //  color: Constants.primaryColor.withOpacity(0.1),
+                border: Border.all(color: Colors.grey, width: 0.5)),
+            height: screenHeight * 0.15,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: screenWidth * 0.65,
+                  child: TextField(
+                    controller: controller.enquiryTextController,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    decoration: InputDecoration(
+                        hoverColor: Constants.hint,
+                        contentPadding: const EdgeInsets.only(left: 10, right: 10),
+                        hintText: 'Ask your question',
+                        hintStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey.shade400),
+                        border: InputBorder.none),
+                  ),
+                ),
+                SizedBox(
+                  width: screenWidth * 0.03,
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: screenHeight * 0.075),
+                  height: screenHeight * 0.05,
+                  width: screenWidth * 0.2,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomTheme.appThemeContrast,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
+                      onPressed: () async {
+                        controller.showSiteVisitBottomModal();
+                      },
+                      child: const Text(
+                        'Ask',
+                        style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                      )),
+                ),
+              ],
+            ),
           ),
-          GridView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: model.listingAmenities?.length ?? 0,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 20, childAspectRatio: 5),
-              itemBuilder: (BuildContext context, int index) {
-                final data = model.listingAmenities![index];
-                return Row(
-                  children: [
-                    SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: SvgPicture.network(
-                        data.amenity?.appIcon ?? '',
-                        color: CustomTheme.appThemeContrast,
-                      ),
-                    ),
-                    SizedBox(
-                      width: screenWidth * 0.01,
-                    ),
-                    Text(data.amenity?.name ?? '',
-                        style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14, color: Colors.black54))
-                  ],
-                );
-              })
         ],
       ),
     );
@@ -301,6 +367,9 @@ class PropertyDetailsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: screenHeight * 0.03,
+          ),
           Text(
             'Property Description',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
@@ -323,6 +392,9 @@ class PropertyDetailsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(
+            height: screenHeight * 0.03,
+          ),
           Text(
             'Property Details',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
@@ -399,6 +471,9 @@ class PropertyDetailsScreen extends StatelessWidget {
     return Obx(() {
       return Column(
         children: [
+          SizedBox(
+            height: screenHeight * 0.025,
+          ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Row(
@@ -681,7 +756,7 @@ class PropertyDetailsScreen extends StatelessWidget {
       visible: model?.property?.address != null,
       replacement: const SizedBox.shrink(),
       child: GestureDetector(
-        onTap:() => controller.navigateToMap(model?.property?.latlng),
+        onTap: () => controller.navigateToMap(model?.property?.latlng),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Row(
@@ -700,10 +775,10 @@ class PropertyDetailsScreen extends StatelessWidget {
               const Spacer(),
               Container(
                 padding: const EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                decoration:
-                    BoxDecoration(color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
+                decoration: BoxDecoration(
+                    color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
                 child: Icon(
-                  Icons.arrow_forward_rounded,
+                  UniconsLine.navigator,
                   color: Constants.primaryColor,
                   size: 20,
                 ),

@@ -8,14 +8,13 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:rentitezy/utils/const/appbar_widget.dart';
 import '../../theme/custom_theme.dart';
 import 'appConfig.dart';
-import 'app_urls.dart';
 
-//height & width
 double screenWidth = Get.width;
 double screenHeight = Get.height;
+String assetImg = 'assets/images/app_logo.png';
+String userVec = 'assets/images/user_vec.png';
 
 Widget loading() {
   return Center(

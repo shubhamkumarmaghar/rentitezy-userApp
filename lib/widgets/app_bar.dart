@@ -1,46 +1,51 @@
-// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
+import '../dashboard/controller/dashboard_controller.dart';
+import '../dashboard/view/dashboard_view.dart';
 
-import '../utils/const/app_urls.dart';
-import '../utils/const/widgets.dart';
-import 'const_widget.dart';
+PreferredSizeWidget appBarWidget({required String title, Function()? onBack, Function()? onRefresh}) {
+  return AppBar(
 
-Widget appBarWidget({required String title,required String image,required Function() function,required Function() onDrawerTap}) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
-      RichText(
-        text: TextSpan(
-          children: [
-            WidgetSpan(
-              child: Text("Hi, ",
-                  style: TextStyle(
-                      color: Constants.black,
-                      fontSize: 19,
-                      fontFamily: Constants.fontsFamily,
-                      fontWeight: FontWeight.bold)),
-            ),
-            WidgetSpan(
-              child: Text(title,
-                  style: TextStyle(
-                      color: Constants.black,
-                      fontSize: 19,
-                      fontFamily: Constants.fontsFamily,
-                      fontWeight: FontWeight.normal)),
-            ),
-          ],
-        ),
-      ),
-      GestureDetector(
-        onTap: function,
-        child: imgLoadWid( image,
-            'assets/images/user_vec.png', 40, 40, BoxFit.contain),
-      ),
+    title: Text(
+      title,
+
+      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20,),
+    ),
+    centerTitle: true,
+    leading: IconButton(
+        onPressed: () {
+          if (onBack == null) {
+            Get.back();
+          } else {
+           onBack();
+          }
+        },
+        icon: const Icon(
+          Icons.arrow_back_ios_new_rounded,
+          color: Colors.white,
+          size: 18,
+        )),
+    actions: [
+      Visibility(
+          visible: onRefresh != null,
+          replacement: const SizedBox.shrink(),
+          child: IconButton(
+              onPressed: onRefresh,
+              icon: const Icon(
+                Icons.refresh_rounded,
+                size: 20,
+                color: Colors.white,
+              ))),
     ],
+    flexibleSpace: Container(
+      decoration: BoxDecoration(
+        color: Constants.primaryColor,
+        borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
+      ),
+    ),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
+    ),
   );
 }
-
-

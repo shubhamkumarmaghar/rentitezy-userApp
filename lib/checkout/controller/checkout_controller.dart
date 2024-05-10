@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -25,13 +24,16 @@ class CheckoutController extends GetxController {
   final RIEUserApiService apiService = RIEUserApiService();
   Rx<DateTime> selectedDate = DateTime.now().add(const Duration(days: 0)).obs;
   final PropertyDetailsModel propertyDetailsModel;
-  RxInt numberOfGuests = 1.obs;
   RxInt selectedMonths = 1.obs;
   RxInt selectedDays = 1.obs;
   RxInt selectedPropertyUnitId = 0.obs;
   RxBool monthSelected = true.obs;
   int? cartId;
-  Units? selectedUnit;
+
+  final guestController = TextEditingController(text: '1');
+  final dayController = TextEditingController(text: '3');
+  final monthController = TextEditingController(text: '11');
+  final unitController = TextEditingController();
 
   CheckoutController({required this.propertyDetailsModel});
 
@@ -64,7 +66,7 @@ class CheckoutController extends GetxController {
     String duration = monthSelected.value ? '${selectedMonths}m' : '${selectedDays}d';
 
     String url =
-        "${AppUrls.checkout}?checkin=$dateFormat&duration=$duration&guest=${numberOfGuests.value}&listingId=${propertyDetailsModel.id}&unitId=$selectedPropertyUnitId";
+        "${AppUrls.checkout}?checkin=$dateFormat&duration=$duration&guest=${guestController.text}&listingId=${propertyDetailsModel.id}&unitId=${selectedPropertyUnitId.value}";
 
     final response = await apiService.getApiCallWithURL(endPoint: url);
 

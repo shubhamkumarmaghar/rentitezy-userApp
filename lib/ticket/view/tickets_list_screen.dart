@@ -5,6 +5,7 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';
+import '../../widgets/app_bar.dart';
 import '../controller/tickets_controller.dart';
 
 class TicketsListScreen extends StatelessWidget {
@@ -21,19 +22,9 @@ class TicketsListScreen extends StatelessWidget {
         init: TicketsController(),
         builder: (controller) {
           return Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded,size: 18,),
-                onPressed: () {
-                  Get.find<DashboardController>().setIndex(0);
-                },
-              ),
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-              titleSpacing: -10,
-              centerTitle: true,
-              backgroundColor: Constants.primaryColor,
-              title: const Text('All Tickets', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20)),
+            appBar: appBarWidget(
+              title: 'All Tickets',
+              onBack: () => Get.find<DashboardController>().setIndex(0),
             ),
             backgroundColor: Colors.white,
             body: Container(

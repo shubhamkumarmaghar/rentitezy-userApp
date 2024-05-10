@@ -25,6 +25,7 @@ class PropertyDetailsController extends GetxController {
   RxInt currentImageIndex = 1.obs;
   final String propertyId;
   Rx<RentType> rentType = RentType.long.obs;
+  final enquiryTextController = TextEditingController();
   final phoneController = TextEditingController(text: GetStorage().read(Constants.phonekey)?.toString() ?? '');
   List<String> propertyImages = [
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmcZfrx5HCXD6E0ROTB5onJjhxJp7u-ntyo2BbyVTgPw&s'
@@ -68,6 +69,25 @@ class PropertyDetailsController extends GetxController {
   }
 
   void submitSiteVisit() async {
+    showProgressLoader(Get.context!);
+    String url = AppUrls.siteVisit;
+    final response = await apiService.postApiCall(endPoint: url, bodyParams: {
+      'phone': phoneController.text,
+      'listingId': propertyId,
+      'date': selectedDate.toString(),
+      'type': radioGroupValue.toLowerCase(),
+      'source': 'app'
+    });
+    cancelLoader();
+    if (response["message"].toString().toLowerCase() == 'success') {
+      RIEWidgets.getToast(message: 'You have successfully scheduled site visit', color: CustomTheme.myFavColor);
+      Get.back();
+    } else {
+      RIEWidgets.getToast(message: response["message"].toString(), color: CustomTheme.errorColor);
+    }
+  }
+
+  void submitPropertyEnquiry() async {
     showProgressLoader(Get.context!);
     String url = AppUrls.siteVisit;
     final response = await apiService.postApiCall(endPoint: url, bodyParams: {
@@ -211,7 +231,7 @@ class PropertyDetailsController extends GetxController {
                               ),
                               Icon(
                                 Icons.phone,
-                                color: Constants.primaryColor,
+                                color: CustomTheme.appThemeContrast,
                                 size: 20,
                               ),
                               SizedBox(
@@ -272,7 +292,7 @@ class PropertyDetailsController extends GetxController {
                                   SizedBox(
                                     width: screenWidth * 0.03,
                                   ),
-                                  Icon(Icons.calendar_today_outlined, color: Constants.primaryColor, size: 20),
+                                  Icon(Icons.calendar_today_outlined, color: CustomTheme.appThemeContrast, size: 20),
                                   SizedBox(
                                     width: screenWidth * 0.05,
                                   ),

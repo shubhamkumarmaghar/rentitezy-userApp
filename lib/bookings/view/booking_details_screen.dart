@@ -7,7 +7,7 @@ import 'package:rentitezy/utils/view/rie_widgets.dart';
 import '../../invoices/view/invoices_screen.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/functions/util_functions.dart';
-import '../appbar_widget.dart';
+import '../../widgets/app_bar.dart';
 import '../controller/bookings_controller.dart';
 
 class BookingDetailsPage extends StatelessWidget {
@@ -29,7 +29,10 @@ class BookingDetailsPage extends StatelessWidget {
           }
         }
         return Scaffold(
-          appBar: appBarBooking('Booking Details  ( Flat no. ${data?.id} )', context, false, (() {})),
+          appBar: appBarWidget(
+            title: 'Booking Details',
+            onRefresh: () => controller.getBookingDetails(bookingId: '${data?.id}', showLoader: true),
+          ),
           body: Container(
             width: getScreenWidth,
             height: getScreenHeight,

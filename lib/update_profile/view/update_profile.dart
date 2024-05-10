@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import '../../../utils/const/widgets.dart';
+import '../../widgets/app_bar.dart';
 import '../controller/update_profile_controller.dart';
 
 class UpdateProfilePage extends StatelessWidget {
@@ -14,13 +15,8 @@ class UpdateProfilePage extends StatelessWidget {
       init: UpdateProfileController(),
       builder: (controller) {
         return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            elevation: 5,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-            backgroundColor: Constants.primaryColor,
-            title: const Text('Update Account',style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20),),
+          appBar: appBarWidget(
+            title: 'Update Account',
           ),
           body: GestureDetector(
             onTap: () => FocusScope.of(context).requestFocus(FocusNode()),

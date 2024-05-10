@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/invoices/controller/invoice_controller.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:rentitezy/utils/functions/util_functions.dart';
-import '../../bookings/appbar_widget.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/view/rie_widgets.dart';
+import '../../widgets/app_bar.dart';
 import '../model/invoice_model.dart';
 
 class InvoiceScreen extends StatelessWidget {
@@ -22,7 +21,9 @@ class InvoiceScreen extends StatelessWidget {
       init: InvoiceController(bookingId: bookingId),
       builder: (controller) {
         return Scaffold(
-            appBar: appBarBooking('Invoices', context, false, (() {})),
+            appBar: appBarWidget(
+                title: 'Invoices',
+                onRefresh: () => controller.fetchInvoices(showLoader: true)),
             body: Container(
               height: screenHeight,
               width: screenWidth,

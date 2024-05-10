@@ -20,11 +20,16 @@ class InvoiceController extends GetxController {
     fetchInvoices();
   }
 
-  Future<void> fetchInvoices() async {
+  Future<void> fetchInvoices({bool? showLoader}) async {
+    if (showLoader != null && showLoader) {
+      showProgressLoader(Get.context!);
+    }
     String url = '${AppUrls.invoice}?bookingId=$bookingId';
 
     final response = await apiService.getApiCallWithURL(endPoint: url);
-
+    if (showLoader != null && showLoader) {
+      cancelLoader();
+    }
     if (response['message'].toString().toLowerCase().contains('success')) {
       if (response['data'] != null) {
         Iterable iterable = response['data'] as Iterable;

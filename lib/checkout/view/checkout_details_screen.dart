@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/checkout/controller/checkout_controller.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
+import '../../widgets/app_bar.dart';
 import '../model/checkout_model.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
@@ -18,24 +19,8 @@ class CheckoutDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-        backgroundColor: Constants.primaryColor,
-        title: const Text(
-          'Checkout  Details',
-          style: TextStyle(color: Colors.white, letterSpacing: 1, fontWeight: FontWeight.w500, fontSize: 20),
-        ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 18,
-          ),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+      appBar: appBarWidget(
+        title: 'Checkout  Details',
       ),
       body: Container(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -43,22 +28,34 @@ class CheckoutDetailsScreen extends StatelessWidget {
         width: screenWidth,
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Text(
+                'Checkout Details',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
+              ),
+              SizedBox(height: screenHeight * 0.01),
               rowText(title: "Property Name", value: checkoutModel.name),
               rowText(title: "Duration", value: checkoutModel.duration),
               rowText(title: "Move In", value: checkoutModel.moveIn),
               rowText(title: "Move Out", value: checkoutModel.moveOut),
               rowText(title: "Guest", value: checkoutModel.guest),
               rowText(title: "Lock In", value: checkoutModel.lockIn),
+              rowText(title: "Address", value: checkoutModel.address),
+              SizedBox(height: screenHeight * 0.04),
+              const Text(
+                'Financial Details',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
+              ),
+              SizedBox(height: screenHeight * 0.01),
               rowText(title: "Rent", value: checkoutModel.rent, showCurrency: true),
               rowText(title: "Deposit", value: checkoutModel.deposit, showCurrency: true),
               rowText(title: "OnBoarding", value: checkoutModel.onboarding, showCurrency: true),
               rowText(title: "Maintenance", value: checkoutModel.maintenance, showCurrency: true),
               rowText(title: "Amount", value: checkoutModel.amount, showCurrency: true),
               rowText(title: "Total", value: checkoutModel.total, showCurrency: true),
-              rowText(title: "Address", value: checkoutModel.address),
               SizedBox(
-                height: screenHeight * 0.3,
+                height: screenHeight * 0.19,
               ),
               Center(
                 child: SizedBox(
@@ -187,19 +184,18 @@ class CheckoutDetailsScreen extends StatelessWidget {
                             padding: EdgeInsets.all(12),
                             child: Text(
                               'Please Fill Your Details',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18),
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 18),
                             ),
                           ),
                           Center(
                               child: Container(
                             height: 0.5,
-                            width: screenWidth*0.2,
+                            width: screenWidth * 0.2,
                             color: Colors.black,
                           )),
-                          SizedBox(height: screenHeight*0.05,),
+                          SizedBox(
+                            height: screenHeight * 0.05,
+                          ),
                           inputField(
                               controller: checkoutController.nameController,
                               hintText: 'Name',
@@ -219,7 +215,9 @@ class CheckoutDetailsScreen extends StatelessWidget {
                               hintText: 'Email Address',
                               prefixIcon: Icons.email,
                               textInputType: TextInputType.emailAddress),
-                          SizedBox(height: screenHeight*0.05,),
+                          SizedBox(
+                            height: screenHeight * 0.05,
+                          ),
                           GestureDetector(
                             onTap: () async {
                               if (checkoutController.nameController.text.isEmpty) {
@@ -255,7 +253,9 @@ class CheckoutDetailsScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(height: screenHeight*0.02,),
+                          SizedBox(
+                            height: screenHeight * 0.02,
+                          ),
                         ],
                       ),
                     ))),

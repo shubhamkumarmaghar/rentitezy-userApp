@@ -1,11 +1,11 @@
-class SingleBookingModel {
+class BookingDetailsModel {
   Data? data;
   bool? success;
   String? message;
 
-  SingleBookingModel({this.data, this.success, this.message});
+  BookingDetailsModel({this.data, this.success, this.message});
 
-  SingleBookingModel.fromJson(Map<String, dynamic> json) {
+  BookingDetailsModel.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     success = json['success'];
     message = json['message'];

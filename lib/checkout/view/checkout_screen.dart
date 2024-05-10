@@ -1,12 +1,15 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/checkout/controller/checkout_controller.dart';
 import 'package:rentitezy/property_details/model/property_details_model.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/widgets.dart';
+import '../../widgets/app_bar.dart';
 
 class CheckoutScreen extends StatelessWidget {
   final PropertyDetailsModel propertyDetailsModel;
@@ -19,29 +22,9 @@ class CheckoutScreen extends StatelessWidget {
       init: CheckoutController(propertyDetailsModel: propertyDetailsModel),
       builder: (controller) {
         return Scaffold(
-          appBar: AppBar(
-              centerTitle: true,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-              backgroundColor: Constants.primaryColor,
-              title: Text(
-                'Checkout',
-                style: TextStyle(
-                    fontFamily: Constants.fontsFamily,
-                    color: Colors.white,
-                    letterSpacing: 1,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20),
-              ),
-              leading: IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  size: 18,
-                ),
-                onPressed: () {
-                  Get.back();
-                },
-              )),
+          appBar: appBarWidget(
+            title: 'Checkout',
+          ),
           body: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Padding(
@@ -90,39 +73,18 @@ class CheckoutScreen extends StatelessWidget {
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
-                    Obx(() {
-                      return Container(
-                        padding: const EdgeInsets.only(left: 5, right: 5),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          color: Constants.primaryColor.withOpacity(0.1),
-                          border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
-                        ),
-                        child: DropdownButton<int>(
-                          underline: const SizedBox(),
-                          isExpanded: true,
-                          padding: EdgeInsets.only(left: 10),
-                          hint: const Text(
-                            'Select Guest',
-                            style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500),
-                          ),
-                          iconEnabledColor: Constants.lightBg,
-                          items: List.generate(5, (index) => index + 1).map((item) {
-                            return DropdownMenuItem<int>(
-                              value: item,
-                              child: Text(
-                                item.toString(),
-                                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
-                              ),
-                            );
-                          }).toList(),
-                          onChanged: (newVal) {
-                            controller.numberOfGuests.value = newVal ?? 1;
-                          },
-                          value: controller.numberOfGuests.value,
-                        ),
-                      );
-                    }),
+                    pickerButton(
+                        onTap: () async {
+                          final guest = await showDataDialog(
+                              context: context,
+                              title: 'Guest',
+                              dataList: List.generate(5, (index) => (index + 1).toString()));
+                          if (guest != null) {
+                            controller.guestController.text = guest;
+                          }
+                        },
+                        textController: controller.guestController,
+                        hintText: 'Guest'),
                     SizedBox(
                       height: screenHeight * 0.025,
                     ),
@@ -135,72 +97,30 @@ class CheckoutScreen extends StatelessWidget {
                     Obx(() {
                       return Visibility(
                         visible: controller.monthSelected.value,
-                        replacement: Container(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Constants.primaryColor.withOpacity(0.1),
-                            border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
-                          ),
-                          child: DropdownButton<int>(
-                            underline: const SizedBox(),
-                            padding: const EdgeInsets.only(left: 10),
-                            isExpanded: true,
-                            hint: Text(
-                              'Select Days',
-                              style: TextStyle(color: Constants.lightBg, fontFamily: Constants.fontsFamily),
-                            ),
-                            iconEnabledColor: Constants.lightBg,
-                            items: List.generate(31, (index) => index + 1).map((item) {
-                              return DropdownMenuItem<int>(
-                                value: item,
-                                child: Text(
-                                  item.toString(),
-                                  style:
-                                      const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (newVal) {
-                              controller.selectedDays.value = newVal ?? 1;
+                        replacement: pickerButton(
+                            onTap: () async {
+                              final day = await showDataDialog(
+                                  context: context,
+                                  title: 'Select Days',
+                                  dataList: List.generate(31, (index) => (index + 1).toString()));
+                              if (day != null) {
+                                controller.dayController.text = day;
+                              }
                             },
-                            value: controller.selectedDays.value,
-                          ),
-                        ),
-                        child: Container(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Constants.primaryColor.withOpacity(0.1),
-                            border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
-                          ),
-                          child: DropdownButton<int>(
-                            underline: const SizedBox(),
-                            padding: const EdgeInsets.only(left: 10),
-                            isExpanded: true,
-                            hint: Text(
-                              'Select Months',
-                              style: TextStyle(color: Constants.lightBg, fontFamily: Constants.fontsFamily),
-                            ),
-                            iconEnabledColor: Constants.lightBg,
-                            items: List.generate(11, (index) => index + 1).map(
-                              (item) {
-                                return DropdownMenuItem<int>(
-                                  value: item,
-                                  child: Text(
-                                    item.toString(),
-                                    style:
-                                        const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (newVal) {
-                              controller.selectedMonths.value = newVal ?? 1;
+                            textController: controller.dayController,
+                            hintText: 'Select Days'),
+                        child: pickerButton(
+                            onTap: () async {
+                              final month = await showDataDialog(
+                                  context: context,
+                                  title: 'Select Month',
+                                  dataList: List.generate(11, (index) => (index + 1).toString()));
+                              if (month != null) {
+                                controller.monthController.text = month;
+                              }
                             },
-                            value: controller.selectedMonths.value,
-                          ),
-                        ),
+                            textController: controller.monthController,
+                            hintText: 'Select Month'),
                       );
                     }),
                     SizedBox(
@@ -210,39 +130,26 @@ class CheckoutScreen extends StatelessWidget {
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
-                    Container(
-                      padding: const EdgeInsets.only(left: 5, right: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Constants.primaryColor.withOpacity(0.1),
-                        border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
-                      ),
-                      child: DropdownButton<Units>(
-                        underline: const SizedBox(),
-                        padding: const EdgeInsets.only(left: 10),
-                        isExpanded: true,
-                        hint: Text(
-                          'Select Unit',
-                          style: TextStyle(color: Colors.black54, fontFamily: Constants.fontsFamily),
-                        ),
-                        iconEnabledColor: Constants.lightBg,
-                        items: controller.propertyDetailsModel.units?.map((item) {
-                          return DropdownMenuItem<Units>(
-                            value: item,
-                            child: Text(
-                              item.flatNo.toString(),
-                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (newVal) {
-                          controller.selectedPropertyUnitId.value = newVal?.id ?? 0;
-                          log('unit id :: ${controller.selectedPropertyUnitId.value}');
-                          controller.selectedUnit = newVal;
-                          controller.update();
-                        },
-                        value: controller.selectedUnit,
-                      ),
+                    Visibility(
+                      visible: controller.propertyDetailsModel.units != null,
+                      replacement: const SizedBox.shrink(),
+                      child: pickerButton(
+                          onTap: () async {
+                            List<String> data =
+                                controller.propertyDetailsModel.units!.map((e) => e.flatNo ?? '').toList();
+
+                            final flatUnit =
+                                await showDataDialog(context: context, title: 'Select Unit', dataList: data);
+
+                            if (flatUnit != null) {
+                              final unit = controller.propertyDetailsModel.units!
+                                  .firstWhere((element) => element.flatNo == flatUnit);
+                              controller.selectedPropertyUnitId.value = unit.id ?? 0;
+                              controller.unitController.text = flatUnit;
+                            }
+                          },
+                          textController: controller.unitController,
+                          hintText: 'Select Unit'),
                     ),
                     SizedBox(
                       height: screenHeight * 0.025,
@@ -255,9 +162,9 @@ class CheckoutScreen extends StatelessWidget {
                       height: 50,
                       padding: const EdgeInsets.only(left: 15, right: 5),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: Constants.primaryColor.withOpacity(0.1),
-                        border: Border.all(color: const Color.fromARGB(255, 227, 225, 225)),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Constants.lightBg,
+
                       ),
                       child: InkWell(
                         onTap: controller.onSelectDate,
@@ -285,26 +192,134 @@ class CheckoutScreen extends StatelessWidget {
                     SizedBox(
                       height: screenHeight * 0.16,
                     ),
-                    Center(
-                      child: SizedBox(
-                        height: screenHeight * 0.06,
-                        width: screenWidth * 0.8,
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Constants.primaryColor,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                    Obx(() {
+                      return Center(
+                        child: SizedBox(
+                          height: screenHeight * 0.06,
+                          width: screenWidth * 0.8,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Constants.primaryColor,
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                              ),
+                              onPressed:
+                                  controller.selectedPropertyUnitId.value == 0 ? null : controller.submitBookingRequest,
+                              child: const Text(
+                                'Submit',
+                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                              )),
+                        ),
+                      );
+                    }),
+                  ],
+                ),
+              )),
+        );
+      },
+    );
+  }
+
+  Widget pickerButton(
+      {required Function onTap, required TextEditingController textController, required String hintText}) {
+    return GestureDetector(
+      onTap: () => onTap(),
+      child: Container(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Constants.lightBg,
+        ),
+        height: screenHeight * 0.06,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            SizedBox(
+              width: screenWidth * 0.75,
+              child: TextField(
+                controller: textController,
+                enabled: false,
+                style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16, color: Colors.black),
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                    hoverColor: Constants.hint,
+                    contentPadding: const EdgeInsets.only(left: 20, right: 20, bottom: 5),
+                    hintText: hintText,
+                    border: InputBorder.none),
+              ),
+            ),
+            Icon(
+              Icons.arrow_drop_down_outlined,
+              color: Constants.greyLight,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<String?> showDataDialog(
+      {required BuildContext context, required String title, required List<String> dataList}) async {
+    return await showDialog<String>(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              insetPadding: EdgeInsets.only(left: screenWidth * 0.05, right: screenWidth * 0.05),
+              contentPadding: EdgeInsets.zero,
+              backgroundColor: Colors.white,
+              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(15.0))),
+              content: Container(
+                height: Get.height * 0.45,
+                width: Get.width * 0.8,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(15)),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(top: screenHeight * 0.01, bottom: screenHeight * 0.02),
+                      child: Text(
+                        title,
+                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: Colors.black),
+                      ),
+                    ),
+                    Container(
+                      height: Get.height * 0.37,
+                      width: Get.width * 0.7,
+                      padding: EdgeInsets.only(bottom: screenWidth * 0.02),
+                      child: ListView.separated(
+                        itemCount: dataList.length,
+                        separatorBuilder: (context, index) => const Divider(),
+                        itemBuilder: (BuildContext context, int index) {
+                          var data = dataList[index];
+                          return InkWell(
+                            onTap: () {
+                              Get.back(result: data.toString());
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                vertical: screenWidth * 0.01,
+                              ),
+                              margin: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                              child: Center(
+                                child: Text(
+                                  data.toString(),
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.w500, color: Colors.blueGrey.shade500),
+                                ),
+                              ),
                             ),
-                            onPressed:
-                                controller.selectedPropertyUnitId.value == 0 ? null : controller.submitBookingRequest,
-                            child: const Text(
-                              'Submit',
-                              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                            )),
+                          );
+                        },
                       ),
                     ),
                   ],
                 ),
-              )),
+              ),
+            );
+          },
         );
       },
     );

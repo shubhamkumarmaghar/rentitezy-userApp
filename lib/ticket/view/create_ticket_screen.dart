@@ -6,6 +6,7 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import '../../../theme/custom_theme.dart';
 import '../../utils/view/rie_widgets.dart';
+import '../../widgets/app_bar.dart';
 
 class CreateTicketScreen extends StatelessWidget {
   final String bookingId;
@@ -18,16 +19,8 @@ class CreateTicketScreen extends StatelessWidget {
       init: CreateTicketScreenController(bookingId: bookingId),
       builder: (controller) {
         return Scaffold(
-          appBar: AppBar(
-            leading: BackButton(
-              color: CustomTheme.white,
-            ),
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15), bottomRight: Radius.circular(15))),
-            titleSpacing: -10,
-            centerTitle: true,
-            backgroundColor: Constants.primaryColor,
-            title: const Text('Create Ticket '),
+          appBar: appBarWidget(
+            title: 'Create Ticket',
           ),
           body: controller.isLoading
               ? const Center(child: CircularProgressIndicator.adaptive())

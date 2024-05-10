@@ -4,6 +4,8 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 
+import '../widgets/app_bar.dart';
+
 class TermsAndConditions extends StatelessWidget {
   const TermsAndConditions({super.key, required this.title, required this.data});
 
@@ -13,17 +15,8 @@ class TermsAndConditions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-          backgroundColor: Constants.primaryColor,
-
-          title: Text(
-            title,
-            style: TextStyle(
-                fontFamily: Constants.fontsFamily, color: Colors.white, fontSize: 20, fontWeight: FontWeight.w500),
-          ),
+        appBar: appBarWidget(
+          title: title,
         ),
         body: Container(
           height: screenHeight,
