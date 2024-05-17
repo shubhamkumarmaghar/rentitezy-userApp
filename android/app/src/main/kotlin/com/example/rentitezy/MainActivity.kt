@@ -1,4 +1,4 @@
-package pro.network.rentiseazy
+package com.app.sowerent
 
 import io.flutter.embedding.android.FlutterActivity
 

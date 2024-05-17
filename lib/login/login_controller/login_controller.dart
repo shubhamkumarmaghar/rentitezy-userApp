@@ -34,7 +34,7 @@ class LoginController extends GetxController {
 
     if (data['message'].toString().toLowerCase().contains('welcome') && data['data'] != null) {
       LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(data['data']);
-
+      RIEWidgets.getToast(message: data['message'].toString(), color: CustomTheme.myFavColor);
       GetStorage().write(Constants.isLogin, true);
       GetStorage().write(Constants.userId, loginResponseModel.id.toString());
       GetStorage().write(Constants.phonekey, loginResponseModel.phone);
@@ -49,7 +49,7 @@ class LoginController extends GetxController {
       Get.offAll(() => const DashboardView());
     } else {
       cancelLoader();
-      RIEWidgets.getToast(message: data['message'].toString(), color: CustomTheme.appTheme);
+      RIEWidgets.getToast(message: data['message'].toString(), color: CustomTheme.errorColor);
     }
   }
 }

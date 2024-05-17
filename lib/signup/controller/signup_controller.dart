@@ -4,9 +4,11 @@ import 'package:get_storage/get_storage.dart';
 
 import '../../dashboard/controller/dashboard_controller.dart';
 import '../../dashboard/view/dashboard_view.dart';
+import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
+import '../../utils/view/rie_widgets.dart';
 import '../../widgets/custom_alert_dialogs.dart';
 import '../model/signup_response_model.dart';
 
@@ -36,6 +38,7 @@ class SignUpController extends GetxController {
 
     if (data['message'].toString().toLowerCase().contains('success') && data['data'] != null) {
       SignUpResponseModel loginResponseModel = SignUpResponseModel.fromJson(data['data']);
+      RIEWidgets.getToast(message: data['message'].toString(), color: CustomTheme.myFavColor);
       GetStorage().write(Constants.isLogin, true);
       GetStorage().write(Constants.userId, loginResponseModel.id.toString());
       GetStorage().write(Constants.phonekey, loginResponseModel.phone);
@@ -50,6 +53,7 @@ class SignUpController extends GetxController {
       Get.offAll(() => const DashboardView());
     } else {
       cancelLoader();
+      RIEWidgets.getToast(message: data['message'].toString(), color: CustomTheme.errorColor);
     }
   }
 
