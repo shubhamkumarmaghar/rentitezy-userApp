@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/services/rie_user_api_service.dart';

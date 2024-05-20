@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,7 +36,8 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     localSetup();
-    fetchProperties(false);
+    fetchProperties();
+    fetchNearbyProperties();
     fetchAddress();
     super.onInit();
   }
@@ -47,45 +49,27 @@ class HomeController extends GetxController {
   }
 
   void localSetup() {
-    userName = GetStorage().read(Constants.usernamekey) ?? '';
+    userName = GetStorage().read(Constants.firstName) ?? '';
     userId = GetStorage().read(Constants.userId) != null ? GetStorage().read(Constants.userId).toString() : "guest";
     imageUrl = GetStorage().read(Constants.profileUrl) ?? '';
   }
 
-  void scrollListener(bool isNext) {
-    if (offset.value >= 10) {
-      offset(isNext ? (offset.value + 10) : (offset.value - 10));
+  void fetchNearbyProperties() async {
+    String url = '${AppUrls.listing}?available=true';
+
+    final response = await apiService.getApiCallWithURL(endPoint: url);
+
+    if (response["message"].toString().toLowerCase().contains('success') && response['data'] != null) {
+      Iterable iterable = response['data'];
+      nearbyPropertyInfoList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
+    } else {
+      nearbyPropertyInfoList = [];
+      RIEWidgets.getToast(message: response["message"] ?? 'Something went wrong!', color: CustomTheme.errorColor);
     }
-    fetchProperties(true);
+    update();
   }
 
-  // void fetchNearbyProperties(bool isNext) async {
-  //   if (!isNext) {
-  //     isLoading(true);
-  //   }
-  //   String url = '${AppUrls.listing}?limit=10&available=true&offset=$offset';
-  //   if (locationBy.value != 'ALL') {
-  //     url = '${AppUrls.listing}?limit=10&available=true&offset=$offset&location=${locationBy.value}';
-  //   }
-  //
-  //   final response = await apiService.getApiCallWithURL(endPoint: url);
-  //
-  //   if (response["message"].toString().toLowerCase().contains('success')) {
-  //     if (response['data'] != null) {
-  //       Iterable iterable = response['data'];
-  //
-  //       propertyInfoList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
-  //     } else {
-  //       propertyInfoList = [];
-  //     }
-  //     isLoading(false);
-  //     update();
-  //   }else{
-  //
-  //   }
-  // }
-
-  void fetchProperties(bool isNext) async {
+  void fetchProperties() async {
     String url = '${AppUrls.listing}?available=true';
     if (locationBy.value != 'ALL') {
       url = '${AppUrls.listing}?available=true&location=${locationBy.value}';
@@ -124,7 +108,7 @@ class HomeController extends GetxController {
   locationFunc(String newVal) {
     locationBy.value = newVal;
     update();
-    fetchProperties(false);
+    fetchProperties();
   }
 
   Future<void> navigateToMap(String? latLang) async {

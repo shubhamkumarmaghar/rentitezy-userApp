@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/home/home_controller/home_controller.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
+import 'package:unicons/unicons.dart';
+import '../checkout/view/checkout_screen.dart';
 import '../property_details/view/property_details_screen.dart';
+import '../site_visit/view/site_visit_screen.dart';
 import '../utils/const/appConfig.dart';
 import '../utils/functions/util_functions.dart';
 import '../utils/model/property_model.dart';
@@ -13,14 +17,13 @@ import '../utils/services/utils_api_service.dart';
 
 class PropertyViewWidget extends StatelessWidget {
   final PropertyInfoModel propertyInfoModel;
-  final homeController = Get.find<HomeController>();
   final Function onWishlist;
 
-  PropertyViewWidget({super.key, required this.propertyInfoModel, required this.onWishlist});
+  const PropertyViewWidget({super.key, required this.propertyInfoModel, required this.onWishlist});
 
   @override
   Widget build(BuildContext context) {
-    bool navigateToMap = false;
+    bool canNavigateToMap = false;
     List<String> images = [
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmcZfrx5HCXD6E0ROTB5onJjhxJp7u-ntyo2BbyVTgPw&s'
     ];
@@ -30,16 +33,16 @@ class PropertyViewWidget extends StatelessWidget {
     if (propertyInfoModel.property?.latlng != null) {
       if (propertyInfoModel.property?.latlng != '' &&
           propertyInfoModel.property?.latlng!.contains('undefined') == false) {
-        navigateToMap = true;
+        canNavigateToMap = true;
       }
     }
     return Container(
       color: Colors.white,
-      height: screenHeight * 0.49,
-      padding: EdgeInsets.only(bottom: screenHeight * 0.015),
+      height: 450,
+      padding: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: () {
-          Get.to(()=>PropertyDetailsScreen(propertyId: propertyInfoModel.id?.toString() ??''));
+          Get.to(() => PropertyDetailsScreen(propertyId: propertyInfoModel.id?.toString() ?? ''));
         },
         child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -51,7 +54,7 @@ class PropertyViewWidget extends StatelessWidget {
               Stack(
                 children: [
                   SizedBox(
-                    height: screenHeight * 0.25,
+                    height: 215,
                     width: screenWidth,
                     child: FlutterCarousel(
                       options: CarouselOptions(
@@ -69,41 +72,45 @@ class PropertyViewWidget extends StatelessWidget {
                             indicatorBackgroundColor: Colors.white),
                       ),
                       items: images
-                          .map((e) => ClipRRect(
+                          .map(
+                            (e) => ClipRRect(
                               borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(10),
                                 topRight: Radius.circular(10),
                               ),
                               child: CachedNetworkImage(
-                                  memCacheHeight: (screenHeight * 0.25).toInt(),
-                                  memCacheWidth: screenWidth.toInt(),
-                                  imageUrl: e,
-                                  imageBuilder: (context, imageProvider) => Container(
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-                                        ),
-                                      ),
-                                  placeholder: (context, url) => Container(
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(
-                                              image: AssetImage('assets/images/dummy_image.png'), fit: BoxFit.contain),
-                                        ),
-                                      ),
-                                  errorWidget: (context, url, error) => Container(
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          image: DecorationImage(
-                                              image: AssetImage('assets/images/app_logo.png'), fit: BoxFit.contain),
-                                        ),
-                                      ))))
+                                memCacheHeight: (screenHeight * 0.25).toInt(),
+                                memCacheWidth: screenWidth.toInt(),
+                                imageUrl: e,
+                                imageBuilder: (context, imageProvider) => Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                                  ),
+                                ),
+                                placeholder: (context, url) => Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(
+                                        image: AssetImage('assets/images/dummy_image.png'), fit: BoxFit.contain),
+                                  ),
+                                ),
+                                errorWidget: (context, url, error) => Container(
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.rectangle,
+                                    image: DecorationImage(
+                                        image: AssetImage('assets/images/dummy_image.png'), fit: BoxFit.contain),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
                           .toList(),
                     ),
                   ),
                   Positioned(
                     right: screenWidth * 0.03,
-                    bottom: screenHeight * 0.02,
+                    bottom: 17,
                     child: GestureDetector(
                       onTap: () async {
                         final res = await UtilsApiService.wishlistProperty(
@@ -113,7 +120,7 @@ class PropertyViewWidget extends StatelessWidget {
                         }
                       },
                       child: Container(
-                        height: screenHeight * 0.045,
+                        height: 38,
                         width: screenWidth * 0.1,
                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(5)),
                         child: Icon(
@@ -130,9 +137,9 @@ class PropertyViewWidget extends StatelessWidget {
                   ),
                   Positioned(
                     right: screenWidth * 0.03,
-                    top: screenHeight * 0.015,
+                    top: 12,
                     child: Container(
-                      height: screenHeight * 0.03,
+                      height:25,
                       width: screenWidth * 0.13,
                       decoration:
                           BoxDecoration(color: CustomTheme.propertyTextColor, borderRadius: BorderRadius.circular(5)),
@@ -154,7 +161,7 @@ class PropertyViewWidget extends StatelessWidget {
                   )
                 ],
               ),
-              height(0.01),
+             const SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -169,19 +176,19 @@ class PropertyViewWidget extends StatelessWidget {
                             fontSize: 20, color: Colors.black, wordSpacing: 3, fontWeight: FontWeight.w500),
                       )),
                   Visibility(
-                    visible: navigateToMap,
+                    visible: canNavigateToMap,
                     replacement: const SizedBox.shrink(),
                     child: GestureDetector(
-                      onTap: () => homeController.navigateToMap(propertyInfoModel.property?.latlng),
+                      onTap: () => navigateToMap(propertyInfoModel.property?.latlng),
                       child: Container(
                         margin: EdgeInsets.only(right: screenWidth * 0.015),
-                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01, vertical: screenHeight * 0.002),
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.01, vertical: 3),
                         decoration: BoxDecoration(
-                            color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(5)),
+                            color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(3)),
                         child: Row(
                           children: [
                             Icon(
-                              Icons.location_on,
+                              UniconsLine.map_pin_alt,
                               size: getScreenWidth * 0.04,
                               color: Constants.primaryColor,
                             ),
@@ -200,7 +207,7 @@ class PropertyViewWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              height(0.006),
+              const SizedBox(height: 5,),
               Container(
                 padding: EdgeInsets.only(left: screenWidth * 0.023),
                 child: Row(
@@ -216,7 +223,7 @@ class PropertyViewWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              height(0.006),
+              const SizedBox(height: 5,),
               Container(
                   padding: EdgeInsets.only(left: screenWidth * 0.023),
                   child: Text(
@@ -227,7 +234,7 @@ class PropertyViewWidget extends StatelessWidget {
                         letterSpacing: 2,
                         fontWeight: FontWeight.w600),
                   )),
-              height(0.006),
+              const SizedBox(height: 5,),
               Container(
                 padding: EdgeInsets.only(left: screenWidth * 0.023),
                 child: Row(
@@ -242,7 +249,7 @@ class PropertyViewWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              height(0.008),
+              const SizedBox(height: 5,),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
                 child: Row(
@@ -282,6 +289,46 @@ class PropertyViewWidget extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 20,),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
+                child: Row(
+                  children: [
+                    const Spacer(),
+                    SizedBox(
+                      height: 35,
+                      width: screenWidth * 0.3,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: CustomTheme.appThemeContrast,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                          onPressed: () async {
+                            Get.to(() => SiteVisitScreen(propertyId: propertyInfoModel.id.toString()));
+                          },
+                          child: const Text(
+                            'Site Visit',
+                            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                          )),
+                    ),
+                    width(0.05),
+                    SizedBox(
+                      height: 35,
+                      width: screenWidth * 0.3,
+                      child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Constants.primaryColor,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                          onPressed: (){
+                            //controller.onBookNow();
+                          },
+                          child: const Text(
+                            'Book Now',
+                            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+                          )),
+                    )
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -298,4 +345,18 @@ class PropertyViewWidget extends StatelessWidget {
       color: CustomTheme.propertyTextColor,
     );
   }
+
+  Future<void> navigateToMap(String? latLang) async {
+    if (latLang == null || latLang.isEmpty) {
+      return;
+    }
+    List<String> locationList = latLang.split(',');
+    navigateToNativeMap(lat: locationList[0], long: locationList[1]);
+  }
+  // void onBookNow() {
+  //   if (propertyDetailsModel != null) {
+  //     Get.to(() => CheckoutScreen(propertyDetailsModel: propertyDetailsModel!));
+  //   }
+  // }
+  //
 }

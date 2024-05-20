@@ -46,7 +46,7 @@ class SignUpController extends GetxController {
       GetStorage().write(Constants.lastName, loginResponseModel.lastName);
       GetStorage().write(Constants.token, loginResponseModel.token);
       GetStorage().write(Constants.profileUrl, loginResponseModel.image);
-      GetStorage().write(Constants.usernamekey, loginResponseModel.firstName);
+      GetStorage().write(Constants.usernamekey, '${loginResponseModel.firstName} ${loginResponseModel.lastName}');
       GetStorage().write(Constants.emailkey, loginResponseModel.email);
       cancelLoader();
       Get.find<DashboardController>().setIndex(0);

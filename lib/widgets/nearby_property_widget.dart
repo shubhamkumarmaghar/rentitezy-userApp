@@ -74,14 +74,20 @@ class NearByPropertyWidget extends StatelessWidget {
                                         image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
                                       ),
                                     ),
-                                placeholder: (context, url) => loading(),
-                                errorWidget: (context, url, error) => Container(
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        image: DecorationImage(
-                                            image: AssetImage('assets/images/app_logo.png'), fit: BoxFit.contain),
-                                      ),
-                                    ))),
+                              placeholder: (context, url) => Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/images/dummy_image.png'), fit: BoxFit.contain),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  image: DecorationImage(
+                                      image: AssetImage('assets/images/dummy_image.png'), fit: BoxFit.contain),
+                                ),
+                              ),)),
                       ),
                       Container(
                           width: screenWidth * 0.48,

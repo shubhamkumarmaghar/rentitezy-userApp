@@ -18,8 +18,8 @@ import '../utils/styles/menu_text_style.dart';
 import 'menu_side_bar_widget.dart';
 
 class AppDrawer extends StatelessWidget {
-  final String userName = GetStorage().read(Constants.usernamekey) ??'';
-  final String userId = GetStorage().read(Constants.userId) ?? "guest";
+  final String userName = GetStorage().read(Constants.firstName) ?? '';
+  final String userId = GetStorage().read(Constants.userId)?.toString() ?? "guest";
   final bool isTenant = GetStorage().read(Constants.isTenant) ?? false;
 
   final AgreementDet tempPdf = AgreementDet(
@@ -71,7 +71,6 @@ class AppDrawer extends StatelessWidget {
                         screenHeight * 0.11, screenWidth * 0.24, BoxFit.cover),
                   ),
                   height(0.015),
-
                   Text(
                     userName,
                     maxLines: 2,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -16,26 +18,27 @@ import '../../widgets/custom_alert_dialogs.dart';
 
 class CheckoutController extends GetxController {
   late TextEditingController nameController;
-
   late TextEditingController emailController;
-
   late TextEditingController phoneController;
-
   final RIEUserApiService apiService = RIEUserApiService();
   Rx<DateTime> selectedDate = DateTime.now().add(const Duration(days: 0)).obs;
-  final PropertyDetailsModel propertyDetailsModel;
+
   RxInt selectedMonths = 1.obs;
   RxInt selectedDays = 1.obs;
   RxInt selectedPropertyUnitId = 0.obs;
   RxBool monthSelected = true.obs;
   int? cartId;
-
-  final guestController = TextEditingController(text: '1');
+  late TextEditingController guestController;
   final dayController = TextEditingController(text: '3');
   final monthController = TextEditingController(text: '11');
   final unitController = TextEditingController();
+  List<String> guestCountList = [];
 
-  CheckoutController({required this.propertyDetailsModel});
+  final String? listingType;
+  final String listingId ;
+  final List<Units>? propertyUnitsList;
+
+  CheckoutController({this.listingType,required this.listingId,this.propertyUnitsList});
 
   @override
   void onInit() {
@@ -43,6 +46,21 @@ class CheckoutController extends GetxController {
     nameController = TextEditingController(text: GetStorage().read(Constants.usernamekey)?.toString() ?? '');
     phoneController = TextEditingController(text: GetStorage().read(Constants.phonekey)?.toString() ?? '');
     emailController = TextEditingController(text: GetStorage().read(Constants.emailkey)?.toString() ?? '');
+    if (listingType == null) {
+      guestCountList = ['1', '2', '3'];
+      guestController = TextEditingController(text: guestCountList.first);
+      return;
+    }
+    if (listingType!.contains('1BHK')) {
+      guestCountList = ['1', '2', '3'];
+    } else if (listingType!.contains('2BHK')) {
+      guestCountList = ['1', '2', '3', '4'];
+    } else if (listingType!.contains('3BHK')) {
+      guestCountList = ['1', '2', '3', '4', '5'];
+    } else if (listingType!.contains('Studio')) {
+      guestCountList = ['1', '2'];
+    }
+    guestController = TextEditingController(text: guestCountList.last);
   }
 
   Future<void> submitBookingRequest() async {
@@ -66,7 +84,7 @@ class CheckoutController extends GetxController {
     String duration = monthSelected.value ? '${selectedMonths}m' : '${selectedDays}d';
 
     String url =
-        "${AppUrls.checkout}?checkin=$dateFormat&duration=$duration&guest=${guestController.text}&listingId=${propertyDetailsModel.id}&unitId=${selectedPropertyUnitId.value}";
+        "${AppUrls.checkout}?checkin=$dateFormat&duration=$duration&guest=${guestController.text}&listingId=$listingId&unitId=${selectedPropertyUnitId.value}";
 
     final response = await apiService.getApiCallWithURL(endPoint: url);
 

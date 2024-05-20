@@ -45,7 +45,7 @@ class DashboardView extends StatelessWidget {
     } else if (index == 3) {
       return const AppSocialScreen();
     } else {
-      return const Text('RentsEasy');
+      return const Text('RentisEazy');
     }
   }
 

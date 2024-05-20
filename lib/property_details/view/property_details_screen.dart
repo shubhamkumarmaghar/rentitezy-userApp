@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -77,9 +75,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: CustomTheme.appThemeContrast,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
-                      onPressed: () async {
-                        controller.showSiteVisitBottomModal();
-                      },
+                      onPressed: controller.onSiteVisit,
                       child: const Text(
                         'Site Visit',
                         style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
@@ -345,9 +341,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: CustomTheme.appThemeContrast,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
-                      onPressed: () async {
-                        controller.showSiteVisitBottomModal();
-                      },
+                      onPressed: () async {},
                       child: const Text(
                         'Ask',
                         style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
