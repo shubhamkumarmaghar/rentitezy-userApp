@@ -1,12 +1,8 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/checkout/controller/checkout_controller.dart';
-import 'package:rentitezy/property_details/model/property_details_model.dart';
+import '../../home/model/property_list_nodel.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/widgets.dart';
 import '../../widgets/app_bar.dart';

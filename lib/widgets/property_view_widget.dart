@@ -319,7 +319,11 @@ class PropertyViewWidget extends StatelessWidget {
                               backgroundColor: Constants.primaryColor,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                           onPressed: (){
-                            //controller.onBookNow();
+                            Get.to(() => CheckoutScreen(
+                              listingType: propertyInfoModel.listingType,
+                              listingId:  propertyInfoModel.id.toString(),
+                              propertyUnitsList: propertyInfoModel.units,
+                            ));
                           },
                           child: const Text(
                             'Book Now',

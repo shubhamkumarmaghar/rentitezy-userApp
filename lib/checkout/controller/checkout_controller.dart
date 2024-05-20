@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:rentitezy/checkout/view/checkout_details_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
+import '../../home/model/property_list_nodel.dart';
 import '../model/checkout_model.dart';
 import '../../property_details/model/property_details_model.dart';
 import '../../razorpay_payment/model/razorpay_payment_response_model.dart';

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
@@ -215,8 +217,8 @@ class MyHomePage extends StatelessWidget {
   Widget nearByPropertiesList(HomeController homeController) {
     return FittedBox(
       child: SizedBox(
-          height: Get.height * 0.35,
-          width: Get.width,
+          height: 330,
+          width: screenWidth,
           child: homeController.nearbyPropertyInfoList == null
               ? Center(child: RIEWidgets.getLoader())
               : homeController.nearbyPropertyInfoList != null && homeController.nearbyPropertyInfoList!.isEmpty
