@@ -4,13 +4,16 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import '../dashboard/controller/dashboard_controller.dart';
 import '../dashboard/view/dashboard_view.dart';
 
-PreferredSizeWidget appBarWidget({required String title, Function()? onBack, Function()? onRefresh}) {
+PreferredSizeWidget appBarWidget(
+    {required String title, Function()? onBack, Function()? onRefresh, Color? backgroundColor}) {
   return AppBar(
-
     title: Text(
       title,
-
-      style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500, fontSize: 20,),
+      style: const TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.w500,
+        fontSize: 20,
+      ),
     ),
     centerTitle: true,
     leading: IconButton(
@@ -18,7 +21,7 @@ PreferredSizeWidget appBarWidget({required String title, Function()? onBack, Fun
           if (onBack == null) {
             Get.back();
           } else {
-           onBack();
+            onBack();
           }
         },
         icon: const Icon(
@@ -40,7 +43,7 @@ PreferredSizeWidget appBarWidget({required String title, Function()? onBack, Fun
     ],
     flexibleSpace: Container(
       decoration: BoxDecoration(
-        color: Constants.primaryColor,
+        color: backgroundColor ?? Constants.primaryColor,
         borderRadius: const BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
       ),
     ),

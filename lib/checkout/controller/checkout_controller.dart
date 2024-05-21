@@ -36,10 +36,11 @@ class CheckoutController extends GetxController {
   List<String> guestCountList = [];
 
   final String? listingType;
-  final String listingId ;
+  final String listingId;
+
   final List<Units>? propertyUnitsList;
 
-  CheckoutController({this.listingType,required this.listingId,this.propertyUnitsList});
+  CheckoutController({this.listingType, required this.listingId, this.propertyUnitsList});
 
   @override
   void onInit() {

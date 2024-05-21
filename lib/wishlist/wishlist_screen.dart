@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
 import '../../utils/const/widgets.dart';
-import '../home/home_controller/home_controller.dart';
 import '../utils/view/rie_widgets.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/property_view_widget.dart';
@@ -26,9 +25,6 @@ class WishlistScreen extends StatelessWidget {
                 title: 'Wishlist',
                 onBack: () {
                   Get.find<DashboardController>().setIndex(0);
-                  final homeController = Get.find<HomeController>();
-                  homeController.fetchNearbyProperties();
-                  homeController.fetchProperties();
                 },
               ),
               body: Container(

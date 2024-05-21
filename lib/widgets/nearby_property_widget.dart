@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
@@ -27,7 +26,6 @@ class NearByPropertyWidget extends StatelessWidget {
     if (propertyInfoModel.images != null && propertyInfoModel.images!.isNotEmpty) {
       images = propertyInfoModel.images!.map((e) => e.url ?? '').toList();
     }
-    log('fff ${screenHeight * 0.15}');
     return GetBuilder<HomeController>(
       builder: (controller) {
         return GestureDetector(

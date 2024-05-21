@@ -9,6 +9,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/custom_theme.dart';
+import '../../widgets/custom_photo_view.dart';
 import 'appConfig.dart';
 
 double screenWidth = Get.width;
@@ -122,12 +123,19 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
       memCacheWidth: w.toInt(),
       memCacheHeight: h.toInt(),
       imageUrl: imgUrl,
-      imageBuilder: (context, imageProvider) => Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+      imageBuilder: (context, imageProvider) => GestureDetector(
+        onTap: () {
+          Get.to(() => CustomPhotoView(
+            imageUrl: imgUrl,
+          ));
+        },
+        child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+              ),
             ),
-          ),
+      ),
       placeholder: (context, url) => loading(),
       errorWidget: (context, url, error) => Container(
             decoration: BoxDecoration(

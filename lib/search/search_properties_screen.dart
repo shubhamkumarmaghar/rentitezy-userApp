@@ -65,7 +65,6 @@ class SearchPropertiesScreen extends StatelessWidget {
                                         controller.showSuggestion = false;
                                         FocusScope.of(context).requestFocus(FocusNode());
                                         controller.searchQuery.text = controller.searchedLocation[index];
-                                        controller.fetchProperties();
                                       },
                                       child: Container(
                                           color: Colors.white,

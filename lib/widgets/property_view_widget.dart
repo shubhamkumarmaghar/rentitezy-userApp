@@ -11,6 +11,7 @@ import '../checkout/view/checkout_screen.dart';
 import '../property_details/view/property_details_screen.dart';
 import '../site_visit/view/site_visit_screen.dart';
 import '../utils/const/appConfig.dart';
+import '../utils/const/widgets.dart';
 import '../utils/functions/util_functions.dart';
 import '../utils/model/property_model.dart';
 import '../utils/services/utils_api_service.dart';

@@ -14,13 +14,13 @@ import '../../utils/view/rie_widgets.dart';
 
 class MyHomePage extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final homeController = Get.put(HomeController());
 
   MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
+      init: HomeController(),
       builder: (controller) {
         return Scaffold(
             key: scaffoldKey,
