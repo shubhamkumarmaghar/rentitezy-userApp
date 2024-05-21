@@ -24,7 +24,7 @@ class _FaqState extends State<FaqScreen> {
         id: 2,
         question: "Is my 1st month's rent covered in the security deposit?",
         ans:
-            "No, your first month's rent needs to be paid in addition to the security deposit to Rentiseazy and You will have to pay the first month's rent on or before you move in to the property."),
+            "No, your first month's rent needs to be paid in addition to the security deposit to SoWeRent and You will have to pay the first month's rent on or before you move in to the property."),
     FaqModel(
         id: 3,
         question: "Is Security Deposit entirely refundable?",

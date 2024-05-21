@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
                               fit: BoxFit.fill,
                             )),
                         height(0.05),
-                        title("Welcome to Rentiseazy", 22),
+                        title("Welcome to SoWeRent", 22),
                         height(0.03),
                         phoneTextField(controller),
                         SizedBox(

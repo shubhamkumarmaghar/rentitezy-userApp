@@ -106,9 +106,9 @@ class _SplashPageState extends State<SplashScreenPage> {
     return Scaffold(
         body: Center(
       child: Image.asset(
-        'assets/images/splash_logo.png',
-        height: 100,
-        width: 100,
+        'assets/images/app_logo.png',
+        height: 200,
+        width: 200,
       ),
     ));
   }

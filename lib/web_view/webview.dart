@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:rentitezy/utils/const/widgets.dart';
+import 'package:rentitezy/widgets/app_bar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Import for Android features.
@@ -99,8 +101,15 @@ Page resource error:
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark, //<-- SEE HERE
         child: Scaffold(
-          body: WebViewWidget(
-            controller: _controller,
+          //appBar: appBarWidget(title: widget.title),
+          body: Container(
+            padding: EdgeInsets.only(
+              top: screenHeight*0.05
+            ),
+            child: WebViewWidget(
+
+              controller: _controller,
+            ),
           ),
         ));
   }

@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
 
 class AppUrls {
-  static const String appName = "Rentiseazy";
+  static const String appName = "SoWeRent";
   static const String phone = "+918867319944";
   static const productionUrl = "https://api.rentiseazy.com/user/";
   static const developmentUrl = "https://test-api.rentiseazy.com/user/";
   static const rootUrl = "http://networkgroups.in/prisma/rentitezy/";
-  static const baseUrl = developmentUrl;
+  static const baseUrl = productionUrl;
   static const imagesRootUrl =
       "https://api.rentiseazy.com/user/images/";
   static const imagesRentIsEasyUrl = "${baseUrl}images/";

@@ -94,7 +94,7 @@ class PdfBillInvoice {
                 children: [
                   Text('Received by:', style: const TextStyle(fontSize: 9)),
                   SizedBox(width: 10),
-                  Text(' Rentiseazy ',
+                  Text(' SoWeRent ',
                       style: const TextStyle(
                           fontSize: 7, decoration: TextDecoration.underline)),
                 ]),

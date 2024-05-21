@@ -96,7 +96,7 @@ class PdfInvoice {
                 'All legal matter subject to Bengaluru (Karnataka) Jurisdiction only.',
                 style: const TextStyle(fontSize: 11)),
             Text(
-                'If Rentiseazy withdraws the contract from the owner the tenants deposit will be fully refundable without any deduction. ',
+                'If SoWeRent withdraws the contract from the owner the tenants deposit will be fully refundable without any deduction. ',
                 style: const TextStyle(fontSize: 11)),
             SizedBox(height: 5 * PdfPageFormat.mm),
             Table(

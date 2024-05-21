@@ -27,7 +27,7 @@ class AppDrawer extends StatelessWidget {
       DateFormat('yyyy-MM-dd').format(DateTime.now()),
       '',
       'TempAbout',
-      'Rentiseazy',
+      'SoWeRent',
       'TempValOne',
       'TempValTwo',
       'TempValFirstParty',
@@ -78,7 +78,6 @@ class AppDrawer extends StatelessWidget {
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 15,
-                        fontFamily: Constants.fontsFamily,
                         fontWeight: FontWeight.bold),
                   )
                 ],

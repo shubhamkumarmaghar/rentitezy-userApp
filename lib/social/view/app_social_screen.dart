@@ -173,7 +173,7 @@ class AppSocialScreen extends StatelessWidget {
       onTap: () async {
         Get.to(() => const WebViewPage(
               title: 'Website',
-              uri: 'https://rentiseazy.com/',
+              uri: 'https://sowerent.com/',
             ));
       },
       child: Row(
@@ -182,7 +182,7 @@ class AppSocialScreen extends StatelessWidget {
           SizedBox(
             width: screenWidth * 0.04,
           ),
-          Text('Rentiseazy',
+          Text('SoWeRent',
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Constants.primaryColor)),
          const Spacer(),
           Container(
