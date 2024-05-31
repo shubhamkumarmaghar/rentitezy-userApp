@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:rentitezy/login/view/login_screen.dart';
+import '../../theme/custom_theme.dart';
 import '../const/appConfig.dart';
 import '../const/app_urls.dart';
 import '../view/rie_widgets.dart';
@@ -131,6 +134,25 @@ class RIEUserApiService {
     }
     return {'message': 'failure'};
   }
+  Future<dynamic> getApiCallWithQueryParamsWithHeaders(
+      {required String endPoint,
+        required Map<String, dynamic> queryParams,
+        required Map<String, String> headers,
+        bool fromLogin = false,
+        required BuildContext context}) async {
+    log('URL :: $_baseURL$endPoint ---- QueryParams :: ${queryParams.toString()} -- Auth(header) ---${headers} ');
+
+    try {
+      final response = await http.get(Uri.https(_baseURL, endPoint, queryParams), headers: headers);
+
+      return await _response(response, url: Uri.https(_baseURL, endPoint).toString());
+    } on SocketException {
+      log('SocketException Happened');
+    } catch (e) {
+      log('Error : ${e.toString()}');
+    }
+    return {'message': 'failure'};
+  }
 
   dynamic deleteApiCall({required String endPoint}) async {
     try {
@@ -168,7 +190,9 @@ class RIEUserApiService {
       case 402:
         return _getErrorResponse(json.decode(response.body));
       case 403:
-        return _getErrorResponse(json.decode(response.body));
+        RIEWidgets.getToast(message: 'Unauthorized access.Please login to authorize.', color: CustomTheme.errorColor);
+        Get.offAll(()=>const LoginScreen());
+        //return _getErrorResponse(json.decode(response.body));
       case 404:
         return _getErrorResponse(json.decode(response.body));
       case 405:
@@ -192,23 +216,5 @@ class RIEUserApiService {
     return {'message': 'failure ${error['message']}'};
   }
 
-  Future<dynamic> getApiCallWithQueryParamsWithHeaders(
-      {required String endPoint,
-      required Map<String, dynamic> queryParams,
-      required Map<String, String> headers,
-      bool fromLogin = false,
-      required BuildContext context}) async {
-    log('URL :: $_baseURL$endPoint ---- QueryParams :: ${queryParams.toString()} -- Auth(header) ---${headers} ');
 
-    try {
-      final response = await http.get(Uri.https(_baseURL, endPoint, queryParams), headers: headers);
-
-      return await _response(response, url: Uri.https(_baseURL, endPoint).toString());
-    } on SocketException {
-      log('SocketException Happened');
-    } catch (e) {
-      log('Error : ${e.toString()}');
-    }
-    return {'message': 'failure'};
-  }
 }

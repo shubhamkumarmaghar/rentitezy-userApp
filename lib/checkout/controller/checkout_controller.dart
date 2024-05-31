@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,14 +8,13 @@ import 'package:rentitezy/checkout/view/checkout_details_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
 import '../../home/model/property_list_nodel.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/checkout_model.dart';
-import '../../property_details/model/property_details_model.dart';
 import '../../razorpay_payment/model/razorpay_payment_response_model.dart';
 import '../../razorpay_payment/view/razorpay_payment_view.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
-import '../../widgets/custom_alert_dialogs.dart';
 
 class CheckoutController extends GetxController {
   late TextEditingController nameController;

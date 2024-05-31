@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
 import 'package:rentitezy/invoices/model/invoice_model.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/view/rie_widgets.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../../web_view/webview_payment.dart';
 
 class InvoiceController extends GetxController {

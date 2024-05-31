@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 
-import '../widgets/app_bar.dart';
+import '../utils/widgets/app_bar.dart';
 
 class TermsAndConditions extends StatelessWidget {
   const TermsAndConditions({super.key, required this.title, required this.data});

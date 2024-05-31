@@ -1,16 +1,16 @@
-import 'dart:developer';
+
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
-import 'package:rentitezy/widgets/app_drawer.dart';
-import 'package:rentitezy/widgets/nearby_property_widget.dart';
-import 'package:rentitezy/widgets/property_view_widget.dart';
 import '../../search/search_properties_screen.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';
+import '../../utils/widgets/app_drawer.dart';
+import '../../utils/widgets/nearby_property_widget.dart';
+import '../../utils/widgets/property_view_widget.dart';
 
 class MyHomePage extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();

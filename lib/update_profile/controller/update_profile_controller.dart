@@ -7,12 +7,13 @@ import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/utils/services/rie_user_api_service.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import 'package:http/http.dart' as http;
 import '../../../dashboard/controller/dashboard_controller.dart';
 import '../../../utils/const/appConfig.dart';
 import '../../../utils/const/app_urls.dart';
 import 'package:http_parser/http_parser.dart';
+
+import '../../utils/widgets/custom_alert_dialogs.dart';
 
 class UpdateProfileController extends GetxController {
   TextEditingController firstNameController = TextEditingController();

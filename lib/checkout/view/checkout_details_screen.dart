@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/checkout/controller/checkout_controller.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
 import '../model/checkout_model.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
@@ -52,10 +52,24 @@ class CheckoutDetailsScreen extends StatelessWidget {
               rowText(title: "Deposit", value: checkoutModel.deposit, showCurrency: true),
               rowText(title: "OnBoarding", value: checkoutModel.onboarding, showCurrency: true),
               rowText(title: "Maintenance", value: checkoutModel.maintenance, showCurrency: true),
-              rowText(title: "Amount", value: checkoutModel.amount, showCurrency: true),
+              // SizedBox(height: screenHeight * 0.01),
+              // Row(
+              //
+              //   children: List.generate(
+              //       50,
+              //       (index) => Expanded(
+              //             child: Container(
+              //               color: index % 2 == 0 ? Colors.transparent : Colors.grey,
+              //               height: 1,
+              //             ),
+              //           )),
+              // ),
+              // SizedBox(height: screenHeight * 0.01),
               rowText(title: "Total", value: checkoutModel.total, showCurrency: true),
+              const Divider(),
+              rowText(title: "Amount to pay", value: checkoutModel.amount, showCurrency: true),
               SizedBox(
-                height: screenHeight * 0.19,
+                height: screenHeight * 0.17,
               ),
               Center(
                 child: SizedBox(

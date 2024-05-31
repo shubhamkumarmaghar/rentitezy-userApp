@@ -6,7 +6,7 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import '../../../theme/custom_theme.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
 
 class CreateTicketScreen extends StatelessWidget {
   final String bookingId;

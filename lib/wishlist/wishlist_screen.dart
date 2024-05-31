@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
 import '../../utils/const/widgets.dart';
 import '../utils/view/rie_widgets.dart';
-import '../widgets/app_bar.dart';
-import '../widgets/property_view_widget.dart';
+import '../utils/widgets/app_bar.dart';
+import '../utils/widgets/property_view_widget.dart';
 import 'wishlist_controller.dart';
 
 class WishlistScreen extends StatelessWidget {

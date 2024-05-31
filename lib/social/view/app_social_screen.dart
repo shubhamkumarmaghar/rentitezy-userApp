@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:unicons/unicons.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/functions/util_functions.dart';
+import '../../utils/widgets/app_bar.dart';
 import '../../web_view/webview.dart';
-import '../../widgets/app_bar.dart';
 
 class AppSocialScreen extends StatelessWidget {
   const AppSocialScreen({super.key});

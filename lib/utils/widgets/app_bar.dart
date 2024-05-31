@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import '../dashboard/controller/dashboard_controller.dart';
-import '../dashboard/view/dashboard_view.dart';
 
 PreferredSizeWidget appBarWidget(
     {required String title, Function()? onBack, Function()? onRefresh, Color? backgroundColor}) {

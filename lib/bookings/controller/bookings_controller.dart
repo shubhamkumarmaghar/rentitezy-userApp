@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/functions/util_functions.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/booking_model.dart';
 import '../model/booking_details_model.dart';
 

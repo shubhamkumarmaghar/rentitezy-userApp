@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 
-import '../utils/const/widgets.dart';
+import '../const/widgets.dart';
+
 EdgeInsetsGeometry contEdge =
     const EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 0);
 

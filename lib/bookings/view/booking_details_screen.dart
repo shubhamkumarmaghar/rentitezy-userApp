@@ -7,7 +7,7 @@ import 'package:rentitezy/utils/view/rie_widgets.dart';
 import '../../invoices/view/invoices_screen.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/functions/util_functions.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
 import '../controller/bookings_controller.dart';
 
 class BookingDetailsPage extends StatelessWidget {

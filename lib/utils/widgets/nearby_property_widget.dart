@@ -8,10 +8,11 @@ import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/model/property_model.dart';
 import 'package:rentitezy/utils/services/utils_api_service.dart';
-import '../checkout/view/checkout_screen.dart';
-import '../property_details/view/property_details_screen.dart';
-import '../site_visit/view/site_visit_screen.dart';
-import '../utils/const/widgets.dart';
+
+import '../../checkout/view/checkout_screen.dart';
+import '../../property_details/view/property_details_screen.dart';
+import '../../site_visit/view/site_visit_screen.dart';
+import '../const/widgets.dart';
 
 class NearByPropertyWidget extends StatelessWidget {
   final PropertyInfoModel propertyInfoModel;

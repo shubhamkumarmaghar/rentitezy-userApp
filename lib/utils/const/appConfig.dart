@@ -146,7 +146,7 @@ void showSnackBar(BuildContext context, String result,[Color? color]) {
         style: TextStyle(
           fontFamily: Constants.fontsFamily,
         )),
-    duration: const Duration(seconds: 2),backgroundColor:color ?? CustomTheme.appTheme,
+    duration: const Duration(seconds: 2),backgroundColor:color ?? CustomTheme.errorColor,
   ));
 }
 

@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import '../../../utils/const/widgets.dart';
-import '../../widgets/app_bar.dart';
-import '../../widgets/custom_photo_view.dart';
+import '../../utils/widgets/app_bar.dart';
+import '../../utils/widgets/custom_photo_view.dart';
 import '../controller/update_profile_controller.dart';
 
 class UpdateProfilePage extends StatelessWidget {

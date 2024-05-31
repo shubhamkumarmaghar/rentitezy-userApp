@@ -7,8 +7,8 @@ import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../../utils/services/rie_user_api_service.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/razorpay_payment_response_model.dart';
 
 class RazorpayController extends GetxController {

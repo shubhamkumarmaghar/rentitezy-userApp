@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/site_visit/controller/site_visit_controller.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-import 'package:rentitezy/widgets/app_bar.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/view/rie_widgets.dart';
+import '../../utils/widgets/app_bar.dart';
 
 class SiteVisitScreen extends StatelessWidget {
   final String propertyId;

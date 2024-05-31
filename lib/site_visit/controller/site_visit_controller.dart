@@ -1,9 +1,6 @@
-import 'dart:developer';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../theme/custom_theme.dart';
@@ -11,7 +8,7 @@ import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../widgets/custom_alert_dialogs.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 
 class SiteVisitController extends GetxController {
   DateTime selectedDate = DateTime.now().add(const Duration(days: 0));

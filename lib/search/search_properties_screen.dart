@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-import '../../widgets/property_view_widget.dart';
-import '../widgets/app_bar.dart';
+import '../utils/widgets/app_bar.dart';
+import '../utils/widgets/property_view_widget.dart';
 import 'search_controller.dart';
 
 class SearchPropertiesScreen extends StatelessWidget {

@@ -1,10 +1,7 @@
 import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-import 'package:rentitezy/widgets/app_bar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 // Import for Android features.

@@ -7,7 +7,7 @@ import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:rentitezy/utils/functions/util_functions.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
 import '../model/invoice_model.dart';
 
 class InvoiceScreen extends StatelessWidget {

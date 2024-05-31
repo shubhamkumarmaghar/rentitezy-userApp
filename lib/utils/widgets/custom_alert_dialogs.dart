@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 
-import '../utils/const/appConfig.dart';
+import '../const/appConfig.dart';
+
 
 void showProgressLoader(BuildContext context) {
   showAdaptiveDialog(

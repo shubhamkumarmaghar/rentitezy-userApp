@@ -5,7 +5,7 @@ import 'package:rentitezy/utils/const/appConfig.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
 import '../controller/tickets_controller.dart';
 
 class TicketsListScreen extends StatelessWidget {

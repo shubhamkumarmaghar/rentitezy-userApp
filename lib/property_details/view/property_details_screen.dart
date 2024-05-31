@@ -10,11 +10,11 @@ import 'package:rentitezy/property_details/model/property_details_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:rentitezy/utils/enums/rent_type.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
-import 'package:rentitezy/widgets/custom_photo_view.dart';
 import 'package:unicons/unicons.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/functions/util_functions.dart';
+import '../../utils/widgets/custom_photo_view.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
   final String propertyId;
@@ -333,9 +333,11 @@ class PropertyDetailsScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: CustomTheme.appThemeContrast,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
-                      onPressed: () async {},
+                      onPressed: () async {
+                        RIEWidgets.getToast(message: 'Coming soon...', color: CustomTheme.myFavColor);
+                      },
                       child: const Text(
-                        'Ask',
+                        'Submit',
                         style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
                       )),
                 ),
@@ -516,6 +518,25 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ),
                 Text(
                   '${Constants.currency} ${getDepositAmount(rentType: controller.rentType.value, model: model)}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: screenHeight * 0.01,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Maintenance',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  '${Constants.currency} ${model.property?.maintenance ?? 0.toString()}',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
                 ),
               ],

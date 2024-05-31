@@ -5,11 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/custom_theme.dart';
-import '../../widgets/custom_photo_view.dart';
+import '../widgets/custom_photo_view.dart';
 import 'appConfig.dart';
 
 double screenWidth = Get.width;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:rentitezy/widgets/app_bar.dart';
+
+import 'app_bar.dart';
 
 class CustomPhotoView extends StatelessWidget {
   final String? imageUrl;

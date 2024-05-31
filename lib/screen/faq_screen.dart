@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/faq_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 
-import '../widgets/app_bar.dart';
+import '../utils/widgets/app_bar.dart';
+
 
 class FaqScreen extends StatefulWidget {
   const FaqScreen({super.key});

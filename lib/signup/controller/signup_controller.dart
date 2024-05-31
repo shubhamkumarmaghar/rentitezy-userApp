@@ -9,7 +9,7 @@ import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../widgets/custom_alert_dialogs.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/signup_response_model.dart';
 
 class SignUpController extends GetxController {
@@ -58,7 +58,7 @@ class SignUpController extends GetxController {
   }
 
   bool isPasswordValid(String password) {
-    RegExp regex = RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    RegExp regex = RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#&*~]).{8,}$');
     return regex.hasMatch(password);
   }
 }

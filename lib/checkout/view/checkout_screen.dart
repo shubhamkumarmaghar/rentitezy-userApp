@@ -5,7 +5,7 @@ import 'package:rentitezy/checkout/controller/checkout_controller.dart';
 import '../../home/model/property_list_nodel.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/widgets.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
 
 class CheckoutScreen extends StatelessWidget {
   final String? listingType;
