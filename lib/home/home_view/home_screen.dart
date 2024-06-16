@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rentitezy/add_kyc/view/add_kyc_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
@@ -122,8 +123,9 @@ class MyHomePage extends StatelessWidget {
             itemBuilder: (ctx, index) {
               return GestureDetector(
                   onTap: () {
-                    homeController.selectedIndex.value = index;
-                    homeController.locationFunc(homeController.categories[index]);
+                    //homeController.selectedIndex.value = index;
+                   // homeController.locationFunc(homeController.categories[index]);
+                    Get.to(AddKycScreen(guestCount: 4,bookingId: '733',));
                   },
                   child: Obx(
                     () => AnimatedContainer(

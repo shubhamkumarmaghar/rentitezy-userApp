@@ -3,7 +3,11 @@ import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 
 PreferredSizeWidget appBarWidget(
-    {required String title, Function()? onBack, Function()? onRefresh, Color? backgroundColor}) {
+    {required String title,
+    Function()? onBack,
+    Function()? onRefresh,
+    Color? backgroundColor,
+    bool showLeading = true}) {
   return AppBar(
     title: Text(
       title,
@@ -14,19 +18,21 @@ PreferredSizeWidget appBarWidget(
       ),
     ),
     centerTitle: true,
-    leading: IconButton(
-        onPressed: () {
-          if (onBack == null) {
-            Get.back();
-          } else {
-            onBack();
-          }
-        },
-        icon: const Icon(
-          Icons.arrow_back_ios_new_rounded,
-          color: Colors.white,
-          size: 18,
-        )),
+    leading: showLeading
+        ? IconButton(
+            onPressed: () {
+              if (onBack == null) {
+                Get.back();
+              } else {
+                onBack();
+              }
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.white,
+              size: 18,
+            ))
+        : null,
     actions: [
       Visibility(
           visible: onRefresh != null,

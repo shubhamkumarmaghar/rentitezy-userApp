@@ -8,6 +8,7 @@ import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
 import '../../../utils/services/rie_user_api_service.dart';
+import '../../add_kyc/view/add_kyc_screen.dart';
 import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/razorpay_payment_response_model.dart';
 
@@ -78,8 +79,7 @@ class RazorpayController extends GetxController {
   }
 
   void _paymentCallback(
-      {
-      required String razorpayOrderId,
+      {required String razorpayOrderId,
       String? paymentId,
       String? razorpayPaymentId,
       String? razorpaySignature}) async {
@@ -90,9 +90,10 @@ class RazorpayController extends GetxController {
       'razorpaySignature': razorpaySignature,
     });
     if (response != null) {
-      log('nnnnn $response');
-     Get.find<DashboardController>().setIndex(0);
-     Get.offAll(const DashboardView());
+      Get.offAll(() => AddKycScreen(
+            guestCount: 4,
+            bookingId: response['data']['id'],
+          ));
     }
   }
 
