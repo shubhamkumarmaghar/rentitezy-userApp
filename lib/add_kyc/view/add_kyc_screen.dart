@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -15,18 +16,19 @@ import '../../utils/widgets/data_alert_dialog.dart';
 class AddKycScreen extends StatelessWidget {
   final int guestCount;
   final String bookingId;
+  final bool fromPayment;
 
-  const AddKycScreen({super.key, required this.guestCount,required this.bookingId});
+  const AddKycScreen({super.key, required this.guestCount, required this.bookingId,required this.fromPayment});
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: !fromPayment,
       child: GetBuilder<AddKycController>(
-        init: AddKycController(guestCount: guestCount,bookingId: bookingId),
+        init: AddKycController(guestCount: guestCount, bookingId: bookingId,fromPayment: fromPayment),
         builder: (controller) {
           return Scaffold(
-            appBar: appBarWidget(title: 'Kyc Documents',showLeading: false),
+            appBar: appBarWidget(title: 'Kyc Documents', showLeading:!fromPayment,),
             body: Container(
               width: screenWidth,
               height: screenHeight,
@@ -127,68 +129,80 @@ class AddKycScreen extends StatelessWidget {
             },
           ),
           height(0.02),
-          controller.documentModelList[index].documentUrl == null
-              ? InkWell(
-                  onTap: () {
-                    controller.showImagePickerDialog(documentIndex: index);
-                  },
-                  child: Container(
-                      width: screenWidth,
-                      height: screenHeight * 0.22,
-                      decoration: BoxDecoration(
-                          color: Constants.primaryColor.withOpacity(0.1), borderRadius: BorderRadius.circular(10)),
-                      child: Icon(
-                        Icons.add_photo_alternate_rounded,
-                        size: 100,
-                        color: Constants.primaryColor,
-                      )),
-                )
-              : InkWell(
-                  onTap: () {
-                    controller.documentModelList.forEach((element) {
-                      log('file -- ${element.toString()}');
-                    });
-                  },
-                  child: SizedBox(
-                    width: screenWidth,
-                    height: screenHeight * 0.24,
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          top: 15,
-                          child: SizedBox(
-                              width: screenWidth * 0.8,
-                              height: screenHeight * 0.22,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    controller.documentModelList[index].documentUrl ?? '',
-                                    fit: BoxFit.cover,
-                                  ))),
-                        ),
-                        Positioned(
-                            right: 0,
-                            top: 0,
-                            child: InkWell(
-                              onTap: () {
-                                controller.deleteDocumentDialog(index);
-                              },
-                              child: const CircleAvatar(
-                                radius: 16,
-                                backgroundColor: Colors.black,
-                                child: Icon(
-                                  Icons.close_outlined,
-                                  size: 18,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ))
-                      ],
-                    ),
-                  ),
-                ),
+          photoListView(docIndex: index, controller: controller),
           height(0.02),
         ],
+      ),
+    );
+  }
+
+  Widget photoListView({required int docIndex, required AddKycController controller}) {
+    return SizedBox(
+
+      child: GridView.builder(
+        scrollDirection: Axis.vertical,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: controller.documentModelList[docIndex].documentUrlsList.length + 1,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3, crossAxisSpacing: 20, childAspectRatio: 1.0),
+        itemBuilder: (context, index) {
+          return Container(
+              alignment: Alignment.center,
+              child: controller.documentModelList[docIndex].documentUrlsList.length == index
+                  ? InkWell(
+                      onTap: () async {
+                        controller.showImagePickerDialog(documentIndex: docIndex);
+                      },
+                      child:  Container(
+                        width: screenWidth * 0.25,
+                        height: screenHeight * 0.1,
+                        decoration: BoxDecoration(
+                          color: Constants.primaryColor.withOpacity(0.1),
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        ),
+                        child: Icon(
+                          Icons.add_photo_alternate,
+                          size: screenHeight * 0.07,
+                          color: Constants.primaryColor,
+                        ),
+                      ),
+                    )
+                  : Stack(
+                    children: [
+                      Positioned(
+                        top: 15,
+                        child: SizedBox(
+                          width: screenWidth * 0.25,
+                          height: screenHeight * 0.1,
+                          child: ClipRRect(
+                              borderRadius: const BorderRadius.all(Radius.circular(10)),
+                              child: Image.network(
+                                controller.documentModelList[docIndex].documentUrlsList[index] ?? '',
+                                fit: BoxFit.cover,
+                              )),
+                        ),
+                      ),
+                      Positioned(
+                          right: 0,
+                          top: 0,
+                          child: InkWell(
+                            onTap: () {
+                              controller.deleteDocumentDialog(docIndex: docIndex,index: index);
+                            },
+                            child: const CircleAvatar(
+                              radius: 16,
+                              backgroundColor: Colors.black,
+                              child: Icon(
+                                Icons.close_outlined,
+                                size: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ))
+                    ],
+                  ));
+        },
       ),
     );
   }

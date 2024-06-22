@@ -175,7 +175,7 @@ class PropertyViewWidget extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                            fontSize: 20, color: Colors.black, wordSpacing: 3, fontWeight: FontWeight.w500),
+                            fontSize: 20, color: Colors.black, wordSpacing: 1.2, fontWeight: FontWeight.w500),
                       )),
                   Visibility(
                     visible: canNavigateToMap,

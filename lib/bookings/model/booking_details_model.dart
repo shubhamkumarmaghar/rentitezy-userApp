@@ -1,28 +1,4 @@
 class BookingDetailsModel {
-  Data? data;
-  bool? success;
-  String? message;
-
-  BookingDetailsModel({this.data, this.success, this.message});
-
-  BookingDetailsModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-    success = json['success'];
-    message = json['message'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    data['success'] = this.success;
-    data['message'] = this.message;
-    return data;
-  }
-}
-
-class Data {
   int? id;
   String? from;
   String? till;
@@ -35,10 +11,12 @@ class Data {
   int? onboarding;
   int? amountPaid;
   String? status;
+  PropUnit? propUnit;
   PropListing? propListing;
-  List<Null>? invoices;
+  List<Invoices>? invoices;
+  List<Tenants>? tenants;
 
-  Data(
+  BookingDetailsModel(
       {this.id,
         this.from,
         this.till,
@@ -51,10 +29,12 @@ class Data {
         this.onboarding,
         this.amountPaid,
         this.status,
+        this.propUnit,
         this.propListing,
-        this.invoices});
+        this.invoices,
+        this.tenants});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  BookingDetailsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     from = json['from'];
     till = json['till'];
@@ -67,11 +47,24 @@ class Data {
     onboarding = json['onboarding'];
     amountPaid = json['amountPaid'];
     status = json['status'];
-
+    propUnit = json['propUnit'] != null
+        ? new PropUnit.fromJson(json['propUnit'])
+        : null;
     propListing = json['propListing'] != null
         ? new PropListing.fromJson(json['propListing'])
         : null;
-
+    if (json['invoices'] != null) {
+      invoices = <Invoices>[];
+      json['invoices'].forEach((v) {
+        invoices!.add(new Invoices.fromJson(v));
+      });
+    }
+    if (json['tenants'] != null) {
+      tenants = <Tenants>[];
+      json['tenants'].forEach((v) {
+        tenants!.add(new Tenants.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -88,11 +81,37 @@ class Data {
     data['onboarding'] = this.onboarding;
     data['amountPaid'] = this.amountPaid;
     data['status'] = this.status;
-
+    if (this.propUnit != null) {
+      data['propUnit'] = this.propUnit!.toJson();
+    }
     if (this.propListing != null) {
       data['propListing'] = this.propListing!.toJson();
     }
+    if (this.invoices != null) {
+      data['invoices'] = this.invoices!.map((v) => v.toJson()).toList();
+    }
+    if (this.tenants != null) {
+      data['tenants'] = this.tenants!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
 
+class PropUnit {
+  int? id;
+  String? flatNo;
+
+  PropUnit({this.id, this.flatNo});
+
+  PropUnit.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    flatNo = json['flatNo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['flatNo'] = this.flatNo;
     return data;
   }
 }
@@ -167,3 +186,155 @@ class Property {
     return data;
   }
 }
+
+class Invoices {
+  int? id;
+  String? type;
+  String? fromDate;
+  String? tillDate;
+  int? payable;
+  int? paid;
+  String? status;
+
+  Invoices(
+      {this.id,
+        this.type,
+        this.fromDate,
+        this.tillDate,
+        this.payable,
+        this.paid,
+        this.status});
+
+  Invoices.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    type = json['type'];
+    fromDate = json['fromDate'];
+    tillDate = json['tillDate'];
+    payable = json['payable'];
+    paid = json['paid'];
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['type'] = this.type;
+    data['fromDate'] = this.fromDate;
+    data['tillDate'] = this.tillDate;
+    data['payable'] = this.payable;
+    data['paid'] = this.paid;
+    data['status'] = this.status;
+    return data;
+  }
+}
+
+class Tenants {
+  int? id;
+  int? bookingId;
+  String? name;
+  String? email;
+  String? phone;
+  String? nationality;
+  String? dob;
+  String? address;
+  String? addedOn;
+  String? updateOn;
+  String? addedById;
+  List<Proofs>? proofs;
+
+  Tenants(
+      {this.id,
+        this.bookingId,
+        this.name,
+        this.email,
+        this.phone,
+        this.nationality,
+        this.dob,
+        this.address,
+        this.addedOn,
+        this.updateOn,
+        this.addedById,
+        this.proofs});
+
+  Tenants.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    bookingId = json['bookingId'];
+    name = json['name'];
+    email = json['email'];
+    phone = json['phone'];
+    nationality = json['nationality'];
+    dob = json['dob'];
+    address = json['address'];
+    addedOn = json['addedOn'];
+    updateOn = json['updateOn'];
+    addedById = json['addedById'];
+    if (json['proofs'] != null) {
+      proofs = <Proofs>[];
+      json['proofs'].forEach((v) {
+        proofs!.add(new Proofs.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['bookingId'] = this.bookingId;
+    data['name'] = this.name;
+    data['email'] = this.email;
+    data['phone'] = this.phone;
+    data['nationality'] = this.nationality;
+    data['dob'] = this.dob;
+    data['address'] = this.address;
+    data['addedOn'] = this.addedOn;
+    data['updateOn'] = this.updateOn;
+    data['addedById'] = this.addedById;
+    if (this.proofs != null) {
+      data['proofs'] = this.proofs!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Proofs {
+  int? id;
+  int? tenantId;
+  int? bookingId;
+  String? type;
+  String? url;
+  String? addedOn;
+  Null? addedById;
+
+  Proofs(
+      {this.id,
+        this.tenantId,
+        this.bookingId,
+        this.type,
+        this.url,
+        this.addedOn,
+        this.addedById});
+
+  Proofs.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    tenantId = json['tenantId'];
+    bookingId = json['bookingId'];
+    type = json['type'];
+    url = json['url'];
+    addedOn = json['addedOn'];
+    addedById = json['addedById'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['tenantId'] = this.tenantId;
+    data['bookingId'] = this.bookingId;
+    data['type'] = this.type;
+    data['url'] = this.url;
+    data['addedOn'] = this.addedOn;
+    data['addedById'] = this.addedById;
+    return data;
+  }
+}
+
+

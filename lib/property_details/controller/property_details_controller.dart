@@ -11,6 +11,7 @@ import '../../utils/const/app_urls.dart';
 import '../../utils/functions/util_functions.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/view/rie_widgets.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 
 class PropertyDetailsController extends GetxController {
   final RIEUserApiService apiService = RIEUserApiService();
@@ -77,6 +78,22 @@ class PropertyDetailsController extends GetxController {
   //     RIEWidgets.getToast(message: response["message"].toString(), color: CustomTheme.errorColor);
   //   }
   // }
+
+  Future<void> wishlistProperty() async {
+    showProgressLoader(Get.context!);
+    String url = AppUrls.addFav;
+    final data = await apiService.postApiCall(endPoint: url, bodyParams: {
+      'listingId': propertyDetailsModel?.id.toString(),
+      'wishlist': propertyDetailsModel?.wishlist != null && propertyDetailsModel?.wishlist == 0 ? '1' : '0',
+    });
+    cancelLoader();
+    if (data != null && data['message'].toString().toLowerCase().contains('success')) {
+      propertyDetailsModel?.wishlist = propertyDetailsModel?.wishlist == 0 ? 1 : 0;
+      update();
+    } else {
+      RIEWidgets.getToast(message: '${data['message']}', color: CustomTheme.errorColor);
+    }
+  }
 
   void onMapCreated(GoogleMapController mapController, double lat, double lng, String title) {
     final marker = Marker(

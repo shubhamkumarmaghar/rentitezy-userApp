@@ -123,9 +123,8 @@ class MyHomePage extends StatelessWidget {
             itemBuilder: (ctx, index) {
               return GestureDetector(
                   onTap: () {
-                    //homeController.selectedIndex.value = index;
-                   // homeController.locationFunc(homeController.categories[index]);
-                    Get.to(AddKycScreen(guestCount: 4,bookingId: '733',));
+                    homeController.selectedIndex.value = index;
+                    homeController.locationFunc(homeController.categories[index]);
                   },
                   child: Obx(
                     () => AnimatedContainer(

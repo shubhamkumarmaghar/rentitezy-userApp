@@ -22,6 +22,7 @@ class PropertyDetailsModel {
   List<Units>? units;
   List<Images>? images;
   List<ListingAmenities>? listingAmenities;
+  int? wishlist;
   String? availFrom;
   int? stPrice;
   int? deposit;
@@ -49,6 +50,7 @@ class PropertyDetailsModel {
         units,
         images,
         listingAmenities,
+        wishlist,
         availFrom,
         stPrice,
         deposit,
@@ -93,6 +95,7 @@ class PropertyDetailsModel {
         listingAmenities!.add( ListingAmenities.fromJson(v));
       });
     }
+    wishlist = json['wishlist'];
     availFrom = json['availFrom'];
     stPrice = json['stPrice'];
     deposit = json['deposit'];
@@ -131,6 +134,7 @@ class PropertyDetailsModel {
       data['listingAmenities'] =
           listingAmenities!.map((v) => v.toJson()).toList();
     }
+    data['wishlist'] = wishlist;
     data['availFrom'] = availFrom;
     data['stPrice'] = stPrice;
     data['deposit'] = deposit;

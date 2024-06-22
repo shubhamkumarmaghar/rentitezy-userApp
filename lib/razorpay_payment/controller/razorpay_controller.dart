@@ -16,10 +16,10 @@ class RazorpayController extends GetxController {
   final Razorpay _razorpay = Razorpay();
 
   final RazorpayPaymentResponseModel paymentResponseModel;
-
+  final int guestCount;
   RIEUserApiService apiService = RIEUserApiService();
 
-  RazorpayController({required this.paymentResponseModel});
+  RazorpayController({required this.paymentResponseModel,required this.guestCount});
 
   @override
   void onInit() {
@@ -89,9 +89,10 @@ class RazorpayController extends GetxController {
       'razorpayOrderId': razorpayOrderId,
       'razorpaySignature': razorpaySignature,
     });
-    if (response != null) {
+    if (response != null && response['data'] != null ) {
       Get.offAll(() => AddKycScreen(
-            guestCount: 4,
+            guestCount: guestCount,
+            fromPayment: true,
             bookingId: response['data']['id'],
           ));
     }

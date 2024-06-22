@@ -96,10 +96,8 @@ class BookingsScreen extends StatelessWidget {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    showProgressLoader(context);
                                     await bookingController.getBookingDetails(bookingId: '${item.id}');
-                                    cancelLoader();
-                                    Get.to(() => const BookingDetailsPage());
+
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(

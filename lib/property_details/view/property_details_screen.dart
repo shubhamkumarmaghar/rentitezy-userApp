@@ -14,6 +14,7 @@ import 'package:unicons/unicons.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/functions/util_functions.dart';
+import '../../utils/services/utils_api_service.dart';
 import '../../utils/widgets/custom_photo_view.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
@@ -660,27 +661,22 @@ class PropertyDetailsScreen extends StatelessWidget {
           top: screenHeight * 0.06,
           child: GestureDetector(
             onTap: () async {
-              // final res = await UtilsApiService.wishlistProperty(
-              //     context: context, propertyInfoModel: propertyInfoModel);
-              // if (res) {
-              //   onWishlist();
-              // }
+              controller.wishlistProperty();
             },
             child: Container(
               height: screenHeight * 0.045,
               width: screenWidth * 0.1,
               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50)),
               child: Icon(
-                  // propertyInfoModel.wishlist != null && propertyInfoModel.wishlist == 1
-                  //     ? Icons.favorite
-                  //     : Icons.favorite_border,
-                  Icons.favorite_border,
-                  size: 20,
-                  color:
-                      // propertyInfoModel.wishlist != null && propertyInfoModel.wishlist == 1
-                      //     ? CustomTheme.errorColor
-                      //     : Constants.primaryColor,
-                      Constants.primaryColor),
+                controller.propertyDetailsModel?.wishlist != null && controller.propertyDetailsModel?.wishlist == 1
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                size: 20,
+                color:
+                    controller.propertyDetailsModel?.wishlist != null && controller.propertyDetailsModel?.wishlist == 1
+                        ? CustomTheme.errorColor
+                        : Constants.primaryColor,
+              ),
             ),
           ),
         ),

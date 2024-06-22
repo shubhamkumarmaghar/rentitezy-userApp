@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:rentitezy/add_kyc/model/kyc_document_model.dart';
+import 'package:rentitezy/add_kyc/model/kyc_model.dart';
 import 'package:rentitezy/utils/extentions/string_extentions.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
 import '../../dashboard/view/dashboard_view.dart';
@@ -24,18 +25,19 @@ import '../../utils/widgets/custom_alert_dialogs.dart';
 class AddKycController extends GetxController {
   final int guestCount;
   final String bookingId;
+  final bool fromPayment;
   List<KycDocumentModel> documentModelList = [];
   RIEUserApiService apiService = RIEUserApiService();
 
   List<String> kycDocumentsList = ['Pan', 'Adhaar', 'Passport', 'Visa'];
 
-  AddKycController({required this.guestCount,required this.bookingId});
+  AddKycController({required this.guestCount, required this.bookingId,required this.fromPayment});
 
   @override
   void onInit() {
     super.onInit();
     for (int i = 0; i < guestCount; i++) {
-      documentModelList.add(KycDocumentModel());
+      documentModelList.add(KycDocumentModel(documentUrlsList: []));
     }
   }
 
@@ -52,7 +54,7 @@ class AddKycController extends GetxController {
             path: pickedImage.path,
             mediaType: pickedImage.name.split('.').last,
             docType: documentModelList[documentIndex].documentName ?? '');
-        documentModelList[documentIndex].documentUrl = url;
+        documentModelList[documentIndex].documentUrlsList.add(url);
         update();
       }
     }
@@ -85,6 +87,7 @@ class AddKycController extends GetxController {
 
   Future<void> submitKycDocs() async {
     int validGuest = 0;
+    List<KycDocumentModel> kycDocuments = [];
 
     for (var data in documentModelList) {
       if (!data.nationality.isNullEmptyOrWhitespace &&
@@ -92,36 +95,45 @@ class AddKycController extends GetxController {
           !data.phone.isNullEmptyOrWhitespace &&
           !data.name.isNullEmptyOrWhitespace &&
           !data.documentName.isNullEmptyOrWhitespace &&
-          !data.documentUrl.isNullEmptyOrWhitespace) {
+          data.documentUrlsList.isNotEmpty) {
         validGuest++;
+        kycDocuments.add(data);
       }
     }
     if (validGuest == 0) {
-     // RIEWidgets.getToast(message: 'Please submit kyc document for atleast 1 Tenant', color: CustomTheme.errorColor);
-      //return;
+      RIEWidgets.getToast(message: 'Please submit kyc document for atleast 1 Tenant', color: CustomTheme.errorColor);
+      return;
     }
-    final response = await apiService.postApiCall(endPoint: AppUrls.uploadTenantsDocs, bodyParams: {
+    List<KycModel> kycList = [];
+    for (var data in kycDocuments) {
+      var kycModel = KycModel(
+        email: data.email,
+        name: data.name,
+        nationality: data.nationality,
+        phone: data.phone,
+        proofs: [],
+      );
+      for (var img in data.documentUrlsList) {
+        kycModel.proofs?.add(Proofs(type: data.documentName?.toLowerCase(), url: img));
+      }
+      kycList.add(kycModel);
+    }
+    List<Map<String, dynamic>> kycJson = kycList.map((element) => element.toJson()).toList();
+
+    final response =
+        await apiService.postApiCall(endPoint: AppUrls.uploadTenantsDocs, canJsonEncode: true, bodyParams: {
       'bookingId': bookingId,
-      'tenants': jsonEncode([{
-        'bookingId': bookingId,
-        'name':'SuperTester',
-        'phone':'1122334455',
-        'email':'super@yopmail.com',
-        'nationality':'india',
-        'proofs':[{
-          'type':'adhaar',
-          'url':'https://tenant-proofs.s3.ap-south-1.amazonaws.com/test/file_1718444117169.webp'
-        }]
-      }]),
+      'tenants': kycJson,
     });
+    if (response['message'].toString().toLowerCase().contains('success')) {
+      RIEWidgets.getToast(message: 'Kyc documents submitted.', color: CustomTheme.myFavColor);
 
-    // Get.find<DashboardController>().setIndex(0);
-    // Get.offAll(() => const DashboardView());
-
-    log('valid guest data $validGuest');
+      Get.find<DashboardController>().setIndex(0);
+      Get.offAll(() => const DashboardView());
+    }
   }
 
-  void deleteDocumentDialog(int index) async {
+  void deleteDocumentDialog({required int index, required int docIndex}) async {
     showCupertinoDialog(
       context: Get.context!,
       builder: (context) {
@@ -142,7 +154,7 @@ class AddKycController extends GetxController {
                   children: [
                     InkWell(
                       onTap: () async {
-                        documentModelList[index].documentUrl = null;
+                        documentModelList[docIndex].documentUrlsList.removeAt(index);
                         Get.back();
                         update();
                       },
