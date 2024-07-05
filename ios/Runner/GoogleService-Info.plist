@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>908472849454-k74hc6741b4nkvc4vuorua0krkc0e8n4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.908472849454-k74hc6741b4nkvc4vuorua0krkc0e8n4</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>908472849454-ei8s9g28t3glkghl385rh722pispkbi7.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAnFO4TRI4yQOK1fnuZ41Nmx6kASF7u188</string>
+	<key>GCM_SENDER_ID</key>
+	<string>908472849454</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.rentiseazy.customer</string>
+	<key>PROJECT_ID</key>
+	<string>sowerent-144eb</string>
+	<key>STORAGE_BUCKET</key>
+	<string>sowerent-144eb.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:908472849454:ios:22d7695ecc46933445fbbf</string>
+</dict>
+</plist>

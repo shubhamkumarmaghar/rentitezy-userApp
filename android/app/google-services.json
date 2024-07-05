@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "908472849454",
+    "project_id": "sowerent-144eb",
+    "storage_bucket": "sowerent-144eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908472849454:android:63aa681a9f86ad5245fbbf",
+        "android_client_info": {
+          "package_name": "com.app.sowerent"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7-ItAKmQfSJkTFWoLUywJ-94Obeuclgg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
