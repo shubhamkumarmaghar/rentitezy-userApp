@@ -35,6 +35,10 @@ migrate_working_dir/
 # Symbolication related
 app.*.symbols
 
+#keystore
+/android/app/cert/keystore.jks
+/android/app/cert/certificate.pem
+/android/app/key.properties
 # Obfuscation related
 app.*.map.json
 
