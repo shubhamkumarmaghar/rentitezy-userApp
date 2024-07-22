@@ -1,25 +1,27 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rentitezy/add_kyc/view/add_kyc_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
-import 'package:rentitezy/screen/profile_screen_new.dart';
-import 'package:rentitezy/widgets/app_drawer.dart';
-import 'package:rentitezy/widgets/nearby_property_widget.dart';
-import 'package:rentitezy/widgets/property_view_widget.dart';
 import '../../search/search_properties_screen.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';
+import '../../utils/widgets/app_drawer.dart';
+import '../../utils/widgets/nearby_property_widget.dart';
+import '../../utils/widgets/property_view_widget.dart';
 
 class MyHomePage extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final homeController = Get.put(HomeController());
 
   MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
+      init: HomeController(),
       builder: (controller) {
         return Scaffold(
             key: scaffoldKey,
@@ -43,7 +45,7 @@ class MyHomePage extends StatelessWidget {
                               fontWeight: FontWeight.w500)),
                     ),
                     WidgetSpan(
-                      child: Text(homeController.userName,
+                      child: Text(controller.userName,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,
@@ -64,9 +66,9 @@ class MyHomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     height(0.02),
-                    searchView(),
+                    searchView(controller),
                     height(0.03),
-                    SizedBox(height: 45, width: screenWidth, child: buildTabBar()),
+                    SizedBox(height: 45, width: screenWidth, child: buildTabBar(controller)),
                     height(0.04),
                     Text(
                       "Near by Properties",
@@ -74,7 +76,7 @@ class MyHomePage extends StatelessWidget {
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
                     ),
                     height(0.02),
-                    nearByPropertiesList(),
+                    nearByPropertiesList(controller),
                     height(0.04),
                     Text(
                       "Recommended Properties",
@@ -82,9 +84,9 @@ class MyHomePage extends StatelessWidget {
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
                     ),
                     height(0.02),
-                    homeController.propertyInfoList == null
+                    controller.propertyInfoList == null
                         ? Center(child: RIEWidgets.getLoader())
-                        : homeController.propertyInfoList != null && homeController.propertyInfoList!.isEmpty
+                        : controller.propertyInfoList != null && controller.propertyInfoList!.isEmpty
                             ? const Center(
                                 child: Text(
                                   'No Property Found!',
@@ -95,10 +97,10 @@ class MyHomePage extends StatelessWidget {
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
-                                itemCount: homeController.propertyInfoList?.length,
+                                itemCount: controller.propertyInfoList?.length,
                                 itemBuilder: (context, index) {
                                   return PropertyViewWidget(
-                                      propertyInfoModel: homeController.propertyInfoList![index],
+                                      propertyInfoModel: controller.propertyInfoList![index],
                                       onWishlist: () => controller.update());
                                 },
                               ),
@@ -111,7 +113,7 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget buildTabBar() {
+  Widget buildTabBar(HomeController homeController) {
     return Obx(() => homeController.isLoadingLocation.value
         ? Center(child: RIEWidgets.getLoader())
         : ListView.builder(
@@ -154,10 +156,12 @@ class MyHomePage extends StatelessWidget {
             }));
   }
 
-  Widget searchView() {
+  Widget searchView(HomeController homeController) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => SearchPropertiesScreen(locationsList: homeController.categories,));
+        Get.to(() => SearchPropertiesScreen(
+              locationsList: homeController.categories,
+            ));
       },
       child: Container(
         height: screenHeight * 0.07,
@@ -211,28 +215,29 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  Widget nearByPropertiesList() {
+  Widget nearByPropertiesList(HomeController homeController) {
     return FittedBox(
       child: SizedBox(
-          height: Get.height * 0.35,
-          width: Get.width,
-          child: homeController.propertyInfoList == null
+          height: 330,
+          width: screenWidth,
+          child: homeController.nearbyPropertyInfoList == null
               ? Center(child: RIEWidgets.getLoader())
-              : homeController.propertyInfoList != null && homeController.propertyInfoList!.isEmpty
+              : homeController.nearbyPropertyInfoList != null && homeController.nearbyPropertyInfoList!.isEmpty
                   ? const Center(
                       child: Text(
-                        'No Property Found!',
+                        'No any nearby property found!',
                         style: TextStyle(fontSize: 18, color: Colors.black),
                       ),
                     )
                   : ListView.separated(
                       shrinkWrap: false,
                       scrollDirection: Axis.horizontal,
-                      itemCount:
-                          homeController.propertyInfoList!.length > 5 ? 5 : homeController.propertyInfoList!.length,
+                      itemCount: homeController.nearbyPropertyInfoList!.length > 5
+                          ? 5
+                          : homeController.nearbyPropertyInfoList!.length,
                       itemBuilder: (context, index) {
                         return NearByPropertyWidget(
-                          propertyInfoModel: homeController.propertyInfoList![index],
+                          propertyInfoModel: homeController.nearbyPropertyInfoList![index],
                         );
                       },
                       separatorBuilder: (context, index) => SizedBox(

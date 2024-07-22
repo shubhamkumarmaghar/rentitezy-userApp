@@ -3,16 +3,17 @@ import 'package:get/get.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/functions/util_functions.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/booking_model.dart';
 import '../model/booking_details_model.dart';
+import '../view/booking_details_screen.dart';
 
 class BookingsController extends GetxController {
-  BookingDetailsModel? getSingleBooking;
+  BookingDetailsModel? bookingDetailsModel;
   List<MyBookingModelData>? myBookingData;
-  var isLoading = true.obs;
+
   final RIEUserApiService apiService = RIEUserApiService();
 
   @override
@@ -35,7 +36,7 @@ class BookingsController extends GetxController {
       var list = response["data"] as List;
       if (list.isNotEmpty) {
         final List<MyBookingModelData> photosList =
-        (response["data"] as List).map((stock) => MyBookingModelData.fromJson(stock)).toList();
+            (response["data"] as List).map((stock) => MyBookingModelData.fromJson(stock)).toList();
         myBookingData = photosList;
         update();
       } else {
@@ -47,7 +48,7 @@ class BookingsController extends GetxController {
     }
   }
 
-  Future<void> getBookingDetails({required String bookingId,bool? showLoader}) async {
+  Future<void> getBookingDetails({required String bookingId, bool? showLoader}) async {
     if (showLoader != null && showLoader) {
       showProgressLoader(Get.context!);
     }
@@ -56,11 +57,11 @@ class BookingsController extends GetxController {
     if (showLoader != null && showLoader) {
       cancelLoader();
     }
-    if (response["message"].toString().toLowerCase() == 'success') {
-      if (response['data'] != null) {
-        getSingleBooking = BookingDetailsModel.fromJson(response);
-        update();
-      }
+    if (response["message"].toString().toLowerCase() == 'success' && response['data'] != null) {
+      bookingDetailsModel = BookingDetailsModel.fromJson(response['data']);
+      Get.to(() => const BookingDetailsPage());
+    } else {
+      bookingDetailsModel = BookingDetailsModel();
     }
   }
 

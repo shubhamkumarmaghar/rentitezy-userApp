@@ -7,18 +7,19 @@ import 'package:rentitezy/dashboard/controller/dashboard_controller.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../../utils/services/rie_user_api_service.dart';
+import '../../add_kyc/view/add_kyc_screen.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/razorpay_payment_response_model.dart';
 
 class RazorpayController extends GetxController {
   final Razorpay _razorpay = Razorpay();
 
   final RazorpayPaymentResponseModel paymentResponseModel;
-
+  final int guestCount;
   RIEUserApiService apiService = RIEUserApiService();
 
-  RazorpayController({required this.paymentResponseModel});
+  RazorpayController({required this.paymentResponseModel,required this.guestCount});
 
   @override
   void onInit() {
@@ -61,7 +62,7 @@ class RazorpayController extends GetxController {
           color: Colors.white,
           size: 40,
         ),
-        description: response.message ?? '',
+        description: response.message ?? 'Something went wrong!',
         subText: const Text(
           'Navigating to dashboard...',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),
@@ -78,8 +79,7 @@ class RazorpayController extends GetxController {
   }
 
   void _paymentCallback(
-      {
-      required String razorpayOrderId,
+      {required String razorpayOrderId,
       String? paymentId,
       String? razorpayPaymentId,
       String? razorpaySignature}) async {
@@ -89,10 +89,12 @@ class RazorpayController extends GetxController {
       'razorpayOrderId': razorpayOrderId,
       'razorpaySignature': razorpaySignature,
     });
-    if (response != null) {
-      log('nnnnn $response');
-     Get.find<DashboardController>().setIndex(0);
-     Get.offAll(const DashboardView());
+    if (response != null && response['data'] != null ) {
+      Get.offAll(() => AddKycScreen(
+            guestCount: guestCount,
+            fromPayment: true,
+            bookingId: response['data']['id'],
+          ));
     }
   }
 

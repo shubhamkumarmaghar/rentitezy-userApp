@@ -5,37 +5,39 @@ import 'package:intl/intl.dart';
 import 'package:rentitezy/checkout/view/checkout_details_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
+import '../../home/model/property_list_nodel.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/checkout_model.dart';
-import '../../property_details/model/property_details_model.dart';
 import '../../razorpay_payment/model/razorpay_payment_response_model.dart';
 import '../../razorpay_payment/view/razorpay_payment_view.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
-import '../../widgets/custom_alert_dialogs.dart';
 
 class CheckoutController extends GetxController {
   late TextEditingController nameController;
-
   late TextEditingController emailController;
-
   late TextEditingController phoneController;
-
   final RIEUserApiService apiService = RIEUserApiService();
   Rx<DateTime> selectedDate = DateTime.now().add(const Duration(days: 0)).obs;
-  final PropertyDetailsModel propertyDetailsModel;
+
   RxInt selectedMonths = 1.obs;
   RxInt selectedDays = 1.obs;
   RxInt selectedPropertyUnitId = 0.obs;
   RxBool monthSelected = true.obs;
   int? cartId;
-
-  final guestController = TextEditingController(text: '1');
+  late TextEditingController guestController;
   final dayController = TextEditingController(text: '3');
   final monthController = TextEditingController(text: '11');
   final unitController = TextEditingController();
+  List<String> guestCountList = [];
 
-  CheckoutController({required this.propertyDetailsModel});
+  final String? listingType;
+  final String listingId;
+
+  final List<Units>? propertyUnitsList;
+
+  CheckoutController({this.listingType, required this.listingId, this.propertyUnitsList});
 
   @override
   void onInit() {
@@ -43,6 +45,21 @@ class CheckoutController extends GetxController {
     nameController = TextEditingController(text: GetStorage().read(Constants.usernamekey)?.toString() ?? '');
     phoneController = TextEditingController(text: GetStorage().read(Constants.phonekey)?.toString() ?? '');
     emailController = TextEditingController(text: GetStorage().read(Constants.emailkey)?.toString() ?? '');
+    if (listingType == null) {
+      guestCountList = ['1', '2', '3'];
+      guestController = TextEditingController(text: guestCountList.first);
+      return;
+    }
+    if (listingType!.contains('1BHK')) {
+      guestCountList = ['1', '2'];
+    } else if (listingType!.contains('2BHK')) {
+      guestCountList = ['1', '2', '3', '4'];
+    } else if (listingType!.contains('3BHK')) {
+      guestCountList = ['1', '2', '3', '4', '5'];
+    } else if (listingType!.contains('Studio')) {
+      guestCountList = ['1', '2'];
+    }
+    guestController = TextEditingController(text: guestCountList.last);
   }
 
   Future<void> submitBookingRequest() async {
@@ -50,23 +67,13 @@ class CheckoutController extends GetxController {
       RIEWidgets.getToast(message: 'Please select unit', color: CustomTheme.errorColor);
       return;
     }
-    // if (selectedPropertyUnitId.value > 1) {
-    //   showTextAlertDialog(
-    //       context: Get.context!,
-    //       onYesTap: () {
-    //         Get.back();
-    //         submitBookingRequest();
-    //       },
-    //       title: 'Booking Alert',
-    //       subTitle: 'Valid ID /KYC should be provided at the time on check in');
-    // }
 
     showProgressLoader(Get.context!);
     final dateFormat = DateFormat('yyyy-MM-dd').format(selectedDate.value);
     String duration = monthSelected.value ? '${selectedMonths}m' : '${selectedDays}d';
 
     String url =
-        "${AppUrls.checkout}?checkin=$dateFormat&duration=$duration&guest=${guestController.text}&listingId=${propertyDetailsModel.id}&unitId=${selectedPropertyUnitId.value}";
+        "${AppUrls.checkout}?checkin=$dateFormat&duration=$duration&guest=${guestController.text}&listingId=$listingId&unitId=${selectedPropertyUnitId.value}";
 
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
@@ -97,7 +104,10 @@ class CheckoutController extends GetxController {
     cancelLoader();
     if (response['message'] != 'failure' && response['data'] != null) {
       final data = response['data'] as Map<String, dynamic>;
-      Get.to(RazorpayPaymentView(paymentResponseModel: RazorpayPaymentResponseModel.fromJson(data)));
+      Get.to(RazorpayPaymentView(
+        paymentResponseModel: RazorpayPaymentResponseModel.fromJson(data),
+        guestCount: int.parse(guestController.text.isNotEmpty ? guestController.text : '1'),
+      ));
     } else {
       RIEWidgets.getToast(message: response["message"].toString(), color: CustomTheme.errorColor);
     }

@@ -1,9 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -17,6 +14,8 @@ import 'package:unicons/unicons.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/functions/util_functions.dart';
+import '../../utils/services/utils_api_service.dart';
+import '../../utils/widgets/custom_photo_view.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
   final String propertyId;
@@ -57,14 +56,6 @@ class PropertyDetailsScreen extends StatelessWidget {
           );
         }
         return Scaffold(
-          appBar: AppBar(
-            toolbarHeight: 0,
-            elevation: 0,
-            systemOverlayStyle: const SystemUiOverlayStyle(
-                statusBarBrightness: Brightness.light,
-                statusBarIconBrightness: Brightness.dark,
-                statusBarColor: Colors.white),
-          ),
           bottomNavigationBar: Container(
             padding: const EdgeInsets.only(left: 15, right: 15, bottom: 20),
             child: Row(
@@ -77,9 +68,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: CustomTheme.appThemeContrast,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
-                      onPressed: () async {
-                        controller.showSiteVisitBottomModal();
-                      },
+                      onPressed: controller.onSiteVisit,
                       child: const Text(
                         'Site Visit',
                         style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
@@ -260,9 +249,10 @@ class PropertyDetailsScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
             ),
             SizedBox(
-              height: screenHeight * 0.005,
+              height: screenHeight * 0.01,
             ),
             GridView.builder(
+              padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 physics: const NeverScrollableScrollPhysics(),
@@ -346,10 +336,10 @@ class PropertyDetailsScreen extends StatelessWidget {
                           backgroundColor: CustomTheme.appThemeContrast,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
                       onPressed: () async {
-                        controller.showSiteVisitBottomModal();
+                        RIEWidgets.getToast(message: 'Coming soon...', color: CustomTheme.myFavColor);
                       },
                       child: const Text(
-                        'Ask',
+                        'Submit',
                         style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
                       )),
                 ),
@@ -440,7 +430,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: screenHeight * 0.01,
+                height: screenHeight * 0.015,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -455,6 +445,32 @@ class PropertyDetailsScreen extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: Constants.primaryColor),
                     ),
                   ),
+                  Visibility(
+                    visible: model?.balconies != null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(width: 0.5, color: Constants.primaryColor)),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      child: Text(
+                        '${model?.balconies.toString()} Balcony',
+                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: Constants.primaryColor),
+                      ),
+                    ),
+                  ),
+                  Visibility(
+                    visible: model?.bathrooms != null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(width: 0.5, color: Constants.primaryColor)),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      child: Text(
+                        '${model?.bathrooms.toString()} Bathroom',
+                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: Constants.primaryColor),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ],
@@ -509,6 +525,25 @@ class PropertyDetailsScreen extends StatelessWidget {
               ],
             ),
           ),
+          SizedBox(
+            height: screenHeight * 0.01,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Maintenance',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+                Text(
+                  '${Constants.currency} ${model.property?.maintenance ?? 0.toString()}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
+                ),
+              ],
+            ),
+          ),
         ],
       );
     });
@@ -538,7 +573,7 @@ class PropertyDetailsScreen extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: screenHeight * 0.35,
+          height: screenHeight * 0.38,
           width: screenWidth,
           padding: EdgeInsets.only(bottom: screenHeight * 0.03),
           child: FlutterCarousel(
@@ -564,10 +599,15 @@ class PropertyDetailsScreen extends StatelessWidget {
                     memCacheHeight: (screenHeight * 0.25).toInt(),
                     memCacheWidth: screenWidth.toInt(),
                     imageUrl: e,
-                    imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                    imageBuilder: (context, imageProvider) => GestureDetector(
+                          onTap: () => Get.to(() => CustomPhotoView(
+                                imageUrl: e,
+                              )),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.rectangle,
+                              image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+                            ),
                           ),
                         ),
                     placeholder: (context, url) => Container(
@@ -614,35 +654,30 @@ class PropertyDetailsScreen extends StatelessWidget {
         ),
         Positioned(
           left: screenWidth * 0.03,
-          top: screenHeight * 0.015,
+          top: screenHeight * 0.06,
           child: goBackWidget(),
         ),
         Positioned(
           right: screenWidth * 0.03,
-          top: screenHeight * 0.015,
+          top: screenHeight * 0.06,
           child: GestureDetector(
             onTap: () async {
-              // final res = await UtilsApiService.wishlistProperty(
-              //     context: context, propertyInfoModel: propertyInfoModel);
-              // if (res) {
-              //   onWishlist();
-              // }
+              controller.wishlistProperty();
             },
             child: Container(
               height: screenHeight * 0.045,
               width: screenWidth * 0.1,
               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50)),
               child: Icon(
-                  // propertyInfoModel.wishlist != null && propertyInfoModel.wishlist == 1
-                  //     ? Icons.favorite
-                  //     : Icons.favorite_border,
-                  Icons.favorite_border,
-                  size: 20,
-                  color:
-                      // propertyInfoModel.wishlist != null && propertyInfoModel.wishlist == 1
-                      //     ? CustomTheme.errorColor
-                      //     : Constants.primaryColor,
-                      Constants.primaryColor),
+                controller.propertyDetailsModel?.wishlist != null && controller.propertyDetailsModel?.wishlist == 1
+                    ? Icons.favorite
+                    : Icons.favorite_border,
+                size: 20,
+                color:
+                    controller.propertyDetailsModel?.wishlist != null && controller.propertyDetailsModel?.wishlist == 1
+                        ? CustomTheme.errorColor
+                        : Constants.primaryColor,
+              ),
             ),
           ),
         ),
@@ -768,7 +803,7 @@ class PropertyDetailsScreen extends StatelessWidget {
               SizedBox(
                 width: screenWidth * 0.7,
                 child: Text(
-                  model?.property?.address ?? '',
+                  model?.property?.address ?? 'ff',
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.blueGrey.shade500),
                 ),
               ),

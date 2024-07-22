@@ -8,13 +8,14 @@ import '../model/razorpay_payment_response_model.dart';
 
 class RazorpayPaymentView extends StatelessWidget {
   final RazorpayPaymentResponseModel paymentResponseModel;
+  final int guestCount;
 
-  const RazorpayPaymentView({super.key, required this.paymentResponseModel});
+  const RazorpayPaymentView({super.key, required this.paymentResponseModel,required this.guestCount});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RazorpayController>(
-      init: RazorpayController(paymentResponseModel: paymentResponseModel),
+      init: RazorpayController(paymentResponseModel: paymentResponseModel,guestCount: guestCount),
       builder: (controller) {
         return PopScope(
           canPop:false ,

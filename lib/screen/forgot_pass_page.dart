@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/widgets/const_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 

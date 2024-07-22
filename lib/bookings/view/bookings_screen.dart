@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/functions/util_functions.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
-import 'package:rentitezy/widgets/app_bar.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../../utils/const/widgets.dart';
 import '../../theme/custom_theme.dart';
+import '../../utils/widgets/app_bar.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../controller/bookings_controller.dart';
 import 'booking_details_screen.dart';
 
@@ -96,10 +96,8 @@ class BookingsScreen extends StatelessWidget {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
-                                    showProgressLoader(context);
                                     await bookingController.getBookingDetails(bookingId: '${item.id}');
-                                    cancelLoader();
-                                    Get.to(() => const BookingDetailsPage());
+
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(

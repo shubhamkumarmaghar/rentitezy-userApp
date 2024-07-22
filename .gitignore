@@ -32,6 +32,12 @@ migrate_working_dir/
 .pub/
 /build/
 
+#keystore
+/android/app/cert/keystore.jks
+/android/app/cert/certificate.pem
+/android/app/key.properties
+
+
 # Symbolication related
 app.*.symbols
 

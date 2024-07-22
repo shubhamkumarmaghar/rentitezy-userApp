@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -9,7 +10,11 @@ import 'package:rentitezy/utils/const/app_urls.dart';
 import 'dashboard/controller/dashboard_controller.dart';
 import 'screen/splash_screen.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+
   runApp(const MyApp());
   GetStorage.init();
   Get.put(DashboardController());
@@ -37,7 +42,7 @@ class MyApp extends StatelessWidget {
 
       theme: ThemeData(
         useMaterial3: false,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+       // colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         // colorScheme: ColorScheme.fromSwatch(primarySwatch:Colors.blue ),
         textTheme: GoogleFonts.kanitTextTheme(),
         scaffoldBackgroundColor: Colors.white,

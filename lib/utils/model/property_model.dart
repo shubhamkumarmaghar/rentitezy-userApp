@@ -1,3 +1,5 @@
+import '../../home/model/property_list_nodel.dart';
+
 class PropertyInfoModel {
   int? id;
   int? propId;
@@ -166,28 +168,6 @@ class Images {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  Map<String, dynamic>();
     data['url'] = this.url;
-    return data;
-  }
-}
-
-class Units {
-  int? id;
-  String? flatNo;
-  String? availFrom;
-
-  Units({this.id, this.flatNo, this.availFrom});
-
-  Units.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    flatNo = json['flatNo'];
-    availFrom = json['availFrom'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
-    data['id'] = this.id;
-    data['flatNo'] = this.flatNo;
-    data['availFrom'] = this.availFrom;
     return data;
   }
 }

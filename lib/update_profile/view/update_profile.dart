@@ -3,7 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import '../../../utils/const/widgets.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
+import '../../utils/widgets/custom_photo_view.dart';
 import '../controller/update_profile_controller.dart';
 
 class UpdateProfilePage extends StatelessWidget {
@@ -45,9 +46,16 @@ class UpdateProfilePage extends StatelessWidget {
                                             color: Constants.primaryColor,
                                           ),
                                         )
-                                      : Image.network(
-                                          controller.imagePath!,
-                                          fit: BoxFit.cover,
+                                      : GestureDetector(
+                                          onTap: () {
+                                            Get.to(() => CustomPhotoView(
+                                                  imageUrl: controller.imagePath,
+                                                ));
+                                          },
+                                          child: Image.network(
+                                            controller.imagePath!,
+                                            fit: BoxFit.cover,
+                                          ),
                                         )),
                             ),
                             Positioned(
@@ -75,7 +83,7 @@ class UpdateProfilePage extends StatelessWidget {
                         inputField(
                             controller: controller.lastNameController,
                             hintText: 'Last name',
-                            prefixIcon:Icons.person ,
+                            prefixIcon: Icons.person,
                             textInputType: TextInputType.text),
                         inputField(
                             controller: controller.phoneController,
@@ -137,7 +145,7 @@ class UpdateProfilePage extends StatelessWidget {
       {required TextEditingController controller,
       required String hintText,
       required TextInputType textInputType,
-        required IconData prefixIcon,
+      required IconData prefixIcon,
       int? maxLength,
       List<TextInputFormatter>? inputFormatters}) {
     return Container(
@@ -149,14 +157,19 @@ class UpdateProfilePage extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SizedBox(width: screenWidth*0.04,),
-          Icon(prefixIcon,color: Constants.primaryColor,size: 20,),
           SizedBox(
-            width: screenWidth*0.78,
+            width: screenWidth * 0.04,
+          ),
+          Icon(
+            prefixIcon,
+            color: Constants.primaryColor,
+            size: 20,
+          ),
+          SizedBox(
+            width: screenWidth * 0.78,
             child: TextFormField(
               controller: controller,
               keyboardType: textInputType,
-
               inputFormatters: inputFormatters,
               maxLength: maxLength,
               decoration: InputDecoration(

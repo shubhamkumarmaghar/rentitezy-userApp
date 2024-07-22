@@ -1,25 +1,24 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rentitezy/checkout/controller/checkout_controller.dart';
-import 'package:rentitezy/property_details/model/property_details_model.dart';
+import '../../home/model/property_list_nodel.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/widgets.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
 
 class CheckoutScreen extends StatelessWidget {
-  final PropertyDetailsModel propertyDetailsModel;
+  final String? listingType;
+  final String listingId;
 
-  const CheckoutScreen({super.key, required this.propertyDetailsModel});
+  final List<Units>? propertyUnitsList;
+
+  const CheckoutScreen({super.key, required this.listingId, this.listingType, this.propertyUnitsList});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<CheckoutController>(
-      init: CheckoutController(propertyDetailsModel: propertyDetailsModel),
+      init: CheckoutController(listingId: listingId, propertyUnitsList: propertyUnitsList, listingType: listingType),
       builder: (controller) {
         return Scaffold(
           appBar: appBarWidget(
@@ -76,9 +75,7 @@ class CheckoutScreen extends StatelessWidget {
                     pickerButton(
                         onTap: () async {
                           final guest = await showDataDialog(
-                              context: context,
-                              title: 'Guest',
-                              dataList: List.generate(5, (index) => (index + 1).toString()));
+                              context: context, title: 'Guest', dataList: controller.guestCountList);
                           if (guest != null) {
                             controller.guestController.text = guest;
                           }
@@ -131,19 +128,18 @@ class CheckoutScreen extends StatelessWidget {
                       height: screenHeight * 0.01,
                     ),
                     Visibility(
-                      visible: controller.propertyDetailsModel.units != null,
+                      visible: controller.propertyUnitsList != null,
                       replacement: const SizedBox.shrink(),
                       child: pickerButton(
                           onTap: () async {
-                            List<String> data =
-                                controller.propertyDetailsModel.units!.map((e) => e.flatNo ?? '').toList();
+                            List<String> data = controller.propertyUnitsList!.map((e) => e.flatNo ?? '').toList();
 
                             final flatUnit =
                                 await showDataDialog(context: context, title: 'Select Unit', dataList: data);
 
                             if (flatUnit != null) {
-                              final unit = controller.propertyDetailsModel.units!
-                                  .firstWhere((element) => element.flatNo == flatUnit);
+                              final unit =
+                                  controller.propertyUnitsList!.firstWhere((element) => element.flatNo == flatUnit);
                               controller.selectedPropertyUnitId.value = unit.id ?? 0;
                               controller.unitController.text = flatUnit;
                             }
@@ -164,7 +160,6 @@ class CheckoutScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Constants.lightBg,
-
                       ),
                       child: InkWell(
                         onTap: controller.onSelectDate,

@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:lottie/lottie.dart';
 
 class AppUrls {
-  static const String appName = "Rentiseazy";
+  static const String appName = "SoWeRent";
   static const String phone = "+918867319944";
   static const productionUrl = "https://api.rentiseazy.com/user/";
   static const developmentUrl = "https://test-api.rentiseazy.com/user/";
   static const rootUrl = "http://networkgroups.in/prisma/rentitezy/";
-  static const baseUrl = developmentUrl;
+  static const baseUrl = productionUrl;
   static const imagesRootUrl =
       "https://api.rentiseazy.com/user/images/";
   static const imagesRentIsEasyUrl = "${baseUrl}images/";
@@ -57,8 +57,14 @@ class AppUrls {
   static const locations = '${baseUrl}locations';
   static const wishlist = '${baseUrl}wishlist';
   static const paymentCallback = '${baseUrl}paymentCallback';
+  static const uploadFile = '${baseUrl}fileUpload';
+  static const uploadTenantsDocs = '${baseUrl}tenants';
+  static const googleSignIn = '${baseUrl}googleSignIn';
+  static const sendOTP = '${baseUrl}otpSend';
+  static const resendOTP = '${baseUrl}otpResend';
+  static const otpSignIn = '${baseUrl}otpSignIn';
+  static const payInvoice = '${baseUrl}invoicePay';
 
-  static Widget emptyWidget(String path) {
-    return SizedBox(height: 150, width: 150, child: Lottie.network(path));
-  }
+
+
 }

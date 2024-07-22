@@ -1,25 +1,23 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/utils/const/api.dart';
+import 'package:rentitezy/utils/const/image_consts.dart';
 import 'package:rentitezy/utils/const/settings.dart';
 import 'package:rentitezy/model/settings_model.dart';
 import 'package:rentitezy/login/view/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../dashboard/controller/dashboard_controller.dart';
 import '../utils/const/appConfig.dart';
-import '../home/home_view/home_screen.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({super.key});
+
   @override
   State<SplashScreenPage> createState() => _SplashPageState();
 }
@@ -30,6 +28,7 @@ class _SplashPageState extends State<SplashScreenPage> {
   late Position position;
   late StreamSubscription<Position> positionStream;
   bool serviceStatus = false;
+
   @override
   void initState() {
     goToSplash();
@@ -54,12 +53,9 @@ class _SplashPageState extends State<SplashScreenPage> {
         }
 
         if (serviceStatus) {
-          position = await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          GetStorage().write(
-              Constants.latitude, position.latitude.toString());
-          GetStorage().write(
-              Constants.longitude, position.longitude.toString());
+          position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+          GetStorage().write(Constants.latitude, position.latitude.toString());
+          GetStorage().write(Constants.longitude, position.longitude.toString());
         }
       }
     } else {
@@ -68,12 +64,9 @@ class _SplashPageState extends State<SplashScreenPage> {
         distanceFilter: 100, //minimum distance (measured in meters) a
       );
       StreamSubscription<Position> positionStream =
-          Geolocator.getPositionStream(locationSettings: locationSettings)
-              .listen((Position position) {
-            GetStorage().write(
-            Constants.latitude, position.latitude.toString());
-            GetStorage().write(
-            Constants.longitude, position.longitude.toString());
+          Geolocator.getPositionStream(locationSettings: locationSettings).listen((Position position) {
+        GetStorage().write(Constants.latitude, position.latitude.toString());
+        GetStorage().write(Constants.longitude, position.longitude.toString());
       });
       if (kDebugMode) {
         print(positionStream);
@@ -93,24 +86,15 @@ class _SplashPageState extends State<SplashScreenPage> {
         getBackgroundLatLong();
         SettingsModel settings = await fetchSetting();
         Timer(const Duration(seconds: 3), () async {
-
-            if (GetStorage().read(Constants.isLogin) != null &&
-                GetStorage().read(Constants.isLogin) != false) {
-              if (settings.agreement.isNotEmpty) {
-               Settings().init(context, settings);
-               Get.find<DashboardController>().setIndex(0);
-                Get.offAll(DashboardView());
-              } else {
-                if (kDebugMode) {
-                  print('errr');
-                }
-              }
-            } else {
-              Get.offAll(const LoginScreen());
-             /* Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()));*/
+          if (GetStorage().read(Constants.isLogin) != null && GetStorage().read(Constants.isLogin) != false) {
+            if (settings.agreement.isNotEmpty) {
+              Settings().init(context, settings);
+              Get.find<DashboardController>().setIndex(0);
+              Get.offAll(() => const DashboardView());
             }
-
+          } else {
+            Get.offAll(() => const LoginScreen());
+          }
         });
       } catch (e) {
         debugPrint(e.toString());
@@ -121,12 +105,13 @@ class _SplashPageState extends State<SplashScreenPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Center(
-      child: Image.asset(
-        'assets/images/splash_logo.png',
-        height: 100,
-        width: 100,
-      ),
-    ));
+          child: Image.asset(
+            appLogo,
+            height: 200,
+            width: 200,
+          ),
+        ));
   }
 }

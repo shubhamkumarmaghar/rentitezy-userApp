@@ -7,6 +7,7 @@ class LoginResponseModel {
   String? phone;
   String? image;
   String? token;
+  String? status;
 
   LoginResponseModel(
       {this.id,
@@ -14,6 +15,7 @@ class LoginResponseModel {
         this.lastName,
         this.email,
         this.phone,
+        this.status,
         this.image,
         this.token});
 
@@ -23,6 +25,7 @@ class LoginResponseModel {
     lastName = json['lastName'];
     email = json['email'];
     phone = json['phone'];
+    status = json['status'];
     image = json['image'];
     token = json['token'];
   }
@@ -34,6 +37,7 @@ class LoginResponseModel {
     data['lastName'] = lastName;
     data['email'] = email;
     data['phone'] = phone;
+    data['status'] = status;
     data['image'] = image;
     data['token'] = token;
     return data;

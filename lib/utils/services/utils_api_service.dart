@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:rentitezy/utils/services/rie_user_api_service.dart';
 
 import '../../theme/custom_theme.dart';
-import '../../widgets/custom_alert_dialogs.dart';
 import '../const/app_urls.dart';
 import '../model/property_model.dart';
 import '../view/rie_widgets.dart';
+import '../widgets/custom_alert_dialogs.dart';
 
 class UtilsApiService {
   static final RIEUserApiService apiService = RIEUserApiService();
@@ -20,6 +19,9 @@ class UtilsApiService {
       'listingId': propertyInfoModel.id.toString(),
       'wishlist': propertyInfoModel.wishlist != null && propertyInfoModel.wishlist == 0 ? '1' : '0',
     });
+    if (response == null) {
+      return false;
+    }
     final data = response as Map<String, dynamic>;
     cancelLoader();
     if (data['message'].toString().toLowerCase().contains('success')) {

@@ -25,6 +25,7 @@ class SearchPropertiesController extends GetxController {
   List<String> searchedLocation = [];
   final List<String> locationsList;
   final RIEUserApiService apiService = RIEUserApiService();
+  final storage = GetStorage();
 
   SearchPropertiesController(this.locationsList);
 
@@ -69,6 +70,7 @@ class SearchPropertiesController extends GetxController {
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
     isLoading = false;
+
     if (response["message"].toString().toLowerCase().contains('success') && response['data'] != null) {
       Iterable iterable = response['data'];
       searchedPropertyList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
@@ -76,8 +78,16 @@ class SearchPropertiesController extends GetxController {
       searchedPropertyList = [];
       RIEWidgets.getToast(message: response["message"] ?? 'Something went wrong!', color: CustomTheme.errorColor);
     }
-    log('length ${searchedPropertyList?.length}');
+    //saveUserSearchText();
     update();
+  }
+
+  void saveUserSearchText() async{
+    final searchedText = storage.read(Constants.searchedText);
+    if (searchedText != null && searchedText.toString().isNotEmpty) {
+      List textList = jsonDecode(searchedText) as List;
+      textList.forEach((element) => log('hello $element'),);
+    }
   }
 
   @override

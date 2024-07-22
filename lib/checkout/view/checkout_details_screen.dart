@@ -1,10 +1,10 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/checkout/controller/checkout_controller.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-import '../../widgets/app_bar.dart';
+import '../../utils/widgets/app_bar.dart';
 import '../model/checkout_model.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
@@ -52,10 +52,11 @@ class CheckoutDetailsScreen extends StatelessWidget {
               rowText(title: "Deposit", value: checkoutModel.deposit, showCurrency: true),
               rowText(title: "OnBoarding", value: checkoutModel.onboarding, showCurrency: true),
               rowText(title: "Maintenance", value: checkoutModel.maintenance, showCurrency: true),
-              rowText(title: "Amount", value: checkoutModel.amount, showCurrency: true),
               rowText(title: "Total", value: checkoutModel.total, showCurrency: true),
+              const Divider(),
+              rowText(title: "Minimum amount payable", value: checkoutModel.amount, showCurrency: true),
               SizedBox(
-                height: screenHeight * 0.19,
+                height: screenHeight * 0.17,
               ),
               Center(
                 child: SizedBox(
@@ -89,7 +90,7 @@ class CheckoutDetailsScreen extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: screenWidth * 0.24,
+              width: screenWidth * 0.3,
               child: Text(
                 title,
                 style: const TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w500),
@@ -97,7 +98,7 @@ class CheckoutDetailsScreen extends StatelessWidget {
             ),
             width(0.05),
             SizedBox(
-              width: screenWidth * 0.58,
+              width: screenWidth * 0.52,
               child: Text(
                 showCurrency != null && showCurrency == true
                     ? '${Constants.currency} ${value.toString().capitalizeFirst.toString()}'

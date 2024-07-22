@@ -9,7 +9,7 @@ import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../widgets/custom_alert_dialogs.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/signup_response_model.dart';
 
 class SignUpController extends GetxController {
@@ -46,7 +46,7 @@ class SignUpController extends GetxController {
       GetStorage().write(Constants.lastName, loginResponseModel.lastName);
       GetStorage().write(Constants.token, loginResponseModel.token);
       GetStorage().write(Constants.profileUrl, loginResponseModel.image);
-      GetStorage().write(Constants.usernamekey, loginResponseModel.firstName);
+      GetStorage().write(Constants.usernamekey, '${loginResponseModel.firstName} ${loginResponseModel.lastName}');
       GetStorage().write(Constants.emailkey, loginResponseModel.email);
       cancelLoader();
       Get.find<DashboardController>().setIndex(0);
@@ -58,7 +58,7 @@ class SignUpController extends GetxController {
   }
 
   bool isPasswordValid(String password) {
-    RegExp regex = RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    RegExp regex = RegExp(r'^(?=.*?[A-Za-z])(?=.*?[0-9])(?=.*?[!@#&*~]).{8,}$');
     return regex.hasMatch(password);
   }
 }

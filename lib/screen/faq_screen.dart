@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/model/faq_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 
-import '../widgets/app_bar.dart';
+import '../utils/widgets/app_bar.dart';
+
 
 class FaqScreen extends StatefulWidget {
   const FaqScreen({super.key});
@@ -24,7 +24,7 @@ class _FaqState extends State<FaqScreen> {
         id: 2,
         question: "Is my 1st month's rent covered in the security deposit?",
         ans:
-            "No, your first month's rent needs to be paid in addition to the security deposit to Rentiseazy and You will have to pay the first month's rent on or before you move in to the property."),
+            "No, your first month's rent needs to be paid in addition to the security deposit to SoWeRent and You will have to pay the first month's rent on or before you move in to the property."),
     FaqModel(
         id: 3,
         question: "Is Security Deposit entirely refundable?",

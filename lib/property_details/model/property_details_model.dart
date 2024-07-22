@@ -1,3 +1,5 @@
+import '../../home/model/property_list_nodel.dart';
+
 class PropertyDetailsModel {
   int? id;
   int? propId;
@@ -20,6 +22,7 @@ class PropertyDetailsModel {
   List<Units>? units;
   List<Images>? images;
   List<ListingAmenities>? listingAmenities;
+  int? wishlist;
   String? availFrom;
   int? stPrice;
   int? deposit;
@@ -47,6 +50,7 @@ class PropertyDetailsModel {
         units,
         images,
         listingAmenities,
+        wishlist,
         availFrom,
         stPrice,
         deposit,
@@ -91,6 +95,7 @@ class PropertyDetailsModel {
         listingAmenities!.add( ListingAmenities.fromJson(v));
       });
     }
+    wishlist = json['wishlist'];
     availFrom = json['availFrom'];
     stPrice = json['stPrice'];
     deposit = json['deposit'];
@@ -129,6 +134,7 @@ class PropertyDetailsModel {
       data['listingAmenities'] =
           listingAmenities!.map((v) => v.toJson()).toList();
     }
+    data['wishlist'] = wishlist;
     data['availFrom'] = availFrom;
     data['stPrice'] = stPrice;
     data['deposit'] = deposit;
@@ -218,28 +224,6 @@ class Property {
     data['online'] = online;
     data['age'] = age;
     data['positionDate'] = positionDate;
-    return data;
-  }
-}
-
-class Units {
-  int? id;
-  String? flatNo;
-  String? availFrom;
-
-  Units({id, flatNo, availFrom});
-
-  Units.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    flatNo = json['flatNo'];
-    availFrom = json['availFrom'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
-    data['id'] = id;
-    data['flatNo'] = flatNo;
-    data['availFrom'] = availFrom;
     return data;
   }
 }

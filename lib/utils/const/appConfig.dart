@@ -98,6 +98,7 @@ class Constants {
   static const currency = '₹';
   static const latitude = "latitude";
   static const longitude = "longitude";
+  static const searchedText = "searchedText";
 
   static String tempAgree =
       'RESIDENTIAL RENTAL AGREEMENT This agreement made at [City, State] on this [Date, Month, Year] between [Landlord Name], residing at [Landlord Address Line 1, Address Line 2, City, State, Pin Code] hereinafter referred to as the `LESSOR` of the One Part AND [Tenant Name], residing at  [Tenant Address Line 1, Address Line 2, City, State, Pin Code] hereinafter referred to as the `LESSEE` of the other Part;WHEREAS the Lessor is the lawful owner of, and otherwise well sufficiently entitled to [Lease Property Address Line 1, Address Line 2, City, State, Pin Code] falling in the category, [Independent House / Apartment / Farm House / Residential Property] and comprising of [X Bedrooms], [X Bathrooms], [X Carparks] with an extent of [XXXX Square Feet] hereinafter referred to as the `said premises`; AND WHEREAS at the request of the Lessee, the Lessor has agreed to let the said premises to the tenant for a term of [Lease Term] commencing from [Lease Start Date] in the manner hereinafter appearing. RESIDENTIAL RENTAL AGREEMENT This agreement made at [City, State] on this [Date, Month, Year] between [Landlord Name], residing at [Landlord Address Line 1, Address Line 2, City, State, Pin Code] hereinafter referred to as the `LESSOR` of the One Part AND [Tenant Name], residing at  [Tenant Address Line 1, Address Line 2, City, State, Pin Code] hereinafter referred to as the `LESSEE` of the other Part;WHEREAS the Lessor is the lawful owner of, and otherwise well sufficiently entitled to [Lease Property Address Line 1, Address Line 2, City, State, Pin Code] falling in the category, [Independent House / Apartment / Farm House / Residential Property] and comprising of [X Bedrooms], [X Bathrooms], [X Carparks] with an extent of [XXXX Square Feet] hereinafter referred to as the `said premises`; AND WHEREAS at the request of the Lessee, the Lessor has agreed to let the said premises to the tenant for a term of [Lease Term] commencing from [Lease Start Date] in the manner hereinafter appearing.';
@@ -146,7 +147,7 @@ void showSnackBar(BuildContext context, String result,[Color? color]) {
         style: TextStyle(
           fontFamily: Constants.fontsFamily,
         )),
-    duration: const Duration(seconds: 2),backgroundColor:color ?? CustomTheme.appTheme,
+    duration: const Duration(seconds: 2),backgroundColor:color ?? CustomTheme.errorColor,
   ));
 }
 

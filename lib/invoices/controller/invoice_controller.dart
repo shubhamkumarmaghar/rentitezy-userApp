@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
 import 'package:rentitezy/invoices/model/invoice_model.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
+import 'package:rentitezy/invoices/view/invoice_payment_screen.dart';
+import 'package:rentitezy/razorpay_payment/model/razorpay_payment_response_model.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/view/rie_widgets.dart';
-import '../../web_view/webview_payment.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 
 class InvoiceController extends GetxController {
   final String bookingId;
@@ -42,17 +43,13 @@ class InvoiceController extends GetxController {
   }
 
   Future<void> invoicePayment({required String invoiceId}) async {
-    String url = AppUrls.invoicePay;
+    String url = AppUrls.payInvoice;
     showProgressLoader(Get.context!);
-    final response = await apiService.postApiCall(endPoint: url, bodyParams: {
-      "invoiceId": invoiceId,
-    });
+    final response = await apiService.postApiCall(endPoint: url, bodyParams: {"invoiceId": invoiceId, "source": 'app'});
     cancelLoader();
-    if (response['message'].toString().toLowerCase().contains('success')) {
-      String longUrl = response['data']['longurl'];
-      Get.off(WebViewContainer(url: longUrl));
-    } else {
-      RIEWidgets.getToast(message: response['message'].toString(), color: CustomTheme.errorColor);
+    if (response['message'].toString().toLowerCase().contains('success') && response['data'] != null) {
+      final paymentModel = RazorpayPaymentResponseModel.fromJson(response['data']);
+      Get.to(() => InvoicePaymentScreen(paymentResponseModel: paymentModel));
     }
   }
 }

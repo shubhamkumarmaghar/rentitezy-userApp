@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/localDb/db_helper.dart';
 import 'package:rentitezy/model/asset_model.dart';
 import 'package:rentitezy/model/assets_req_model.dart';
 import 'package:rentitezy/model/issues_model.dart';

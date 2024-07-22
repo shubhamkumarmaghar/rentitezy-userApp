@@ -6,8 +6,8 @@ import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/ticket/model/ticket_details_model.dart';
 import 'package:rentitezy/utils/services/rie_user_api_service.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
-import 'package:rentitezy/widgets/custom_alert_dialogs.dart';
 import '../../utils/const/app_urls.dart';
+import '../../utils/widgets/custom_alert_dialogs.dart';
 
 class CreateTicketScreenController extends GetxController {
   List<String> ticketCategoriesList = [];
