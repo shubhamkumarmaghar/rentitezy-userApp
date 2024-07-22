@@ -74,8 +74,8 @@ class LoginController extends GetxController {
         final userCredential = await _auth.signInWithCredential(credential);
         cancelLoader();
         if (userCredential.user != null) {
-          final googleIdToken = await userCredential.user?.getIdToken(false);
-          _googleSignInApi(googleIdToken ?? '');
+          final googleIdToken = await userCredential.user?.getIdTokenResult();
+          _googleSignInApi(googleIdToken?.token ?? '');
         }
       }
     } on FirebaseAuthException catch (e) {

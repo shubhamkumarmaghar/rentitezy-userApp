@@ -249,9 +249,10 @@ class PropertyDetailsScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
             ),
             SizedBox(
-              height: screenHeight * 0.005,
+              height: screenHeight * 0.01,
             ),
             GridView.builder(
+              padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 physics: const NeverScrollableScrollPhysics(),
@@ -802,7 +803,7 @@ class PropertyDetailsScreen extends StatelessWidget {
               SizedBox(
                 width: screenWidth * 0.7,
                 child: Text(
-                  model?.property?.address ?? '',
+                  model?.property?.address ?? 'ff',
                   style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.blueGrey.shade500),
                 ),
               ),

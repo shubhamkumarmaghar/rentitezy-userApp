@@ -7,7 +7,7 @@ class AppUrls {
   static const productionUrl = "https://api.rentiseazy.com/user/";
   static const developmentUrl = "https://test-api.rentiseazy.com/user/";
   static const rootUrl = "http://networkgroups.in/prisma/rentitezy/";
-  static const baseUrl = developmentUrl;
+  static const baseUrl = productionUrl;
   static const imagesRootUrl =
       "https://api.rentiseazy.com/user/images/";
   static const imagesRentIsEasyUrl = "${baseUrl}images/";
@@ -63,6 +63,7 @@ class AppUrls {
   static const sendOTP = '${baseUrl}otpSend';
   static const resendOTP = '${baseUrl}otpResend';
   static const otpSignIn = '${baseUrl}otpSignIn';
+  static const payInvoice = '${baseUrl}invoicePay';
 
 
 

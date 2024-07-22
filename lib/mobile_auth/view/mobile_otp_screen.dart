@@ -21,7 +21,7 @@ class MobileOtpScreen extends StatelessWidget {
       body: Container(
         height: screenHeight,
         width: screenWidth,
-        color: Constants.primaryColor.withOpacity(0.1),
+        color: Colors.white,
         padding: EdgeInsets.only(left: 16, right: 16, top: screenHeight * 0.08),
         child: SingleChildScrollView(
           child: Column(
@@ -46,20 +46,20 @@ class MobileOtpScreen extends StatelessWidget {
                 ],
               ),
              SizedBox(
-                height: screenHeight * 0.1,
+                height: screenHeight * 0.06,
               ),
               SizedBox(
-                  height: 100, child: Image.network('https://cdn.templates.unlayer.com/assets/1636374086763-hero.png')),
+                  height: screenHeight*0.2, child: Image.network('https://cdn.templates.unlayer.com/assets/1636374086763-hero.png')),
 
               SizedBox(
-                height: screenHeight * 0.1,
+                height: screenHeight * 0.08,
               ),
               SizedBox(
-                  width: screenWidth * 0.5,
+                  width: screenWidth * 0.6,
                   child: Text(
                     'We have send you one time password (OTP) to ${controller.phoneController.text}',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
                   )),
               SizedBox(
                 height: screenHeight * 0.02,
@@ -69,10 +69,10 @@ class MobileOtpScreen extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 isDense: false,
                 margin: const EdgeInsets.all(5),
-                length: 6,
-                width: screenWidth * 0.85,
-                fieldWidth: screenWidth * 0.1,
-                fieldStyle: FieldStyle.underline,
+                length: 4,
+                width: screenWidth * 0.75,
+                fieldWidth: screenWidth * 0.12,
+                fieldStyle: FieldStyle.box,
                 outlineBorderRadius: 10,
                 contentPadding: const EdgeInsets.all(12),
                 otpFieldStyle: OtpFieldStyle(
@@ -92,7 +92,7 @@ class MobileOtpScreen extends StatelessWidget {
               ),
               const SizedBox(height: 15),
               GestureDetector(
-                onTap: () {},
+                onTap: controller.resendOTP,
                 child: Text.rich(
                   TextSpan(
                     children: [

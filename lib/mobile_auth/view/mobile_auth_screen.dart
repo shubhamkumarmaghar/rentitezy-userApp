@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/mobile_auth/controller/mobile_auth_controller.dart';
+import 'package:rentitezy/utils/const/image_consts.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/const/widgets.dart';
 
@@ -13,13 +14,10 @@ class MobileAuthScreen extends StatelessWidget {
       init: MobileAuthController(),
       builder: (controller) {
         return Scaffold(
+          backgroundColor: Colors.white,
           body: Container(
             height: screenHeight,
             width: screenWidth,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
             padding: const EdgeInsets.only(
               left: 30,
               right: 30,
@@ -28,23 +26,25 @@ class MobileAuthScreen extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: screenHeight * 0.15,
+                    height: screenHeight * 0.1,
+                  ),
+                  Image.asset('assets/images/login_image.png', height: 120,),
+                  SizedBox(
+                    height: screenHeight * 0.05,
                   ),
                   Text(
                     'Welcome',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 32, color: Constants.primaryColor),
                   ),
-                  SizedBox(
-                    height: screenHeight * 0.02,
-                  ),
+
                   Text(
                     'to',
                     style: TextStyle(fontWeight: FontWeight.w600, fontSize: 32, color: Constants.primaryColor),
                   ),
                   Image.asset(
-                    'assets/images/app_logo.png',
+                   appLogo,
                     fit: BoxFit.cover,
-                    height: screenHeight * 0.1,
+                    height: screenHeight * 0.06,
                     width: screenWidth * 0.5,
                   ),
                   SizedBox(
@@ -99,7 +99,7 @@ class MobileAuthScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black),
                       )),
                   SizedBox(
-                    height: screenHeight * 0.3,
+                    height: screenHeight * 0.22,
                   ),
                   SizedBox(
                     height: screenHeight * 0.06,

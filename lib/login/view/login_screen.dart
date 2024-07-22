@@ -1,14 +1,12 @@
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/login/login_controller/login_controller.dart';
 import 'package:rentitezy/mobile_auth/view/mobile_auth_screen.dart';
-import 'package:rentitezy/signup/view/signup_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/screen/forgot_pass_page.dart';
+import '../../signup/view/signup_screen.dart';
 import '../../utils/const/image_consts.dart';
 import '../../utils/const/widgets.dart';
 
@@ -23,6 +21,7 @@ class LoginScreen extends StatelessWidget {
         init: LoginController(),
         builder: (controller) {
           return Scaffold(
+            backgroundColor: Colors.white,
             body: GestureDetector(
               onTap: () => FocusScope.of(context).requestFocus(FocusNode()),
               child: Container(
@@ -42,7 +41,13 @@ class LoginScreen extends StatelessWidget {
                               fit: BoxFit.fill,
                             )),
                         height(0.05),
-                        title("Welcome to SoWeRent", 22),
+
+                        Image.asset(
+                          appLogo,
+                          fit: BoxFit.cover,
+                          height: screenHeight * 0.06,
+                          width: screenWidth * 0.5,
+                        ),
                         height(0.03),
                         phoneTextField(controller),
                         SizedBox(
@@ -112,25 +117,26 @@ class LoginScreen extends StatelessWidget {
                         // Platform.isIOS ? appleSignInButton(controller) : googleSignInButton(controller),
 
                         height(0.03),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              width: screenWidth * 0.3,
-                              child: googleSignInButton(controller),
-                            ),
-                            SizedBox(
-                              width: screenWidth * 0.3,
-                              child: otpSignInButton(controller),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     SizedBox(
+                        //       width: screenWidth * 0.3,
+                        //       child: googleSignInButton(controller),
+                        //     ),
+                        //     SizedBox(
+                        //       width: screenWidth * 0.3,
+                        //       child: otpSignInButton(controller),
+                        //     ),
+                        //   ],
+                        // ),
+                        otpSignInButton(controller),
 
-                        height(0.05),
+                        height(0.04),
                         GestureDetector(
                           onTap: () {
-                            controller.signOutFromGoogle();
-                            //  Get.offAll(() => const SignUpScreen());
+                           // controller.signOutFromGoogle();
+                              Get.offAll(() => const SignUpScreen());
                           },
                           child: RichText(
                             text: TextSpan(

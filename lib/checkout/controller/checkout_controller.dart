@@ -67,16 +67,6 @@ class CheckoutController extends GetxController {
       RIEWidgets.getToast(message: 'Please select unit', color: CustomTheme.errorColor);
       return;
     }
-    // if (selectedPropertyUnitId.value > 1) {
-    //   showTextAlertDialog(
-    //       context: Get.context!,
-    //       onYesTap: () {
-    //         Get.back();
-    //         submitBookingRequest();
-    //       },
-    //       title: 'Booking Alert',
-    //       subTitle: 'Valid ID /KYC should be provided at the time on check in');
-    // }
 
     showProgressLoader(Get.context!);
     final dateFormat = DateFormat('yyyy-MM-dd').format(selectedDate.value);

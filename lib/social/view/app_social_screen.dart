@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rentitezy/utils/const/image_consts.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:unicons/unicons.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
@@ -84,34 +85,34 @@ class AppSocialScreen extends StatelessWidget {
                   SizedBox(
                     width: screenWidth * 0.08,
                   ),
-                  getFollowingButton(
-                      icon: UniconsLine.facebook,
+                  getYoutubeButton(
+                      icon: youtubeIcon,
                       onTap: () {
                         Get.to(() => const WebViewPage(
-                              title: 'Facebook',
-                              uri: 'https://www.facebook.com/people/Rentiseazy/100085212123196/',
+                              title: 'Youtube',
+                              uri: 'https://www.youtube.com/@sowerentbng',
                             ));
                       }),
                   SizedBox(
                     width: screenWidth * 0.15,
                   ),
                   getFollowingButton(
-                      icon: UniconsLine.twitter,
+                      icon: pinterestIcon,
                       onTap: () {
                         Get.to(() => const WebViewPage(
-                              title: 'Twitter',
-                              uri: 'https://twitter.com/i/flow/login?redirect_after_login=%2Frentiseazy',
+                              title: 'Pinterest',
+                              uri: 'https://in.pinterest.com/sowerent/',
                             ));
                       }),
                   SizedBox(
                     width: screenWidth * 0.15,
                   ),
                   getFollowingButton(
-                      icon: UniconsLine.instagram,
+                      icon: linkedinIcon,
                       onTap: () {
                         Get.to(() => const WebViewPage(
-                              title: 'Instagram',
-                              uri: 'https://www.instagram.com/rentiseazy/',
+                              title: 'Linkedin',
+                              uri: 'https://www.linkedin.com/in/sowerent/',
                             ));
                       }),
                 ],
@@ -123,21 +124,30 @@ class AppSocialScreen extends StatelessWidget {
     );
   }
 
-  Widget getFollowingButton({required IconData icon, required Function onTap}) {
+  Widget getFollowingButton({required String icon, required Function onTap}) {
     return GestureDetector(
         onTap: () => onTap(),
         child: Container(
-          height: screenHeight*0.06,
-          width: screenWidth*0.135,
+          width: screenWidth*0.14,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+          color: Colors.white
+          ),
+          child: Image.asset(icon,fit: BoxFit.fill,),
+        ));
+  }
+
+  Widget getYoutubeButton({required String icon, required Function onTap}) {
+    return GestureDetector(
+        onTap: () => onTap(),
+        child: Container(
+          height: screenHeight*0.1,
+          width: screenWidth*0.14,
           decoration: BoxDecoration(
-            border: Border.all(color: Constants.primaryColor.withOpacity(0.6)),
-            borderRadius: BorderRadius.circular(60)
+              shape: BoxShape.circle,
+              color: Colors.white
           ),
-          child: Icon(
-            icon,
-            size: 25,
-            color:Constants.primaryColor,
-          ),
+          child: Image.asset(icon,fit: BoxFit.cover,),
         ));
   }
 

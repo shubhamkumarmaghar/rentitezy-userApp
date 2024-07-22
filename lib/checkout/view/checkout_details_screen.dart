@@ -54,7 +54,7 @@ class CheckoutDetailsScreen extends StatelessWidget {
               rowText(title: "Maintenance", value: checkoutModel.maintenance, showCurrency: true),
               rowText(title: "Total", value: checkoutModel.total, showCurrency: true),
               const Divider(),
-              rowText(title: "Amount to pay", value: checkoutModel.amount, showCurrency: true),
+              rowText(title: "Minimum amount payable", value: checkoutModel.amount, showCurrency: true),
               SizedBox(
                 height: screenHeight * 0.17,
               ),
@@ -90,7 +90,7 @@ class CheckoutDetailsScreen extends StatelessWidget {
         child: Row(
           children: [
             SizedBox(
-              width: screenWidth * 0.24,
+              width: screenWidth * 0.3,
               child: Text(
                 title,
                 style: const TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w500),
@@ -98,7 +98,7 @@ class CheckoutDetailsScreen extends StatelessWidget {
             ),
             width(0.05),
             SizedBox(
-              width: screenWidth * 0.58,
+              width: screenWidth * 0.52,
               child: Text(
                 showCurrency != null && showCurrency == true
                     ? '${Constants.currency} ${value.toString().capitalizeFirst.toString()}'

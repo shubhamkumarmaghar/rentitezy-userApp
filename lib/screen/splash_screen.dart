@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
 import 'package:rentitezy/utils/const/api.dart';
+import 'package:rentitezy/utils/const/image_consts.dart';
 import 'package:rentitezy/utils/const/settings.dart';
 import 'package:rentitezy/model/settings_model.dart';
 import 'package:rentitezy/login/view/login_screen.dart';
@@ -104,12 +105,13 @@ class _SplashPageState extends State<SplashScreenPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Center(
-      child: Image.asset(
-        'assets/images/app_logo.png',
-        height: 200,
-        width: 200,
-      ),
-    ));
+          child: Image.asset(
+            appLogo,
+            height: 200,
+            width: 200,
+          ),
+        ));
   }
 }

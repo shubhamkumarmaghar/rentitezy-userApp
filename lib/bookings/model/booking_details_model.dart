@@ -239,7 +239,7 @@ class Tenants {
   String? address;
   String? addedOn;
   String? updateOn;
-  String? addedById;
+  dynamic addedById;
   List<Proofs>? proofs;
 
   Tenants(
@@ -303,7 +303,7 @@ class Proofs {
   String? type;
   String? url;
   String? addedOn;
-  Null? addedById;
+  dynamic addedById;
 
   Proofs(
       {this.id,
