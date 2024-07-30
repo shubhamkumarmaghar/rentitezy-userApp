@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
@@ -266,27 +268,7 @@ class PropertyViewWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Visibility(
-                        visible: propertyInfoModel.availFrom != null && propertyInfoModel.availFrom!.isNotEmpty,
-                        replacement: const Row(
-                          children: [
-                            Text('Not Available',
-                                style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500)),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.info,
-                              color: Colors.grey,
-                              size: 18,
-                            )
-                          ],
-                        ),
-                        child: calculateDateDifference(propertyInfoModel.availFrom ?? '') < 1
-                            ? const Text('Available Now',
-                                style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))
-                            : Text('Available From : ${getLocalTime(propertyInfoModel.availFrom)}',
-                                style: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))),
+                    calculateDateDifference(dateTime: propertyInfoModel.availFrom,shouldShowAvailFrom: true),
                     Visibility(
                       visible: propertyInfoModel.furnishType != null,
                       replacement: const SizedBox.shrink(),

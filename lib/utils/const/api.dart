@@ -77,33 +77,7 @@ Future<List<PropertyModel>> searchProperty() async {
   }
 }
 
-Future<dynamic> createLeadsApi(String name, String phone, String address, String zipcode, String facility,
-    String moveIn, String priceRange, String userId, String propertyId, String bhkType) async {
-  var sharedPreferences = await _prefs;
-  final response = await http.post(Uri.parse(AppUrls.leads),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-        "Auth-Token": GetStorage().read(Constants.token).toString()
-      },
-      body: jsonEncode(<String, String>{
-        "name": name,
-        "phone": phone,
-        "address": address,
-        "zipcode": zipcode,
-        "facility": facility,
-        "moveIn": moveIn,
-        "priceRange": priceRange,
-        "userId": userId,
-        "propertyId": propertyId,
-        "bhkType": bhkType
-      }));
-  if (response.statusCode == 200) {
-    var body = jsonDecode(response.body);
-    return body;
-  } else {
-    throw Exception('Failed to load Rentiseazy');
-  }
-}
+
 Future<SettingsModel> fetchSetting() async {
   final response = await http.get(
     Uri.parse(AppUrls.settings),

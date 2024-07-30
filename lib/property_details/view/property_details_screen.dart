@@ -129,29 +129,13 @@ class PropertyDetailsScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Visibility(
                         visible: data.availFrom != null && data.availFrom!.isNotEmpty,
-                        replacement: const Row(
-                          children: [
-                            Text('Not Available',
-                                style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500)),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.info,
-                              color: Colors.grey,
-                              size: 18,
-                            )
-                          ],
-                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
 
                             const Text('Available From',
                                 style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500)),
-                          Text( calculateDateDifference(data.availFrom ??'') < 1 ?'Available Now':getLocalTime(data.availFrom),
-                                style: TextStyle(
-                                    color: Colors.blueGrey.shade500, fontSize: 16, fontWeight: FontWeight.w500)),
+                            calculateDateDifference(dateTime: data.availFrom,shouldShowAvailFrom: false)
                           ],
                         )),
                   ),
