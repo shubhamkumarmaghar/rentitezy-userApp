@@ -128,7 +128,7 @@ class PropertyDetailsScreen extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Visibility(
-                        visible: data.availFrom != null,
+                        visible: data.availFrom != null && data.availFrom!.isNotEmpty,
                         replacement: const Row(
                           children: [
                             Text('Not Available',
@@ -146,9 +146,10 @@ class PropertyDetailsScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+
                             const Text('Available From',
                                 style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500)),
-                            Text(getLocalTime(data.availFrom),
+                          Text( calculateDateDifference(data.availFrom ??'') < 1 ?'Available Now':getLocalTime(data.availFrom),
                                 style: TextStyle(
                                     color: Colors.blueGrey.shade500, fontSize: 16, fontWeight: FontWeight.w500)),
                           ],
@@ -252,7 +253,7 @@ class PropertyDetailsScreen extends StatelessWidget {
               height: screenHeight * 0.01,
             ),
             GridView.builder(
-              padding: EdgeInsets.zero,
+                padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 physics: const NeverScrollableScrollPhysics(),
