@@ -15,6 +15,12 @@ String getLocalTime(String? dateTime) {
   var showDate = '${date.toLocal().year}-${handleZero(date.toLocal().month)}-${handleZero(date.toLocal().day)}';
   return showDate;
 }
+int calculateDateDifference(String dateTime) {
+  var date = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(dateTime, true);
+  DateTime now = DateTime.now();
+  int count = DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+  return count;
+}
 
 String handleZero(int data) {
   return data < 10 ? '0$data' : data.toString();

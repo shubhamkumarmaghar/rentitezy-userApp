@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -141,7 +140,7 @@ class PropertyViewWidget extends StatelessWidget {
                     right: screenWidth * 0.03,
                     top: 12,
                     child: Container(
-                      height:25,
+                      height: 25,
                       width: screenWidth * 0.13,
                       decoration:
                           BoxDecoration(color: CustomTheme.propertyTextColor, borderRadius: BorderRadius.circular(5)),
@@ -163,7 +162,9 @@ class PropertyViewWidget extends StatelessWidget {
                   )
                 ],
               ),
-             const SizedBox(height: 10,),
+              const SizedBox(
+                height: 10,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -209,7 +210,9 @@ class PropertyViewWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 5,),
+              const SizedBox(
+                height: 5,
+              ),
               Container(
                 padding: EdgeInsets.only(left: screenWidth * 0.023),
                 child: Row(
@@ -225,7 +228,9 @@ class PropertyViewWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 5,),
+              const SizedBox(
+                height: 5,
+              ),
               Container(
                   padding: EdgeInsets.only(left: screenWidth * 0.023),
                   child: Text(
@@ -236,7 +241,9 @@ class PropertyViewWidget extends StatelessWidget {
                         letterSpacing: 2,
                         fontWeight: FontWeight.w600),
                   )),
-              const SizedBox(height: 5,),
+              const SizedBox(
+                height: 5,
+              ),
               Container(
                 padding: EdgeInsets.only(left: screenWidth * 0.023),
                 child: Row(
@@ -251,14 +258,16 @@ class PropertyViewWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 5,),
+              const SizedBox(
+                height: 5,
+              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Visibility(
-                        visible: propertyInfoModel.availFrom != null,
+                        visible: propertyInfoModel.availFrom != null && propertyInfoModel.availFrom!.isNotEmpty,
                         replacement: const Row(
                           children: [
                             Text('Not Available',
@@ -273,8 +282,11 @@ class PropertyViewWidget extends StatelessWidget {
                             )
                           ],
                         ),
-                        child: Text('Available From : ${getLocalTime(propertyInfoModel.availFrom)}',
-                            style: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))),
+                        child: calculateDateDifference(propertyInfoModel.availFrom ?? '') < 1
+                            ? const Text('Available Now',
+                                style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))
+                            : Text('Available From : ${getLocalTime(propertyInfoModel.availFrom)}',
+                                style: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))),
                     Visibility(
                       visible: propertyInfoModel.furnishType != null,
                       replacement: const SizedBox.shrink(),
@@ -291,7 +303,9 @@ class PropertyViewWidget extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(
+                height: 20,
+              ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
                 child: Row(
@@ -320,12 +334,12 @@ class PropertyViewWidget extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Constants.primaryColor,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                          onPressed: (){
+                          onPressed: () {
                             Get.to(() => CheckoutScreen(
-                              listingType: propertyInfoModel.listingType,
-                              listingId:  propertyInfoModel.id.toString(),
-                              propertyUnitsList: propertyInfoModel.units,
-                            ));
+                                  listingType: propertyInfoModel.listingType,
+                                  listingId: propertyInfoModel.id.toString(),
+                                  propertyUnitsList: propertyInfoModel.units,
+                                ));
                           },
                           child: const Text(
                             'Book Now',
@@ -359,10 +373,5 @@ class PropertyViewWidget extends StatelessWidget {
     List<String> locationList = latLang.split(',');
     navigateToNativeMap(lat: locationList[0], long: locationList[1]);
   }
-  // void onBookNow() {
-  //   if (propertyDetailsModel != null) {
-  //     Get.to(() => CheckoutScreen(propertyDetailsModel: propertyDetailsModel!));
-  //   }
-  // }
-  //
+
 }

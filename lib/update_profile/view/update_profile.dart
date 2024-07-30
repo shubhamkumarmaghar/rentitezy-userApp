@@ -24,12 +24,13 @@ class UpdateProfilePage extends StatelessWidget {
             child: Container(
                 height: screenHeight,
                 width: screenWidth,
-                padding: const EdgeInsets.only(left: 15, right: 15, top: 30),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SingleChildScrollView(
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
+                        height(0.03),
                         Stack(
                           children: [
                             SizedBox(
@@ -132,7 +133,7 @@ class UpdateProfilePage extends StatelessWidget {
                                     fontWeight: FontWeight.bold),
                               )),
                         ),
-                        height(0.05),
+                        height(0.02),
                       ]),
                 )),
           ),

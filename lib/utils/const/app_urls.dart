@@ -1,6 +1,8 @@
-import 'package:flutter/cupertino.dart';
-import 'package:lottie/lottie.dart';
 
+/*
+* static const productionUrl = "https://api.rentiseazy.com/user/";
+  static const developmentUrl = "https://test-api.rentiseazy.com/user/";
+* */
 class AppUrls {
   static const String appName = "SoWeRent";
   static const String phone = "+918867319944";
