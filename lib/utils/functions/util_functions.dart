@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../theme/custom_theme.dart';
+import '../const/appConfig.dart';
 import '../view/rie_widgets.dart';
 
 String getLocalTime(String? dateTime) {
@@ -13,19 +14,22 @@ String getLocalTime(String? dateTime) {
     return 'NA';
   }
   var date = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(dateTime, true);
-  var showDate = '${date.toLocal().year}-${handleZero(date.toLocal().month)}-${handleZero(date.toLocal().day)}';
+  var showDate =
+      '${date.toLocal().year}-${handleZero(date.toLocal().month)}-${handleZero(date.toLocal().day)} ${handleZero(date.hour)}:${handleZero(date.minute)}:${handleZero(date.second)}';
+
   return showDate;
 }
 
-Widget calculateDateDifference({String? dateTime, required bool shouldShowAvailFrom}) {
+Widget calculateDateDifference({String? dateTime, required bool shouldShowAvailFrom, Color? textColor}) {
   if (dateTime == null || dateTime.isEmpty) {
-    return const Row(
+    return Row(
       children: [
-        Text('Not Available', style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500)),
-        SizedBox(
+        Text('Not Available',
+            style: TextStyle(color: textColor ?? Colors.grey, fontSize: 16, fontWeight: FontWeight.w500)),
+        const SizedBox(
           width: 5,
         ),
-        Icon(
+        const Icon(
           Icons.info,
           color: Colors.grey,
           size: 18,
@@ -39,9 +43,22 @@ Widget calculateDateDifference({String? dateTime, required bool shouldShowAvailF
   int count = DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
 
   return count < 1
-      ? const Text('Available Now', style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))
-      : Text('${shouldShowAvailFrom ?  'Available From':''} : ${getLocalTime(dateTime)}',
-          style: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500));
+      ? Text('Available Now',
+          style: TextStyle(color: textColor ?? Constants.primaryColor, fontSize: 16, fontWeight: FontWeight.w500))
+      : Text('${shouldShowAvailFrom ? 'Available From' : ''} : ${getLocalTime(dateTime)}',
+          style: TextStyle(color: textColor ?? Constants.primaryColor, fontSize: 16, fontWeight: FontWeight.w500));
+}
+
+bool availableToBook({String? dateTime}) {
+  if (dateTime == null || dateTime.isEmpty) {
+    return false;
+  }
+
+  var date = DateFormat('yyyy-MM-ddTHH:mm:ss').parse(dateTime, true);
+  DateTime now = DateTime.now();
+  int count = DateTime(date.year, date.month, date.day).difference(DateTime(now.year, now.month, now.day)).inDays;
+
+  return count < 1 ? true : true;
 }
 
 String handleZero(int data) {

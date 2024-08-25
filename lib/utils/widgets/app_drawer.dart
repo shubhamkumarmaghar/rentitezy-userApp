@@ -8,6 +8,7 @@ import '../../login/view/login_screen.dart';
 import '../../pdf/pdf_api.dart';
 import '../../pdf/pdf_new.dart';
 import '../../screen/faq_screen.dart';
+import '../../social/view/app_social_screen.dart';
 import '../../terms_conditions.dart/policy_data.dart';
 import '../../terms_conditions.dart/terms_and_condition.dart';
 import '../../update_profile/view/update_profile.dart';
@@ -107,6 +108,7 @@ class AppDrawer extends StatelessWidget {
                   ));
             },
           ),
+
           getMenuSideBar(
             leading: Icon(
               Icons.question_answer_rounded,
@@ -116,6 +118,18 @@ class AppDrawer extends StatelessWidget {
             title: Text(' Faq ', style: menuTextStyle()),
             onTap: () {
               Get.to(() => const FaqScreen());
+            },
+          ),
+          //
+          getMenuSideBar(
+            leading: Icon(
+              Icons.contact_page,
+              size: 20,
+              color: Constants.primaryColor,
+            ),
+            title: Text(' Contact us ', style: menuTextStyle()),
+            onTap: () {
+              Get.to(() => const AppSocialScreen());
             },
           ),
 

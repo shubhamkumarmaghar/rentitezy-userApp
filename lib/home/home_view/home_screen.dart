@@ -60,107 +60,70 @@ class MyHomePage extends StatelessWidget {
               height: screenHeight,
               width: screenWidth,
               padding: EdgeInsets.only(left: screenWidth * 0.03, right: screenWidth * 0.03, top: screenHeight * 0.01),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    height(0.02),
-                    searchView(controller),
-                    height(0.03),
-                    SizedBox(height: 45, width: screenWidth, child: buildTabBar(controller)),
-                    height(0.04),
-                    Text(
-                      "Near by Properties",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  height(0.02),
+                  searchView(controller),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          height(0.03),
+                          Text(
+                            "Near by Properties",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
+                          ),
+                          height(0.02),
+                          nearByPropertiesList(controller),
+                          height(0.04),
+                          Text(
+                            "Recommended Properties",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
+                          ),
+                          height(0.02),
+                          controller.propertyInfoList == null
+                              ? Center(child: RIEWidgets.getLoader())
+                              : controller.propertyInfoList != null && controller.propertyInfoList!.isEmpty
+                              ? const Center(
+                            child: Text(
+                              'No Property Found!',
+                              style: TextStyle(fontSize: 18, color: Colors.black),
+                            ),
+                          )
+                              : ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: controller.propertyInfoList?.length,
+                            itemBuilder: (context, index) {
+                              return PropertyViewWidget(
+                                  propertyInfoModel: controller.propertyInfoList![index],
+                                  onWishlist: () => controller.update());
+                            },
+                          ),
+                          height(0.02),
+                        ],
+                      ),
                     ),
-                    height(0.02),
-                    nearByPropertiesList(controller),
-                    height(0.04),
-                    Text(
-                      "Recommended Properties",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
-                    ),
-                    height(0.02),
-                    controller.propertyInfoList == null
-                        ? Center(child: RIEWidgets.getLoader())
-                        : controller.propertyInfoList != null && controller.propertyInfoList!.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  'No Property Found!',
-                                  style: TextStyle(fontSize: 18, color: Colors.black),
-                                ),
-                              )
-                            : ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: controller.propertyInfoList?.length,
-                                itemBuilder: (context, index) {
-                                  return PropertyViewWidget(
-                                      propertyInfoModel: controller.propertyInfoList![index],
-                                      onWishlist: () => controller.update());
-                                },
-                              ),
-                    height(0.02),
-                  ],
-                ),
+                  )
+                ],
               ),
             ));
       },
     );
   }
 
-  Widget buildTabBar(HomeController homeController) {
-    return Obx(() => homeController.isLoadingLocation.value
-        ? Center(child: RIEWidgets.getLoader())
-        : ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: homeController.categories.length,
-            itemBuilder: (ctx, index) {
-              return GestureDetector(
-                  onTap: () {
-                    homeController.selectedIndex.value = index;
-                    homeController.locationFunc(homeController.categories[index]);
-                  },
-                  child: Obx(
-                    () => AnimatedContainer(
-                        margin: EdgeInsets.fromLTRB(index == 0 ? 15 : 5, 0, 5, 0),
-                        width: screenWidth * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                          color: index == homeController.selectedIndex.value
-                              ? Constants.primaryColor
-                              : Constants.primaryColor.withOpacity(0.1),
-                        ),
-                        duration: const Duration(milliseconds: 300),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          alignment: Alignment.center,
-                          child: Text(
-                            homeController.categories[index],
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w500,
-                              color: index == homeController.selectedIndex.value ? Colors.white : Colors.black,
-                            ),
-                          ),
-                        )),
-                  ));
-            }));
-  }
+
 
   Widget searchView(HomeController homeController) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => SearchPropertiesScreen(
-              locationsList: homeController.categories,
+        Get.to(() => const SearchPropertiesScreen(
+
             ));
       },
       child: Container(
@@ -198,7 +161,7 @@ class MyHomePage extends StatelessWidget {
               width: screenWidth * 0.2,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => SearchPropertiesScreen(locationsList: homeController.categories));
+                  Get.to(() => const SearchPropertiesScreen());
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Constants.primaryColor,

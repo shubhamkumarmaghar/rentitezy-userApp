@@ -86,7 +86,8 @@ class CheckoutScreen extends StatelessWidget {
                       height: screenHeight * 0.025,
                     ),
                     Obx(() {
-                      return textHeading(controller.monthSelected.value ? 'Select Months' : 'Select Days');
+                      return textHeading(
+                          controller.monthSelected.value ? 'Duration  (in-months)' : 'Duration  (in-days)');
                     }),
                     SizedBox(
                       height: screenHeight * 0.01,
@@ -98,32 +99,32 @@ class CheckoutScreen extends StatelessWidget {
                             onTap: () async {
                               final day = await showDataDialog(
                                   context: context,
-                                  title: 'Select Days',
+                                  title: 'Select Duration',
                                   dataList: List.generate(31, (index) => (index + 1).toString()));
                               if (day != null) {
                                 controller.dayController.text = day;
                               }
                             },
                             textController: controller.dayController,
-                            hintText: 'Select Days'),
+                            hintText: 'Select Duration'),
                         child: pickerButton(
                             onTap: () async {
                               final month = await showDataDialog(
                                   context: context,
-                                  title: 'Select Month',
+                                  title: 'Select Duration',
                                   dataList: List.generate(11, (index) => (index + 1).toString()));
                               if (month != null) {
                                 controller.monthController.text = month;
                               }
                             },
                             textController: controller.monthController,
-                            hintText: 'Select Month'),
+                            hintText: 'Select Duration'),
                       );
                     }),
                     SizedBox(
                       height: screenHeight * 0.025,
                     ),
-                    textHeading('Select Unit'),
+                    textHeading('Flat no.'),
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),
@@ -135,7 +136,7 @@ class CheckoutScreen extends StatelessWidget {
                             List<String> data = controller.propertyUnitsList!.map((e) => e.flatNo ?? '').toList();
 
                             final flatUnit =
-                                await showDataDialog(context: context, title: 'Select Unit', dataList: data);
+                                await showDataDialog(context: context, title: 'Select Flat', dataList: data);
 
                             if (flatUnit != null) {
                               final unit =
@@ -145,12 +146,12 @@ class CheckoutScreen extends StatelessWidget {
                             }
                           },
                           textController: controller.unitController,
-                          hintText: 'Select Unit'),
+                          hintText: 'Select Flat'),
                     ),
                     SizedBox(
                       height: screenHeight * 0.025,
                     ),
-                    textHeading('Select Date'),
+                    textHeading('Move-In Date'),
                     SizedBox(
                       height: screenHeight * 0.01,
                     ),

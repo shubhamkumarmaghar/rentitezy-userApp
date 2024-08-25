@@ -42,8 +42,6 @@ class DashboardView extends StatelessWidget {
       return const WishlistScreen();
     } else if (index == 2) {
       return const TicketsListScreen();
-    } else if (index == 3) {
-      return const AppSocialScreen();
     } else {
       return const Text('RentisEazy');
     }
@@ -54,7 +52,7 @@ class DashboardView extends StatelessWidget {
       barItem(icon: Icons.home, label: 'Home', selected: selectedIndex == 0),
       barItem(icon: Icons.favorite_border, label: 'Wishlist', selected: selectedIndex == 1),
       barItem(icon: UniconsLine.ticket, label: 'Tickets', selected: selectedIndex == 2),
-      barItem(icon: UniconsLine.webcam, label: 'Social', selected: selectedIndex == 3),
+     // barItem(icon: UniconsLine.webcam, label: 'Social', selected: selectedIndex == 3),
     ];
   }
 

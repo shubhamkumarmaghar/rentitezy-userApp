@@ -3,23 +3,67 @@ import 'package:get/get.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-import '../utils/widgets/app_bar.dart';
+import '../utils/view/rie_widgets.dart';
 import '../utils/widgets/property_view_widget.dart';
 import 'search_controller.dart';
 
 class SearchPropertiesScreen extends StatelessWidget {
-  final List<String> locationsList;
-
-  const SearchPropertiesScreen({super.key, required this.locationsList});
+  const SearchPropertiesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SearchPropertiesController>(
-      init: SearchPropertiesController(locationsList),
+      init: SearchPropertiesController(),
       builder: (controller) {
         return Scaffold(
-          appBar: appBarWidget(
-            title: 'Search Properties',
+          appBar: AppBar(
+            title: const Text(
+              'Search Properties',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                fontSize: 20,
+              ),
+            ),
+            centerTitle: true,
+            leading: IconButton(
+                onPressed: () => Get.back(),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: Colors.white,
+                  size: 18,
+                )),
+            actions: [
+              Obx(
+                () {
+                  return controller.isLoadingLocation.value
+                      ? Container(
+                          height: 3,
+                          width: 30,
+                          margin: const EdgeInsets.only(right: 5),
+                          child: const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: controller.showFiltersBottomModalSheet,
+                          icon: const Icon(
+                            Icons.tune_rounded,
+                            size: 20,
+                            color: Colors.white,
+                          ));
+                },
+              ),
+              SizedBox(
+                width: screenWidth * 0.01,
+              ),
+            ],
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(bottomRight: Radius.circular(20), bottomLeft: Radius.circular(20)),
+            ),
           ),
           body: Container(
             padding: EdgeInsets.only(
@@ -31,7 +75,6 @@ class SearchPropertiesScreen extends StatelessWidget {
                 children: [
                   height(0.02),
                   searchView(controller: controller),
-                  height(0.02),
                   SizedBox(
                     height: screenHeight * 0.76,
                     width: screenWidth,
@@ -92,7 +135,9 @@ class SearchPropertiesScreen extends StatelessWidget {
                                 ),
                               ),
                             )),
-                        SizedBox(height: screenHeight*0.02,),
+                        SizedBox(
+                          height: screenHeight * 0.02,
+                        ),
                         controller.searchedPropertyList == null
                             ? const Center(
                                 child: Text(
@@ -109,6 +154,7 @@ class SearchPropertiesScreen extends StatelessWidget {
                                 : ListView.separated(
                                     scrollDirection: Axis.vertical,
                                     shrinkWrap: true,
+                                    padding: const EdgeInsets.only(bottom: 40),
                                     physics: const NeverScrollableScrollPhysics(),
                                     itemCount: controller.searchedPropertyList!.length,
                                     itemBuilder: (context, index) {
@@ -117,7 +163,7 @@ class SearchPropertiesScreen extends StatelessWidget {
                                           onWishlist: () => controller.update());
                                     },
                                     separatorBuilder: (context, index) => SizedBox(
-                                      width: screenWidth * 0.05,
+                                      height: screenHeight * 0.01,
                                     ),
                                   ),
                       ],

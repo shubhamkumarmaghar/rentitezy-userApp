@@ -79,9 +79,16 @@ class PropertyDetailsScreen extends StatelessWidget {
                   width: screenWidth * 0.44,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Constants.primaryColor,
+                          backgroundColor:
+                              availableToBook(dateTime: data.availFrom) ? Constants.primaryColor : Colors.grey,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25))),
-                      onPressed: controller.onBookNow,
+                      onPressed: () {
+                        if (availableToBook(dateTime: data.availFrom)) {
+                          controller.onBookNow();
+                        } else {
+                          RIEWidgets.getToast(message: 'Not available for booking', color: CustomTheme.errorColor);
+                        }
+                      },
                       child: const Text(
                         'Book Now',
                         style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
@@ -123,25 +130,23 @@ class PropertyDetailsScreen extends StatelessWidget {
                   propertyRent(controller: controller, model: data),
                   propertyFeatures(controller: controller, model: data),
                   SizedBox(
-                    height: screenHeight * 0.03,
+                    height: screenHeight * 0.02,
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Visibility(
-                        visible: data.availFrom != null && data.availFrom!.isNotEmpty,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-
-                            const Text('Available From',
-                                style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w500)),
-                            calculateDateDifference(dateTime: data.availFrom,shouldShowAvailFrom: false)
-                          ],
-                        )),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      margin: const EdgeInsets.only(right: 15),
+                      decoration: BoxDecoration(color: Constants.primaryColor, borderRadius: BorderRadius.circular(5)),
+                      child: Visibility(
+                          visible: data.availFrom != null && data.availFrom!.isNotEmpty,
+                          child: calculateDateDifference(
+                              dateTime: data.availFrom, shouldShowAvailFrom: true, textColor: Colors.white)),
+                    ),
                   ),
                   propertyDescription(controller: controller, model: data),
                   propertyAmenities(controller: controller, model: data),
-                  propertyEnquiry(controller: controller, model: data),
+                  // propertyEnquiry(controller: controller, model: data),
                   showGoogleMaps(controller: controller, model: data),
                   SizedBox(
                     height: screenHeight * 0.05,
@@ -431,6 +436,19 @@ class PropertyDetailsScreen extends StatelessWidget {
                     ),
                   ),
                   Visibility(
+                    visible: model?.bathrooms != null,
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(width: 0.5, color: Constants.primaryColor)),
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      child: Text(
+                        '${model?.bathrooms.toString()} Bathroom',
+                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: Constants.primaryColor),
+                      ),
+                    ),
+                  ),
+                  Visibility(
                     visible: model?.balconies != null,
                     child: Container(
                       decoration: BoxDecoration(
@@ -443,19 +461,6 @@ class PropertyDetailsScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Visibility(
-                    visible: model?.bathrooms != null,
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(width: 0.5, color: Constants.primaryColor)),
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      child: Text(
-                        '${model?.bathrooms.toString()} Bathroom',
-                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14, color: Constants.primaryColor),
-                      ),
-                    ),
-                  )
                 ],
               ),
             ],
@@ -475,60 +480,47 @@ class PropertyDetailsScreen extends StatelessWidget {
           SizedBox(
             height: screenHeight * 0.025,
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Rent',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  '${Constants.currency} ${getPrice(rentType: controller.rentType.value, model: model)}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
-                ),
-              ],
-            ),
-          ),
+          getPrice(rentType: controller.rentType.value, model: model).trim().toString() != '0'
+              ? Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Rent',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        '${Constants.currency} ${getPrice(rentType: controller.rentType.value, model: model)}',
+                        style:
+                            TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
           SizedBox(
             height: screenHeight * 0.01,
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Deposit',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  '${Constants.currency} ${getDepositAmount(rentType: controller.rentType.value, model: model)}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: screenHeight * 0.01,
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Maintenance',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  '${Constants.currency} ${model.property?.maintenance ?? 0.toString()}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
-                ),
-              ],
-            ),
-          ),
+          getDepositAmount(rentType: controller.rentType.value, model: model).trim().toString() != '0'
+              ? Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Deposit',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        '${Constants.currency} ${getDepositAmount(rentType: controller.rentType.value, model: model)}',
+                        style:
+                            TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
         ],
       );
     });

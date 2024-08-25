@@ -70,8 +70,8 @@ class BookingsScreen extends StatelessWidget {
                                   ),
                                   children: [
                                     rowTxt('Amount Paid', item.amountPaid.toString()),
-                                    rowTxt('From', getLocalTime(item.from)),
-                                    rowTxt('Till', getLocalTime(item.till)),
+                                    rowTxt('From Date', getLocalTime(item.from)),
+                                    rowTxt('Till Date', getLocalTime(item.till)),
                                     rowTxt('No. of Guest', item.guest.toString()),
                                     Visibility(
                                       visible: item.propUnit?.listing?.property != null,
@@ -84,7 +84,7 @@ class BookingsScreen extends StatelessWidget {
                                     Visibility(
                                       visible: item.propUnit?.listing?.listingType != null,
                                       child: rowTxt(
-                                          'BHK Type',
+                                          'Property Type',
                                           item.propUnit?.listing?.listingType != null
                                               ? '${item.propUnit?.listing?.listingType}'
                                               : 'NA'),

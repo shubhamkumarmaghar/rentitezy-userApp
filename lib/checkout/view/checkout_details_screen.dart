@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -31,20 +33,20 @@ class CheckoutDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Checkout Details',
+                'Booking Details',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
               ),
               SizedBox(height: screenHeight * 0.01),
               rowText(title: "Property Name", value: checkoutModel.name),
               rowText(title: "Duration", value: checkoutModel.duration),
-              rowText(title: "Move In", value: checkoutModel.moveIn),
-              rowText(title: "Move Out", value: checkoutModel.moveOut),
+              rowText(title: "From Date", value: checkoutModel.moveIn),
+              rowText(title: "Till Date", value: checkoutModel.moveOut),
               rowText(title: "Guest", value: checkoutModel.guest),
               rowText(title: "Lock In", value: checkoutModel.lockIn),
               rowText(title: "Address", value: checkoutModel.address),
               SizedBox(height: screenHeight * 0.04),
               const Text(
-                'Financial Details',
+                'Payment Details',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
               ),
               SizedBox(height: screenHeight * 0.01),
@@ -82,6 +84,7 @@ class CheckoutDetailsScreen extends StatelessWidget {
   }
 
   Widget rowText({required String title, dynamic value, bool? showCurrency}) {
+    log('$value');
     return Visibility(
       visible: value != null,
       replacement: const SizedBox.shrink(),

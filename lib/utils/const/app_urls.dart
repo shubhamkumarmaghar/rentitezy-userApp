@@ -5,7 +5,7 @@ class AppUrls {
   static const productionUrl = "https://api.sowerent.com/user/";
   static const developmentUrl = "https://test-api.sowerent.com/user/";
   static const rootUrl = "http://networkgroups.in/prisma/rentitezy/";
-  static const baseUrl = productionUrl;
+  static const baseUrl = developmentUrl;
   static const imagesRootUrl =
       "https://api.rentiseazy.com/user/images/";
   static const imagesRentIsEasyUrl = "${baseUrl}images/";

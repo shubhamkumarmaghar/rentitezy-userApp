@@ -258,7 +258,7 @@ class BookingDetailsPage extends StatelessWidget {
           height: getScreenHeight * 0.01,
         ),
         const Text(
-          'Financial Info',
+          'Payment Info',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.black),
         ),
         SizedBox(
@@ -339,11 +339,11 @@ class BookingDetailsPage extends StatelessWidget {
         SizedBox(
           height: getScreenHeight * 0.01,
         ),
-        getBookingDataText(text: 'Move-In', value: getLocalTime(controller.bookingDetailsModel?.from)),
+        getBookingDataText(text: 'From Date', value: getLocalTime(controller.bookingDetailsModel?.from)),
         SizedBox(
           height: getScreenHeight * 0.01,
         ),
-        getBookingDataText(text: 'Move-Out', value: getLocalTime(controller.bookingDetailsModel?.till)),
+        getBookingDataText(text: 'Till Date', value: getLocalTime(controller.bookingDetailsModel?.till)),
       ],
     );
   }

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../theme/custom_theme.dart';
+import '../functions/util_functions.dart';
 import '../widgets/custom_photo_view.dart';
 import 'appConfig.dart';
 
@@ -83,6 +84,7 @@ Widget iconWidget(String name, double he, double wi, [Color? color]) {
     color: color,
   );
 }
+
 Widget drawerIconWidget(String name, double he, double wi, [Color? color]) {
   return Image.asset(
     'assets/images/$name.png',
@@ -92,7 +94,6 @@ Widget drawerIconWidget(String name, double he, double wi, [Color? color]) {
     color: color,
   );
 }
-
 
 Widget imgLoadWidCircle(String imgUrl, String asset, double h, double w, BoxFit fit, double radius) {
   return ClipRRect(
@@ -123,18 +124,18 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
       memCacheHeight: h.toInt(),
       imageUrl: imgUrl,
       imageBuilder: (context, imageProvider) => GestureDetector(
-        onTap: () {
-          Get.to(() => CustomPhotoView(
-            imageUrl: imgUrl,
-          ));
-        },
-        child: Container(
+            onTap: () {
+              Get.to(() => CustomPhotoView(
+                    imageUrl: imgUrl,
+                  ));
+            },
+            child: Container(
               decoration: BoxDecoration(
                 shape: BoxShape.rectangle,
                 image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
               ),
             ),
-      ),
+          ),
       placeholder: (context, url) => loading(),
       errorWidget: (context, url, error) => Container(
             decoration: BoxDecoration(
@@ -157,20 +158,4 @@ Widget imgLoadWid(String imgUrl, String asset, double h, double w, BoxFit fit) {
           //width: w,
         );
       });
-}
-
-String dateConvert(String date) {
-  String dateTime;
-  try {
-    if (date != 'null' && date.isNotEmpty) {
-      DateTime datee = DateTime.parse(date);
-      dateTime = DateFormat('dd-MM-yyyy').format(datee);
-    } else {
-      dateTime = 'NA';
-    }
-  } catch (e) {
-    log('error exception ::$e');
-    dateTime = 'NA';
-  }
-  return dateTime;
 }

@@ -1,4 +1,3 @@
-
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -16,7 +15,7 @@ import '../const/appConfig.dart';
 import '../functions/util_functions.dart';
 import '../model/property_model.dart';
 import '../services/utils_api_service.dart';
-
+import '../view/rie_widgets.dart';
 
 class PropertyViewWidget extends StatelessWidget {
   final PropertyInfoModel propertyInfoModel;
@@ -45,6 +44,7 @@ class PropertyViewWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
           Get.to(() => PropertyDetailsScreen(propertyId: propertyInfoModel.id?.toString() ?? ''));
         },
         child: Card(
@@ -268,7 +268,7 @@ class PropertyViewWidget extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    calculateDateDifference(dateTime: propertyInfoModel.availFrom,shouldShowAvailFrom: true),
+                    calculateDateDifference(dateTime: propertyInfoModel.availFrom, shouldShowAvailFrom: true),
                     Visibility(
                       visible: propertyInfoModel.furnishType != null,
                       replacement: const SizedBox.shrink(),
@@ -314,14 +314,18 @@ class PropertyViewWidget extends StatelessWidget {
                       width: screenWidth * 0.3,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Constants.primaryColor,
+                              backgroundColor:availableToBook(dateTime: propertyInfoModel.availFrom)? Constants.primaryColor:Colors.grey,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                           onPressed: () {
-                            Get.to(() => CheckoutScreen(
-                                  listingType: propertyInfoModel.listingType,
-                                  listingId: propertyInfoModel.id.toString(),
-                                  propertyUnitsList: propertyInfoModel.units,
-                                ));
+                            if (availableToBook(dateTime: propertyInfoModel.availFrom)) {
+                              Get.to(() => CheckoutScreen(
+                                    listingType: propertyInfoModel.listingType,
+                                    listingId: propertyInfoModel.id.toString(),
+                                    propertyUnitsList: propertyInfoModel.units,
+                                  ));
+                            } else {
+                              RIEWidgets.getToast(message: 'Not available for booking', color: CustomTheme.errorColor);
+                            }
                           },
                           child: const Text(
                             'Book Now',
@@ -355,5 +359,4 @@ class PropertyViewWidget extends StatelessWidget {
     List<String> locationList = latLang.split(',');
     navigateToNativeMap(lat: locationList[0], long: locationList[1]);
   }
-
 }

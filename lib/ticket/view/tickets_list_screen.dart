@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
+import 'package:rentitezy/utils/functions/util_functions.dart';
 import '../../dashboard/controller/dashboard_controller.dart';
 import '../../utils/const/widgets.dart';
 import '../../utils/view/rie_widgets.dart';
@@ -69,9 +70,7 @@ class TicketsListScreen extends StatelessWidget {
                                 ),
                                 children: [
                                   expandableBodyStyle('Flat', data.unit ?? 'NA'),
-                                  expandableBodyStyle('Created on', dateConvert('${data.createdOn}')),
-                                  expandableBodyStyle('Updated on', dateConvert('${data.updatedOn}')),
-                                  expandableBodyStyle('Added By', data.addedBy ?? 'NA'),
+                                  expandableBodyStyle('Created on', getLocalTime('${data.createdOn}')),
                                   expandableDescriptionStyle('Description', data.description ?? 'NA'),
                                   SizedBox(
                                     height: screenHeight * 0.025,

@@ -42,7 +42,7 @@ class LoginController extends GetxController {
 
     if (data['message'].toString().toLowerCase().contains('welcome') && data['data'] != null) {
       LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(data['data']);
-      RIEWidgets.getToast(message: data['message'].toString(), color: CustomTheme.myFavColor);
+      RIEWidgets.getToast(message: data['message'].toString(), color: Constants.primaryColor);
       GetStorage().write(Constants.isLogin, true);
       GetStorage().write(Constants.userId, loginResponseModel.id.toString());
       GetStorage().write(Constants.phonekey, loginResponseModel.phone);
