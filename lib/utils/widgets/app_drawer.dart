@@ -20,28 +20,7 @@ import 'menu_side_bar_widget.dart';
 class AppDrawer extends StatelessWidget {
   final String userName = GetStorage().read(Constants.firstName) ?? '';
   final String userId = GetStorage().read(Constants.userId)?.toString() ?? "guest";
-  final bool isTenant = GetStorage().read(Constants.isTenant) ?? false;
-
-  final AgreementDet tempPdf = AgreementDet(
-      'Residential Rental Agreement',
-      DateFormat('yyyy-MM-dd').format(DateTime.now()),
-      '',
-      'TempAbout',
-      'SoWeRent',
-      'TempValOne',
-      'TempValTwo',
-      'TempValFirstParty',
-      'Coimbatore',
-      'commencingFrom',
-      'commencingEnding',
-      'licenseAmount',
-      'totalAdvance',
-      'deducting',
-      'licenseCharged',
-      'notice1',
-      'notice2',
-      'premisesBearing',
-      'consisting');
+  final bool isLogin = GetStorage().read(Constants.isLogin) ?? false;
 
   AppDrawer({super.key});
 
@@ -67,7 +46,7 @@ class AppDrawer extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(screenHeight * 0.07),
-                    child: imgLoadWid(GetStorage().read(Constants.profileUrl), 'assets/images/user_vec.png',
+                    child: imgLoadWid(GetStorage().read(Constants.profileUrl) ?? "", 'assets/images/user_vec.png',
                         screenHeight * 0.11, screenWidth * 0.24, BoxFit.cover),
                   ),
                   height(0.015),
@@ -75,10 +54,7 @@ class AppDrawer extends StatelessWidget {
                     userName,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold),
+                    style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
                   )
                 ],
               ) //UserAccountDrawerHeader
@@ -89,23 +65,9 @@ class AppDrawer extends StatelessWidget {
               size: 20,
               color: Constants.primaryColor,
             ),
-            title: Text(' Profile Edit ', style: menuTextStyle()),
+            title: Text('Edit Profile ', style: menuTextStyle()),
             onTap: () {
               Get.to(() => const UpdateProfilePage());
-            },
-          ),
-
-          getMenuSideBar(
-            leading: Icon(
-              Icons.shopping_bag_rounded,
-              size: 20,
-              color: Constants.primaryColor,
-            ),
-            title: Text('My Bookings ', style: menuTextStyle()),
-            onTap: () {
-              Get.to(() => BookingsScreen(
-                    from: false,
-                  ));
             },
           ),
 
@@ -131,16 +93,6 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Get.to(() => const AppSocialScreen());
             },
-          ),
-
-          Visibility(
-            visible: isTenant,
-            child: getMenuSideBar(
-                leading: iconWidget('agreement', 24, 24, Constants.primaryColor),
-                title: Text(' Agreement ', style: menuTextStyle()),
-                onTap: () {
-                  showInvoice();
-                }),
           ),
           getMenuSideBar(
             leading: Icon(
@@ -195,15 +147,14 @@ class AppDrawer extends StatelessWidget {
           ),
           getMenuSideBar(
             leading: Icon(
-              Icons.logout_rounded,
+              isLogin ? Icons.logout_rounded : Icons.login,
               size: 20,
               color: Constants.primaryColor,
             ),
-            title: Text((userId.isNotEmpty || userId != 'null' || userId != 'guest') ? 'Logout' : 'Login',
-                style: menuTextStyle()),
+            title: Text(isLogin ? 'Logout' : 'Login', style: menuTextStyle()),
             onTap: () {
-              if ((userId.isNotEmpty || userId != 'null' || userId != 'guest')) {
-                alertDialog(context, 'LOG OUT', 'do you want to Logout ?');
+              if (isLogin) {
+                logoutAlertDialog(context);
               } else {
                 Get.offAll(() => const LoginScreen());
               }
@@ -212,11 +163,5 @@ class AppDrawer extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  showInvoice() async {
-    tempPdf.between = userName;
-    final pdfFile = await PdfInvoice.generate(tempPdf);
-    PdfApi.openFile(pdfFile);
   }
 }

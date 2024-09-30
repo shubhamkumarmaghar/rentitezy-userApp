@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -10,6 +11,7 @@ import 'package:rentitezy/property_details/model/property_details_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:rentitezy/utils/enums/rent_type.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
+import 'package:rentitezy/utils/widgets/youtube_player_widget.dart';
 import 'package:unicons/unicons.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
@@ -130,19 +132,17 @@ class PropertyDetailsScreen extends StatelessWidget {
                   propertyRent(controller: controller, model: data),
                   propertyFeatures(controller: controller, model: data),
                   SizedBox(
-                    height: screenHeight * 0.02,
+                    height: screenHeight * 0.03,
                   ),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      margin: const EdgeInsets.only(right: 15),
-                      decoration: BoxDecoration(color: Constants.primaryColor, borderRadius: BorderRadius.circular(5)),
-                      child: Visibility(
-                          visible: data.availFrom != null && data.availFrom!.isNotEmpty,
-                          child: calculateDateDifference(
-                              dateTime: data.availFrom, shouldShowAvailFrom: true, textColor: Colors.white)),
-                    ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    margin: const EdgeInsets.only(left: 15),
+                    decoration: BoxDecoration(
+                        color: Constants.primaryColor.withOpacity(0.05), borderRadius: BorderRadius.circular(20)),
+                    child: Visibility(
+                        visible: data.availFrom != null && data.availFrom!.isNotEmpty,
+                        child: calculateDateDifference(
+                            dateTime: data.availFrom, shouldShowAvailFrom: true, textColor: Constants.primaryColor)),
                   ),
                   propertyDescription(controller: controller, model: data),
                   propertyAmenities(controller: controller, model: data),
@@ -521,6 +521,19 @@ class PropertyDetailsScreen extends StatelessWidget {
                   ),
                 )
               : const SizedBox.shrink(),
+          SizedBox(
+            height: screenHeight * 0.02,
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: const Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'RENT DOES NOT INCLUDE WATER & ELECTRICITY',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: CustomTheme.errorColor),
+              ),
+            ),
+          )
         ],
       );
     });
@@ -631,19 +644,37 @@ class PropertyDetailsScreen extends StatelessWidget {
         ),
         Positioned(
           left: screenWidth * 0.03,
-          top: screenHeight * 0.06,
+          top: screenHeight * 0.05,
           child: goBackWidget(),
         ),
+        controller.propertyDetailsModel != null &&
+                controller.propertyDetailsModel!.video != null &&
+                controller.propertyDetailsModel!.video!.isNotEmpty
+            ? Positioned(
+                right: screenWidth * 0.15,
+                top: screenHeight * 0.05,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.to(() => YoutubePlayerWidget(videoUrl: controller.propertyDetailsModel!.video ?? ''),
+                        transition: Transition.cupertino);
+                  },
+                  child: const Icon(
+                    CupertinoIcons.play_circle_fill,
+                    color: Colors.white,
+                    size: 40,
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
         Positioned(
           right: screenWidth * 0.03,
-          top: screenHeight * 0.06,
+          top: screenHeight * 0.05,
           child: GestureDetector(
             onTap: () async {
               controller.wishlistProperty();
             },
             child: Container(
-              height: screenHeight * 0.045,
-              width: screenWidth * 0.1,
+              padding: const EdgeInsets.all(7),
               decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(50)),
               child: Icon(
                 controller.propertyDetailsModel?.wishlist != null && controller.propertyDetailsModel?.wishlist == 1

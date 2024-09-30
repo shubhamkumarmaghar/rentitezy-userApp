@@ -1,16 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
-import 'package:rentitezy/utils/const/api.dart';
 import 'package:rentitezy/utils/const/image_consts.dart';
-import 'package:rentitezy/utils/const/settings.dart';
-import 'package:rentitezy/model/settings_model.dart';
-import 'package:rentitezy/login/view/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../dashboard/controller/dashboard_controller.dart';
 import '../utils/const/appConfig.dart';
@@ -36,7 +31,6 @@ class _SplashPageState extends State<SplashScreenPage> {
   }
 
   void getBackgroundLatLong() async {
-    var sharedPreferences = await _prefs;
     if (!serviceStatus) {
       serviceStatus = await Geolocator.isLocationServiceEnabled();
       if (serviceStatus) {
@@ -84,17 +78,9 @@ class _SplashPageState extends State<SplashScreenPage> {
     } else {
       try {
         getBackgroundLatLong();
-        SettingsModel settings = await fetchSetting();
-        Timer(const Duration(seconds: 3), () async {
-          if (GetStorage().read(Constants.isLogin) != null && GetStorage().read(Constants.isLogin) != false) {
-            if (settings.agreement.isNotEmpty) {
-              Settings().init(context, settings);
-              Get.find<DashboardController>().setIndex(0);
-              Get.offAll(() => const DashboardView());
-            }
-          } else {
-            Get.offAll(() => const LoginScreen());
-          }
+        Timer(const Duration(seconds: 2), () async {
+          Get.find<DashboardController>().setIndex(0);
+          Get.offAll(() => const DashboardView());
         });
       } catch (e) {
         debugPrint(e.toString());

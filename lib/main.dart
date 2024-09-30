@@ -58,9 +58,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Constants.primaryColor,
         ),
       ),
-      //home: const ForgotScreen(),
       home: const SplashScreenPage(),
-      //home: const ProfileScreenNew(),
     );
   }
 }

@@ -257,18 +257,7 @@ class PropertyViewWidget extends StatelessWidget {
                     ),
                     Text('${propertyInfoModel.area}',
                         style: const TextStyle(color: CustomTheme.propertyTextColor, fontSize: 14)),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    calculateDateDifference(dateTime: propertyInfoModel.availFrom, shouldShowAvailFrom: true),
+                    const Spacer(),
                     Visibility(
                       visible: propertyInfoModel.furnishType != null,
                       replacement: const SizedBox.shrink(),
@@ -284,6 +273,13 @@ class PropertyViewWidget extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
+                child: calculateDateDifference(dateTime: propertyInfoModel.availFrom, shouldShowAvailFrom: true),
               ),
               const SizedBox(
                 height: 20,
@@ -314,7 +310,9 @@ class PropertyViewWidget extends StatelessWidget {
                       width: screenWidth * 0.3,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor:availableToBook(dateTime: propertyInfoModel.availFrom)? Constants.primaryColor:Colors.grey,
+                              backgroundColor: availableToBook(dateTime: propertyInfoModel.availFrom)
+                                  ? Constants.primaryColor
+                                  : Colors.grey,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                           onPressed: () {
                             if (availableToBook(dateTime: propertyInfoModel.availFrom)) {

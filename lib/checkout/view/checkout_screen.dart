@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -24,192 +26,184 @@ class CheckoutScreen extends StatelessWidget {
           appBar: appBarWidget(
             title: 'Checkout',
           ),
-          body: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Please Fill Your Details',
-                      style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.02,
-                    ),
-                    Obx(() {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          FilterChip(
-                              label: const Text('Monthly Booking'),
-                              selectedColor: Constants.primaryColor,
-                              backgroundColor: Colors.grey,
-                              checkmarkColor: Colors.white,
-                              labelStyle: const TextStyle(color: Colors.white),
-                              selected: controller.monthSelected.value,
-                              onSelected: (value) {
-                                controller.monthSelected.value = true;
-                              }),
-                          FilterChip(
-                              label: const Text('Daily Booking  '),
-                              selectedColor: Constants.primaryColor,
-                              backgroundColor: Colors.grey,
-                              checkmarkColor: Colors.white,
-                              labelStyle: const TextStyle(color: Colors.white),
-                              selected: controller.monthSelected.value == false,
-                              onSelected: (value) {
-                                controller.monthSelected.value = false;
-                              }),
-                        ],
-                      );
-                    }),
-                    SizedBox(
-                      height: screenHeight * 0.02,
-                    ),
-                    textHeading('No. of Guests'),
-                    SizedBox(
-                      height: screenHeight * 0.01,
-                    ),
-                    pickerButton(
+          bottomNavigationBar: Obx(() {
+            return Container(
+              height: screenHeight * 0.06,
+              margin: EdgeInsets.only(left: screenWidth * 0.12,right:screenWidth * 0.12,bottom: 20 ),
+              child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Constants.primaryColor,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                  ),
+                  onPressed: controller.selectedPropertyUnitId.value == 0 ? null : controller.submitBookingRequest,
+                  child: const Text(
+                    'Submit',
+                    style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+                  )),
+            );
+          }),
+          body: Container(
+            padding: const EdgeInsets.all(20.0),
+            height: screenHeight,
+            width: screenWidth,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Please Fill Your Details',
+                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 20),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.02,
+                ),
+                Obx(() {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FilterChip(
+                          label: const Text('Monthly Booking'),
+                          selectedColor: Constants.primaryColor,
+                          backgroundColor: Colors.grey,
+                          checkmarkColor: Colors.white,
+                          labelStyle: const TextStyle(color: Colors.white),
+                          selected: controller.monthSelected.value,
+                          onSelected: (value) {
+                            controller.monthSelected.value = true;
+                          }),
+                      FilterChip(
+                          label: const Text('Daily Booking  '),
+                          selectedColor: Constants.primaryColor,
+                          backgroundColor: Colors.grey,
+                          checkmarkColor: Colors.white,
+                          labelStyle: const TextStyle(color: Colors.white),
+                          selected: controller.monthSelected.value == false,
+                          onSelected: (value) {
+                            controller.monthSelected.value = false;
+                          }),
+                    ],
+                  );
+                }),
+                SizedBox(
+                  height: screenHeight * 0.02,
+                ),
+                textHeading('No. of Guests'),
+                SizedBox(
+                  height: screenHeight * 0.01,
+                ),
+                pickerButton(
+                    onTap: () async {
+                      final guest =
+                          await showDataDialog(context: context, title: 'Guest', dataList: controller.guestCountList);
+                      if (guest != null) {
+                        controller.guestController.text = guest;
+                      }
+                    },
+                    textController: controller.guestController,
+                    hintText: 'Guest'),
+                SizedBox(
+                  height: screenHeight * 0.025,
+                ),
+                Obx(() {
+                  return textHeading(controller.monthSelected.value ? 'Duration  (in-months)' : 'Duration  (in-days)');
+                }),
+                SizedBox(
+                  height: screenHeight * 0.01,
+                ),
+                Obx(() {
+                  return Visibility(
+                    visible: controller.monthSelected.value,
+                    replacement: pickerButton(
                         onTap: () async {
-                          final guest = await showDataDialog(
-                              context: context, title: 'Guest', dataList: controller.guestCountList);
-                          if (guest != null) {
-                            controller.guestController.text = guest;
+                          final day = await showDataDialog(
+                              context: context,
+                              title: 'Select Duration',
+                              dataList: List.generate(31, (index) => (index + 1).toString()));
+                          if (day != null) {
+                            controller.dayController.text = day;
                           }
                         },
-                        textController: controller.guestController,
-                        hintText: 'Guest'),
-                    SizedBox(
-                      height: screenHeight * 0.025,
-                    ),
-                    Obx(() {
-                      return textHeading(
-                          controller.monthSelected.value ? 'Duration  (in-months)' : 'Duration  (in-days)');
-                    }),
-                    SizedBox(
-                      height: screenHeight * 0.01,
-                    ),
-                    Obx(() {
-                      return Visibility(
-                        visible: controller.monthSelected.value,
-                        replacement: pickerButton(
-                            onTap: () async {
-                              final day = await showDataDialog(
-                                  context: context,
-                                  title: 'Select Duration',
-                                  dataList: List.generate(31, (index) => (index + 1).toString()));
-                              if (day != null) {
-                                controller.dayController.text = day;
-                              }
-                            },
-                            textController: controller.dayController,
-                            hintText: 'Select Duration'),
-                        child: pickerButton(
-                            onTap: () async {
-                              final month = await showDataDialog(
-                                  context: context,
-                                  title: 'Select Duration',
-                                  dataList: List.generate(11, (index) => (index + 1).toString()));
-                              if (month != null) {
-                                controller.monthController.text = month;
-                              }
-                            },
-                            textController: controller.monthController,
-                            hintText: 'Select Duration'),
-                      );
-                    }),
-                    SizedBox(
-                      height: screenHeight * 0.025,
-                    ),
-                    textHeading('Flat no.'),
-                    SizedBox(
-                      height: screenHeight * 0.01,
-                    ),
-                    Visibility(
-                      visible: controller.propertyUnitsList != null,
-                      replacement: const SizedBox.shrink(),
-                      child: pickerButton(
-                          onTap: () async {
-                            List<String> data = controller.propertyUnitsList!.map((e) => e.flatNo ?? '').toList();
-
-                            final flatUnit =
-                                await showDataDialog(context: context, title: 'Select Flat', dataList: data);
-
-                            if (flatUnit != null) {
-                              final unit =
-                                  controller.propertyUnitsList!.firstWhere((element) => element.flatNo == flatUnit);
-                              controller.selectedPropertyUnitId.value = unit.id ?? 0;
-                              controller.unitController.text = flatUnit;
-                            }
-                          },
-                          textController: controller.unitController,
-                          hintText: 'Select Flat'),
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.025,
-                    ),
-                    textHeading('Move-In Date'),
-                    SizedBox(
-                      height: screenHeight * 0.01,
-                    ),
-                    Container(
-                      height: 50,
-                      padding: const EdgeInsets.only(left: 15, right: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Constants.lightBg,
-                      ),
-                      child: InkWell(
-                        onTap: controller.onSelectDate,
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.calendar_today_outlined,
-                              color: Constants.primaryColor,
-                              size: 20,
-                            ),
-                            Obx(() {
-                              return Padding(
-                                padding: const EdgeInsets.only(left: 10.0),
-                                child: Text(
-                                  DateFormat.yMMMd().format(controller.selectedDate.value),
-                                  style:
-                                      const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
-                                ),
-                              );
-                            })
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: screenHeight * 0.16,
-                    ),
-                    Obx(() {
-                      return Center(
-                        child: SizedBox(
-                          height: screenHeight * 0.06,
-                          width: screenWidth * 0.8,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Constants.primaryColor,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                              ),
-                              onPressed:
-                                  controller.selectedPropertyUnitId.value == 0 ? null : controller.submitBookingRequest,
-                              child: const Text(
-                                'Submit',
-                                style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                              )),
-                        ),
-                      );
-                    }),
-                  ],
+                        textController: controller.dayController,
+                        hintText: 'Select Duration'),
+                    child: pickerButton(
+                        onTap: () async {
+                          final month = await showDataDialog(
+                              context: context,
+                              title: 'Select Duration',
+                              dataList: List.generate(11, (index) => (index + 1).toString()));
+                          if (month != null) {
+                            log('month :: $month');
+                            controller.monthController.text = month;
+                          }
+                        },
+                        textController: controller.monthController,
+                        hintText: 'Select Duration'),
+                  );
+                }),
+                SizedBox(
+                  height: screenHeight * 0.025,
                 ),
-              )),
+                textHeading('Flat no.'),
+                SizedBox(
+                  height: screenHeight * 0.01,
+                ),
+                Visibility(
+                  visible: controller.propertyUnitsList != null,
+                  replacement: const SizedBox.shrink(),
+                  child: pickerButton(
+                      onTap: () async {
+                        List<String> data = controller.propertyUnitsList!.map((e) => e.flatNo ?? '').toList();
+
+                        final flatUnit = await showDataDialog(context: context, title: 'Select Flat', dataList: data);
+
+                        if (flatUnit != null) {
+                          final unit =
+                              controller.propertyUnitsList!.firstWhere((element) => element.flatNo == flatUnit);
+                          controller.selectedPropertyUnitId.value = unit.id ?? 0;
+                          controller.unitController.text = flatUnit;
+                        }
+                      },
+                      textController: controller.unitController,
+                      hintText: 'Select Flat'),
+                ),
+                SizedBox(
+                  height: screenHeight * 0.025,
+                ),
+                textHeading('Move-In'),
+                SizedBox(
+                  height: screenHeight * 0.01,
+                ),
+                Container(
+                  height: 50,
+                  padding: const EdgeInsets.only(left: 15, right: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Constants.lightBg,
+                  ),
+                  child: InkWell(
+                    onTap: controller.onSelectDate,
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.calendar_today_outlined,
+                          color: Constants.primaryColor,
+                          size: 20,
+                        ),
+                        Obx(() {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Text(
+                              DateFormat.yMMMd().format(controller.selectedDate.value),
+                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.black),
+                            ),
+                          );
+                        })
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

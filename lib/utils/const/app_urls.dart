@@ -4,8 +4,7 @@ class AppUrls {
   static const String phone = "+918867319944";
   static const productionUrl = "https://api.sowerent.com/user/";
   static const developmentUrl = "https://test-api.sowerent.com/user/";
-  static const rootUrl = "http://networkgroups.in/prisma/rentitezy/";
-  static const baseUrl = developmentUrl;
+  static const baseUrl = productionUrl;
   static const imagesRootUrl =
       "https://api.rentiseazy.com/user/images/";
   static const imagesRentIsEasyUrl = "${baseUrl}images/";
@@ -14,8 +13,7 @@ class AppUrls {
   static const userLogin = "${baseUrl}login";
   static const property = "${baseUrl}property";
   static const issues = "${baseUrl}faq";
-  static const settings = "${baseUrl}settings";
-  static const fetchAllFavByIds = "${rootUrl}fetchProductByIds";
+
   static const tenantAgree = "${baseUrl}rentitezyAgreement";
   static const userTenant =
       "${baseUrl}userTenant"; //query userTenant?userId=19

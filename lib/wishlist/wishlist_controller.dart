@@ -19,20 +19,14 @@ class WishlistController extends GetxController {
     String url = AppUrls.wishlist;
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
-    try {
-      if (response['message'].toString().toLowerCase() == 'success') {
-        if (response['data'] != null) {
-          Iterable iterable = response['data'];
-          wishListedPropertyList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
-        } else {
-          wishListedPropertyList = [];
-        }
-      }
-      update();
-    } catch (e) {
+    if (response != null &&
+        response['message'].toString().toLowerCase().contains('success') &&
+        response['data'] != null) {
+      Iterable iterable = response['data'];
+      wishListedPropertyList = iterable.map((e) => PropertyInfoModel.fromJson(e)).toList();
+    } else {
       wishListedPropertyList = [];
-      update();
-      log('Error while wishlist :: ${e.toString()}');
     }
+    update();
   }
 }

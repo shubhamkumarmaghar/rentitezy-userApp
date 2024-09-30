@@ -339,11 +339,11 @@ class BookingDetailsPage extends StatelessWidget {
         SizedBox(
           height: getScreenHeight * 0.01,
         ),
-        getBookingDataText(text: 'From Date', value: getLocalTime(controller.bookingDetailsModel?.from)),
+        getBookingDataText(text: 'Move-In', value: getLocalTime(controller.bookingDetailsModel?.from)),
         SizedBox(
           height: getScreenHeight * 0.01,
         ),
-        getBookingDataText(text: 'Till Date', value: getLocalTime(controller.bookingDetailsModel?.till)),
+        getBookingDataText(text: 'Move-Out', value: getLocalTime(controller.bookingDetailsModel?.till)),
       ],
     );
   }

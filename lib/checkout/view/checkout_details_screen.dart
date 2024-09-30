@@ -1,6 +1,3 @@
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -24,6 +21,20 @@ class CheckoutDetailsScreen extends StatelessWidget {
       appBar: appBarWidget(
         title: 'Checkout  Details',
       ),
+      bottomNavigationBar: Container(
+        height: screenHeight * 0.06,
+        margin: EdgeInsets.only(left: screenWidth * 0.12, right: screenWidth * 0.12, bottom: 20),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Constants.primaryColor,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            ),
+            onPressed: () => showUserDetailsBottomModalSheet(context),
+            child: const Text(
+              'Submit',
+              style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+            )),
+      ),
       body: Container(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
         height: screenHeight,
@@ -39,8 +50,8 @@ class CheckoutDetailsScreen extends StatelessWidget {
               SizedBox(height: screenHeight * 0.01),
               rowText(title: "Property Name", value: checkoutModel.name),
               rowText(title: "Duration", value: checkoutModel.duration),
-              rowText(title: "From Date", value: checkoutModel.moveIn),
-              rowText(title: "Till Date", value: checkoutModel.moveOut),
+              rowText(title: "Move-In", value: checkoutModel.moveIn),
+              rowText(title: "Move-Out", value: checkoutModel.moveOut),
               rowText(title: "Guest", value: checkoutModel.guest),
               rowText(title: "Lock In", value: checkoutModel.lockIn),
               rowText(title: "Address", value: checkoutModel.address),
@@ -57,25 +68,6 @@ class CheckoutDetailsScreen extends StatelessWidget {
               rowText(title: "Total", value: checkoutModel.total, showCurrency: true),
               const Divider(),
               rowText(title: "Minimum amount payable", value: checkoutModel.amount, showCurrency: true),
-              SizedBox(
-                height: screenHeight * 0.17,
-              ),
-              Center(
-                child: SizedBox(
-                  height: screenHeight * 0.06,
-                  width: screenWidth * 0.8,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Constants.primaryColor,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                      ),
-                      onPressed: () => showUserDetailsBottomModalSheet(context),
-                      child: const Text(
-                        'Submit',
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
-                      )),
-                ),
-              ),
             ],
           ),
         ),
@@ -84,7 +76,6 @@ class CheckoutDetailsScreen extends StatelessWidget {
   }
 
   Widget rowText({required String title, dynamic value, bool? showCurrency}) {
-    log('$value');
     return Visibility(
       visible: value != null,
       replacement: const SizedBox.shrink(),

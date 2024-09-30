@@ -8,6 +8,7 @@ import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/ticket/view/tickets_list_screen.dart';
 import 'package:unicons/unicons.dart';
 
+import '../../bookings/view/bookings_screen.dart';
 import '../../utils/const/appConfig.dart';
 import '../../wishlist/wishlist_screen.dart';
 
@@ -39,8 +40,10 @@ class DashboardView extends StatelessWidget {
     if (index == 0) {
       return MyHomePage();
     } else if (index == 1) {
+      return BookingsScreen();
+    }else if (index == 2) {
       return const WishlistScreen();
-    } else if (index == 2) {
+    } else if (index == 3) {
       return const TicketsListScreen();
     } else {
       return const Text('RentisEazy');
@@ -50,9 +53,10 @@ class DashboardView extends StatelessWidget {
   List<BottomNavigationBarItem> barItemsList({required int selectedIndex}) {
     return [
       barItem(icon: Icons.home, label: 'Home', selected: selectedIndex == 0),
-      barItem(icon: Icons.favorite_border, label: 'Wishlist', selected: selectedIndex == 1),
-      barItem(icon: UniconsLine.ticket, label: 'Tickets', selected: selectedIndex == 2),
-     // barItem(icon: UniconsLine.webcam, label: 'Social', selected: selectedIndex == 3),
+      barItem(icon: Icons.shopping_bag_rounded, label: 'Bookings', selected: selectedIndex == 1),
+      barItem(icon: Icons.favorite_border, label: 'Wishlist', selected: selectedIndex == 2),
+      barItem(icon: UniconsLine.ticket, label: 'Tickets', selected: selectedIndex == 3),
+
     ];
   }
 

@@ -8,7 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../theme/custom_theme.dart';
 import '../const/appConfig.dart';
 import '../view/rie_widgets.dart';
-
 String getLocalTime(String? dateTime) {
   if (dateTime == null || dateTime.isEmpty) {
     return 'NA';

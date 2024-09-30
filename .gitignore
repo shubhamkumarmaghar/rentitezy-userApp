@@ -37,6 +37,7 @@ migrate_working_dir/
 /android/app/cert/certificate.pem
 /android/app/key.properties
 
+/lib/utils/secret/.secret_keys.dart
 
 # Symbolication related
 app.*.symbols

@@ -32,19 +32,19 @@ class BookingsController extends GetxController {
     if (showLoader != null && showLoader) {
       cancelLoader();
     }
-    if (response['message'].toString().toLowerCase() == 'success') {
+    if (response != null &&
+        response['message'].toString().toLowerCase().contains('success') &&
+        response['data'] != null) {
       var list = response["data"] as List;
       if (list.isNotEmpty) {
         final List<MyBookingModelData> photosList =
             (response["data"] as List).map((stock) => MyBookingModelData.fromJson(stock)).toList();
         myBookingData = photosList;
-        update();
       } else {
-        log('No Booking found');
         RIEWidgets.getToast(message: 'No Booking found', color: CustomTheme.white);
         myBookingData = [];
-        update();
       }
+      update();
     }
   }
 

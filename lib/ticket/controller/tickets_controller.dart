@@ -24,15 +24,15 @@ class TicketsController extends GetxController {
     isLoading = true;
     update();
     final response = await _apiService.getApiCallWithURL(endPoint: url);
-
-    final data = response as Map<String, dynamic>;
-    if (data['message'].toString().toLowerCase().contains('success')) {
-      Iterable iterable = data['data'];
-      ticketsList = iterable.map((element) => TicketModel.fromJson(element)).toList();
-      isLoading = false;
-      update();
-    } else {
-      isLoading = false;
+    if (response != null) {
+      final data = response as Map<String, dynamic>;
+      if (data['message'].toString().toLowerCase().contains('success') && data['data'] != null) {
+        Iterable iterable = data['data'];
+        ticketsList = iterable.map((element) => TicketModel.fromJson(element)).toList();
+        isLoading = false;
+      } else {
+        isLoading = false;
+      }
       update();
     }
   }
