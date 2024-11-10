@@ -1,52 +1,68 @@
 class InvoiceModel {
   int? id;
-  int? bookingId;
   String? fromDate;
   String? tillDate;
-  String? type;
-  int? payable;
-  int? paid;
-  String? status;
-  String? createdOn;
-  String? updatedOn;
+  int? amount;
+  int? pending;
+  List<Details>? details;
 
   InvoiceModel(
       {this.id,
-        this.bookingId,
         this.fromDate,
         this.tillDate,
-        this.type,
-        this.payable,
-        this.paid,
-        this.status,
-        this.createdOn,
-        this.updatedOn});
+        this.amount,
+        this.pending,
+        this.details});
 
   InvoiceModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    bookingId = json['bookingId'];
     fromDate = json['fromDate'];
     tillDate = json['tillDate'];
-    type = json['type'];
-    payable = json['payable'];
-    paid = json['paid'];
-    status = json['status'];
-    createdOn = json['createdOn'];
-    updatedOn = json['updatedOn'];
+    amount = json['amount'];
+    pending = json['pending'];
+    if (json['details'] != null) {
+      details = <Details>[];
+      json['details'].forEach((v) {
+        details!.add(new Details.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
-    data['bookingId'] = bookingId;
     data['fromDate'] = fromDate;
     data['tillDate'] = tillDate;
+    data['amount'] = amount;
+    data['pending'] = pending;
+    if (details != null) {
+      data['details'] = details!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Details {
+  String? type;
+  int? amount;
+  int? pending;
+  String? status;
+
+  Details({this.type, this.amount, this.pending, this.status});
+
+  Details.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    amount = json['amount'];
+    pending = json['pending'];
+    status = json['status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type;
-    data['payable'] = payable;
-    data['paid'] = paid;
+    data['amount'] = amount;
+    data['pending'] = pending;
     data['status'] = status;
-    data['createdOn'] = createdOn;
-    data['updatedOn'] = updatedOn;
     return data;
   }
 }

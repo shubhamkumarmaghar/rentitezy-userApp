@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../theme/custom_theme.dart';
 import '../const/appConfig.dart';
 import '../view/rie_widgets.dart';
+
 String getLocalTime(String? dateTime) {
   if (dateTime == null || dateTime.isEmpty) {
     return 'NA';
@@ -46,6 +47,22 @@ Widget calculateDateDifference({String? dateTime, required bool shouldShowAvailF
           style: TextStyle(color: textColor ?? Constants.primaryColor, fontSize: 16, fontWeight: FontWeight.w500))
       : Text('${shouldShowAvailFrom ? 'Available From' : ''} : ${getLocalTime(dateTime)}',
           style: TextStyle(color: textColor ?? Constants.primaryColor, fontSize: 16, fontWeight: FontWeight.w500));
+}
+
+String convertDateTimeToLocalTime(String? isoDate) {
+  if (isoDate == null || isoDate.isEmpty) {
+    return '';
+  }
+  log('ISO date :: $isoDate');
+  try {
+    DateTime dateTime = DateTime.parse(isoDate).toUtc(); // Convert to local time if needed
+
+    return DateFormat('EEE, MMM d yyyy, h:mma').format(dateTime);
+  } catch (e) {
+    log(e.toString());
+    RIEWidgets.getToast(message: e.toString(), color: CustomTheme.errorColor);
+    return '';
+  }
 }
 
 bool availableToBook({String? dateTime}) {

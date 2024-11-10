@@ -21,17 +21,13 @@ Future<void> logoutAlertDialog(BuildContext context) {
       return CupertinoAlertDialog(
         title: Text('Log Out',
             style: TextStyle(fontFamily: Constants.fontsFamily, color: CustomTheme.appThemeContrast, fontSize: 16)),
-        content: Text('are you sure to Logout ?',
-            style: TextStyle(
-              fontFamily: Constants.fontsFamily,
-              color: Colors.grey
-            )),
+        content:
+            Text('are you sure to Logout ?', style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.grey)),
         actions: [
           CupertinoDialogAction(
               child: Text("YES",
                   style: TextStyle(
                     fontFamily: Constants.fontsFamily,
-
                   )),
               onPressed: () async {
                 executeLogOut(context);
@@ -40,8 +36,6 @@ Future<void> logoutAlertDialog(BuildContext context) {
             child: Text("NO",
                 style: TextStyle(
                   fontFamily: Constants.fontsFamily,
-
-
                 )),
             onPressed: () {
               Navigator.of(context).pop();
@@ -138,8 +132,8 @@ void executeLogOut(BuildContext context) async {
 
 void unAuthorizeAccess() async {
   await GetStorage().erase();
-  Get.offAll(() => const LoginScreen(
-        canPop: false,
+  Get.to(() => const LoginScreen(
+        canPop: true,
       ));
 }
 

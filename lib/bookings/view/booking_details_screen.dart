@@ -99,7 +99,7 @@ class BookingDetailsPage extends StatelessWidget {
                       ),
                     ],
                   ),
-                  getPropertyFinancialInfo(controller: controller),
+                  //getPropertyFinancialInfo(controller: controller),
                   getPropertyUserInfo(controller: controller),
                   getPropertyBookingInfo(controller: controller),
                   getTenantsInfo(controller: controller),
@@ -339,11 +339,11 @@ class BookingDetailsPage extends StatelessWidget {
         SizedBox(
           height: getScreenHeight * 0.01,
         ),
-        getBookingDataText(text: 'Move-In', value: getLocalTime(controller.bookingDetailsModel?.from)),
+        getBookingDataText(text: 'Move-In', value: convertDateTimeToLocalTime(controller.bookingDetailsModel?.from)),
         SizedBox(
           height: getScreenHeight * 0.01,
         ),
-        getBookingDataText(text: 'Move-Out', value: getLocalTime(controller.bookingDetailsModel?.till)),
+        getBookingDataText(text: 'Move-Out', value: convertDateTimeToLocalTime(controller.bookingDetailsModel?.till)),
       ],
     );
   }

@@ -197,13 +197,13 @@ class RIEUserApiService {
       case 400:
         return _getErrorResponse(json.decode(response.body));
       case 401:
-        RIEWidgets.getToast(message: 'Unauthorized access.Please login to authorize.', color: CustomTheme.errorColor);
+        //RIEWidgets.getToast(message: 'Unauthorized access.Please login to authorize.', color: CustomTheme.errorColor);
         unAuthorizeAccess();
       // return _getErrorResponse(json.decode(response.body));
       case 402:
         return _getErrorResponse(json.decode(response.body));
       case 403:
-        RIEWidgets.getToast(message: 'Unauthorized access.Please login to authorize.', color: CustomTheme.errorColor);
+        // RIEWidgets.getToast(message: 'Unauthorized access.Please login to authorize.', color: CustomTheme.errorColor);
         unAuthorizeAccess();
       //return _getErrorResponse(json.decode(response.body));
       case 404:

@@ -70,7 +70,7 @@ class TicketsListScreen extends StatelessWidget {
                                 ),
                                 children: [
                                   expandableBodyStyle('Flat', data.unit ?? 'NA'),
-                                  expandableBodyStyle('Created on', getLocalTime('${data.createdOn}')),
+                                  expandableBodyStyle('Created on', convertDateTimeToLocalTime('${data.createdOn}')),
                                   expandableDescriptionStyle('Description', data.description ?? 'NA'),
                                   SizedBox(
                                     height: screenHeight * 0.025,

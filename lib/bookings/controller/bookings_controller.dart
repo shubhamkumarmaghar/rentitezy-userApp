@@ -1,9 +1,13 @@
 import 'dart:developer';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/functions/util_functions.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
 import '../../../utils/const/app_urls.dart';
+import '../../dashboard/controller/dashboard_controller.dart';
+import '../../login/view/login_screen.dart';
+import '../../utils/const/appConfig.dart';
 import '../../utils/services/rie_user_api_service.dart';
 import '../../utils/widgets/custom_alert_dialogs.dart';
 import '../model/booking_model.dart';
@@ -13,13 +17,30 @@ import '../view/booking_details_screen.dart';
 class BookingsController extends GetxController {
   BookingDetailsModel? bookingDetailsModel;
   List<MyBookingModelData>? myBookingData;
+  final bool isLogin = GetStorage().read(Constants.isLogin) ?? false;
 
   final RIEUserApiService apiService = RIEUserApiService();
 
   @override
   void onInit() {
-    fetchMyBooking();
     super.onInit();
+    if (isLogin) {
+      fetchMyBooking();
+    } else {
+      Future.delayed(const Duration(seconds: 0)).then(
+        (value) {
+          Get.to(() => const LoginScreen(
+                canPop: true,
+              ))?.then(
+            (value) {
+              Get.find<DashboardController>().setIndex(0);
+            },
+          );
+        },
+      );
+    }
+
+
   }
 
   void fetchMyBooking({bool? showLoader}) async {

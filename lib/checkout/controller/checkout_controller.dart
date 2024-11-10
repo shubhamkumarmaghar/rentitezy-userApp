@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -86,6 +88,7 @@ class CheckoutController extends GetxController {
   }
 
   void requestPayment(String cartId) async {
+
     if (cartId.trim().isEmpty) {
       return;
     }
@@ -100,12 +103,18 @@ class CheckoutController extends GetxController {
       "source": 'app'
     });
     cancelLoader();
-    if (response['message'] != 'failure' && response['data'] != null) {
+
+    if (response != null &&
+        response['message'] != null &&
+        response['message'].toString().toLowerCase().contains('success') &&
+        response['data'] != null) {
       final data = response['data'] as Map<String, dynamic>;
       Get.to(RazorpayPaymentView(
         paymentResponseModel: RazorpayPaymentResponseModel.fromJson(data),
         guestCount: int.parse(guestController.text.isNotEmpty ? guestController.text : '1'),
-      ));
+      ))?.then((value) {
+        cancelLoader();
+      },);
     } else {
       RIEWidgets.getToast(message: response["message"].toString(), color: CustomTheme.errorColor);
     }

@@ -62,16 +62,18 @@ class RazorpayController extends GetxController {
           color: Colors.white,
           size: 40,
         ),
-        description: response.message ?? 'Something went wrong!',
+       // description: response.message ?? 'Something went wrong!',
+        description:  'Payment Error!',
         subText: const Text(
-          'Navigating to dashboard...',
+          'Processing...',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black54),
         ),
         textColor: CustomTheme.errorColor);
-    await Future.delayed(const Duration(seconds: 4));
-
-    Get.find<DashboardController>().setIndex(0);
-    Get.offAll(() => const DashboardView());
+    await Future.delayed(const Duration(seconds: 1));
+    Get.back();
+    Get.back();
+    // Get.find<DashboardController>().setIndex(0);
+    // Get.offAll(() => const DashboardView());
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
@@ -102,7 +104,7 @@ class RazorpayController extends GetxController {
     var options = {
       'key': paymentResponseModel.key,
       'amount': paymentResponseModel.amount,
-      'name': paymentResponseModel.prefill?.name,
+      'name': paymentResponseModel.name,
       'description': paymentResponseModel.description,
       'retry': {'enabled': true, 'max_count': 1},
       'order_id': paymentResponseModel.orderId,

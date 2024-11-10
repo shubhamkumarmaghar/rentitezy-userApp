@@ -12,9 +12,7 @@ import '../controller/bookings_controller.dart';
 import 'booking_details_screen.dart';
 
 class BookingsScreen extends StatelessWidget {
-  BookingsScreen({super.key});
-
-  final BookingsController bookingController = Get.put(BookingsController());
+  const BookingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +22,13 @@ class BookingsScreen extends StatelessWidget {
         Get.find<DashboardController>().setIndex(0);
       },
       child: GetBuilder<BookingsController>(
-        builder: (controller) {
+        init: BookingsController(),
+        builder: (bookingController) {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: appBarWidget(
                 title: 'My Bookings',
-                onBack: (){
+                onBack: () {
                   Get.find<DashboardController>().setIndex(0);
                 },
                 onRefresh: () => bookingController.fetchMyBooking(showLoader: true)),
@@ -78,8 +77,8 @@ class BookingsScreen extends StatelessWidget {
                                     ),
                                     children: [
                                       rowTxt('Amount Paid', item.amountPaid.toString()),
-                                      rowTxt('Move-In', getLocalTime(item.from)),
-                                      rowTxt('Move-Out', getLocalTime(item.till)),
+                                      rowTxt('Move-In', convertDateTimeToLocalTime(item.from)),
+                                      rowTxt('Move-Out', convertDateTimeToLocalTime(item.till)),
                                       rowTxt('No. of Guest', item.guest.toString()),
                                       Visibility(
                                         visible: item.propUnit?.listing?.property != null,
@@ -105,7 +104,6 @@ class BookingsScreen extends StatelessWidget {
                                   GestureDetector(
                                     onTap: () async {
                                       await bookingController.getBookingDetails(bookingId: '${item.id}');
-
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -118,8 +116,8 @@ class BookingsScreen extends StatelessWidget {
                                         children: [
                                           Text(
                                             'See Details',
-                                            style:
-                                                TextStyle(fontSize: 12, color: Colors.white, fontWeight: FontWeight.w400),
+                                            style: TextStyle(
+                                                fontSize: 12, color: Colors.white, fontWeight: FontWeight.w400),
                                           ),
                                           Icon(
                                             Icons.arrow_forward,

@@ -21,7 +21,7 @@ class AppUrls {
   static const ticket = "${baseUrl}ticket";
   static const getTicket = "${baseUrl}tickets";
 
-  static const invoice = "${baseUrl}invoices";
+  static const invoice = "${baseUrl}invoicesV2";
   static const otp = "${baseUrl}user_otp";
   static const resetPass = "${baseUrl}user_reset_password";
   static const checkout = '${baseUrl}checkout';
@@ -46,7 +46,7 @@ class AppUrls {
   static const sendOTP = '${baseUrl}otpSend';
   static const resendOTP = '${baseUrl}otpResend';
   static const otpSignIn = '${baseUrl}otpSignIn';
-  static const payInvoice = '${baseUrl}invoicePay';
+  static const payInvoice = '${baseUrl}payment';
 
 
 

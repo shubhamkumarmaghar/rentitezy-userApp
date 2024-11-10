@@ -59,17 +59,18 @@ class AppDrawer extends StatelessWidget {
                 ],
               ) //UserAccountDrawerHeader
               ), //DrawerHeaderRS
-          getMenuSideBar(
-            leading: Icon(
-              Icons.edit,
-              size: 20,
-              color: Constants.primaryColor,
+          if (isLogin)
+            getMenuSideBar(
+              leading: Icon(
+                Icons.edit,
+                size: 20,
+                color: Constants.primaryColor,
+              ),
+              title: Text('Edit Profile ', style: menuTextStyle()),
+              onTap: () {
+                Get.to(() => const UpdateProfilePage());
+              },
             ),
-            title: Text('Edit Profile ', style: menuTextStyle()),
-            onTap: () {
-              Get.to(() => const UpdateProfilePage());
-            },
-          ),
 
           getMenuSideBar(
             leading: Icon(
