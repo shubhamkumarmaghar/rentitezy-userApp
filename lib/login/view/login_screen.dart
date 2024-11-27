@@ -1,22 +1,22 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentitezy/login/login_controller/login_controller.dart';
 import 'package:rentitezy/mobile_auth/view/mobile_auth_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
-import 'package:rentitezy/screen/forgot_pass_page.dart';
 import '../../signup/view/signup_screen.dart';
 import '../../utils/const/image_consts.dart';
 import '../../utils/const/widgets.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final bool canPop;
+
+  const LoginScreen({super.key, this.canPop = false});
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false,
+      canPop: canPop,
       child: GetBuilder<LoginController>(
         init: LoginController(),
         builder: (controller) {
@@ -54,22 +54,7 @@ class LoginScreen extends StatelessWidget {
                           height: screenHeight * 0.025,
                         ),
                         passwordTextField(controller),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotScreen()));
-                            },
-                            child: Text("Forgot Password? ",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: Constants.fontsFamily,
-                                    color: CustomTheme.appThemeContrast,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.normal)),
-                          ),
-                        ),
-                        height(0.07),
+                        height(0.1),
                         SizedBox(
                           height: screenHeight * 0.06,
                           width: screenWidth * 0.8,
@@ -105,11 +90,10 @@ class LoginScreen extends StatelessWidget {
                               color: Colors.grey.shade200,
                               width: screenWidth * 0.35,
                             ),
-                            const Text('  Or  ',style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black
-                            ),),
+                            const Text(
+                              '  Or  ',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+                            ),
                             Container(height: 1, color: Colors.grey.shade200, width: screenWidth * 0.35),
                           ],
                         ),
@@ -135,8 +119,8 @@ class LoginScreen extends StatelessWidget {
                         height(0.04),
                         GestureDetector(
                           onTap: () {
-                           // controller.signOutFromGoogle();
-                              Get.offAll(() => const SignUpScreen());
+                            // controller.signOutFromGoogle();
+                            Get.offAll(() => const SignUpScreen());
                           },
                           child: RichText(
                             text: TextSpan(
@@ -176,7 +160,7 @@ class LoginScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            shape: BoxShape.circle,
+          shape: BoxShape.circle,
           color: Constants.primaryColor.withOpacity(0.1),
         ),
         child: Image.asset(
@@ -190,19 +174,19 @@ class LoginScreen extends StatelessWidget {
 
   Widget otpSignInButton(LoginController controller) {
     return GestureDetector(
-        onTap: () => Get.to(() => const MobileAuthScreen()),
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-            color: Constants.primaryColor.withOpacity(0.1),
-          ),
-          child: Image.asset(
-            loginOtpIcon,
-            color: Constants.primaryColor,
-            height: 40,
-          ),
+      onTap: () => Get.to(() => const MobileAuthScreen()),
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Constants.primaryColor.withOpacity(0.1),
         ),
+        child: Image.asset(
+          loginOtpIcon,
+          color: Constants.primaryColor,
+          height: 40,
+        ),
+      ),
     );
   }
 

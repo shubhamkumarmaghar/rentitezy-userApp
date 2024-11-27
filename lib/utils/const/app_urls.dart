@@ -1,31 +1,19 @@
 
-/*
-* static const productionUrl = "https://api.rentiseazy.com/user/";
-  static const developmentUrl = "https://test-api.rentiseazy.com/user/";
-* */
 class AppUrls {
   static const String appName = "SoWeRent";
   static const String phone = "+918867319944";
-  static const productionUrl = "https://api.rentiseazy.com/user/";
-  static const developmentUrl = "https://test-api.rentiseazy.com/user/";
-  static const rootUrl = "http://networkgroups.in/prisma/rentitezy/";
+  static const productionUrl = "https://api.sowerent.com/user/";
+  static const developmentUrl = "https://test-api.sowerent.com/user/";
   static const baseUrl = productionUrl;
   static const imagesRootUrl =
       "https://api.rentiseazy.com/user/images/";
   static const imagesRentIsEasyUrl = "${baseUrl}images/";
   static const user = baseUrl;
   static const userRegister = "${baseUrl}signUp";
-  static const getUser = baseUrl;
-  static const userDelete = "${baseUrl}userDelete";
   static const userLogin = "${baseUrl}login";
-  static const leads = "${baseUrl}leads";
-  static const nearProperty = "${rootUrl}nearByProperty";
   static const property = "${baseUrl}property";
   static const issues = "${baseUrl}faq";
-  static const assetReq = "${baseUrl}assets_req";
-  static const assets = "${rootUrl}assets";
-  static const settings = "${baseUrl}settings";
-  static const fetchAllFavByIds = "${rootUrl}fetchProductByIds";
+
   static const tenantAgree = "${baseUrl}rentitezyAgreement";
   static const userTenant =
       "${baseUrl}userTenant"; //query userTenant?userId=19
@@ -33,21 +21,14 @@ class AppUrls {
   static const ticket = "${baseUrl}ticket";
   static const getTicket = "${baseUrl}tickets";
 
-  // static const rentReq = "${rentIsEasyUrl}rent_req";
-  static const invoice = "${baseUrl}invoices";
-  static const review = "${baseUrl}review";
+  static const invoice = "${baseUrl}invoicesV2";
   static const otp = "${baseUrl}user_otp";
   static const resetPass = "${baseUrl}user_reset_password";
-  static const bookNow = "${baseUrl}leadsBooking";
-  static const orderIdRzy = "https://api.razorpay.com/v1/orders";
   static const checkout = '${baseUrl}checkout';
   static const checkoutV2 = '${baseUrl}checkOutV2';
   static const siteVisit = '${baseUrl}siteVisit';
-  static const loginWeb = '${baseUrl}login';
-  static const invoicePay = '${baseUrl}payment';
   static const addFav = '${baseUrl}wishlist';
 
-  static const urlImgUpload = "${rootUrl}fileUpload";
 
   static const updateProfileImageUrl = "${baseUrl}profileImage";
   static const updateProfileUrl = "${baseUrl}profile";
@@ -65,8 +46,24 @@ class AppUrls {
   static const sendOTP = '${baseUrl}otpSend';
   static const resendOTP = '${baseUrl}otpResend';
   static const otpSignIn = '${baseUrl}otpSignIn';
-  static const payInvoice = '${baseUrl}invoicePay';
+  static const payInvoice = '${baseUrl}payment';
 
 
 
 }
+// android:networkSecurityConfig="@xml/network_security_config"
+
+/*<?xml version="1.0" encoding="utf-8"?>
+ android:usesCleartextTraffic="true"
+<network-security-config>
+    <domain-config
+        cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">networkgroups.in</domain>
+        <domain includeSubdomains="true">api.rentiseazy.com</domain>
+        <domain includeSubdomains="true">192.168.1.204</domain>
+        <domain includeSubdomains="true">157.245.60.156</domain>
+        <domain includeSubdomains="true">192.168.1.233</domain>
+        <domain includeSubdomains="true">rie-images.s3.ap-south-1.amazonaws.com</domain>
+
+    </domain-config>
+</network-security-config>*/

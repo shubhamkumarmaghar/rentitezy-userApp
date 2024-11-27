@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -21,8 +23,6 @@ class CheckoutController extends GetxController {
   final RIEUserApiService apiService = RIEUserApiService();
   Rx<DateTime> selectedDate = DateTime.now().add(const Duration(days: 0)).obs;
 
-  RxInt selectedMonths = 1.obs;
-  RxInt selectedDays = 1.obs;
   RxInt selectedPropertyUnitId = 0.obs;
   RxBool monthSelected = true.obs;
   int? cartId;
@@ -70,24 +70,25 @@ class CheckoutController extends GetxController {
 
     showProgressLoader(Get.context!);
     final dateFormat = DateFormat('yyyy-MM-dd').format(selectedDate.value);
-    String duration = monthSelected.value ? '${selectedMonths}m' : '${selectedDays}d';
+    String duration = monthSelected.value ? '${monthController.text}m' : '${dayController.text}d';
 
     String url =
         "${AppUrls.checkout}?checkin=$dateFormat&duration=$duration&guest=${guestController.text}&listingId=$listingId&unitId=${selectedPropertyUnitId.value}";
 
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
-    Get.back();
-    if (response["message"].toString().toLowerCase() == 'success' && response['data'] != null) {
+    cancelLoader();
+    if (response != null &&
+        response["message"].toString().toLowerCase().contains('success') &&
+        response['data'] != null) {
       final checkoutModel = CheckoutModel.fromJson(response['data']);
       cartId = checkoutModel.cartId;
       Get.to(() => CheckoutDetailsScreen(checkoutModel: checkoutModel));
-    } else {
-      RIEWidgets.getToast(message: response["message"].toString(), color: CustomTheme.errorColor);
     }
   }
 
   void requestPayment(String cartId) async {
+
     if (cartId.trim().isEmpty) {
       return;
     }
@@ -102,12 +103,18 @@ class CheckoutController extends GetxController {
       "source": 'app'
     });
     cancelLoader();
-    if (response['message'] != 'failure' && response['data'] != null) {
+
+    if (response != null &&
+        response['message'] != null &&
+        response['message'].toString().toLowerCase().contains('success') &&
+        response['data'] != null) {
       final data = response['data'] as Map<String, dynamic>;
       Get.to(RazorpayPaymentView(
         paymentResponseModel: RazorpayPaymentResponseModel.fromJson(data),
         guestCount: int.parse(guestController.text.isNotEmpty ? guestController.text : '1'),
-      ));
+      ))?.then((value) {
+        cancelLoader();
+      },);
     } else {
       RIEWidgets.getToast(message: response["message"].toString(), color: CustomTheme.errorColor);
     }

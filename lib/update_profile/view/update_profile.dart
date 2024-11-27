@@ -26,115 +26,120 @@ class UpdateProfilePage extends StatelessWidget {
                 width: screenWidth,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: SingleChildScrollView(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        height(0.03),
-                        Stack(
+                  child: controller.userProfileModel != null
+                      ? Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              height: screenHeight * 0.18,
-                              width: screenWidth * 0.4,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(screenWidth * 0.2),
-                                  child: controller.imagePath == null || controller.imagePath == ''
-                                      ? Container(
-                                          color: Constants.primaryColor.withOpacity(0.2),
-                                          child: Icon(
-                                            Icons.person,
-                                            size: screenWidth * 0.2,
-                                            color: Constants.primaryColor,
-                                          ),
-                                        )
-                                      : GestureDetector(
-                                          onTap: () {
-                                            Get.to(() => CustomPhotoView(
-                                                  imageUrl: controller.imagePath,
-                                                ));
-                                          },
-                                          child: Image.network(
-                                            controller.imagePath!,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        )),
-                            ),
-                            Positioned(
-                                bottom: 0,
-                                right: 0,
-                                child: InkWell(
-                                  onTap: controller.updateProfileImage,
-                                  child: CircleAvatar(
-                                    backgroundColor: Constants.primaryColor,
-                                    child: Icon(
-                                      Icons.edit,
-                                      size: screenWidth * 0.04,
-                                      color: Colors.white,
-                                    ),
+                              height(0.03),
+                              Stack(
+                                children: [
+                                  SizedBox(
+                                    height: screenHeight * 0.18,
+                                    width: screenWidth * 0.4,
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(screenWidth * 0.2),
+                                        child: controller.imagePath == null || controller.imagePath == ''
+                                            ? Container(
+                                                color: Constants.primaryColor.withOpacity(0.2),
+                                                child: Icon(
+                                                  Icons.person,
+                                                  size: screenWidth * 0.2,
+                                                  color: Constants.primaryColor,
+                                                ),
+                                              )
+                                            : GestureDetector(
+                                                onTap: () {
+                                                  Get.to(() => CustomPhotoView(
+                                                        imageUrl: controller.imagePath,
+                                                      ));
+                                                },
+                                                child: Image.network(
+                                                  controller.imagePath!,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )),
                                   ),
-                                ))
-                          ],
-                        ),
-                        height(0.05),
-                        inputField(
-                            controller: controller.firstNameController,
-                            hintText: 'First name',
-                            prefixIcon: Icons.account_circle_rounded,
-                            textInputType: TextInputType.text),
-                        inputField(
-                            controller: controller.lastNameController,
-                            hintText: 'Last name',
-                            prefixIcon: Icons.person,
-                            textInputType: TextInputType.text),
-                        inputField(
-                            controller: controller.phoneController,
-                            hintText: 'Mobile number',
-                            prefixIcon: Icons.phone,
-                            textInputType: TextInputType.number,
-                            maxLength: 10,
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
-                            ]),
-                        inputField(
-                            controller: controller.emailController,
-                            hintText: 'Email Address',
-                            prefixIcon: Icons.email,
-                            textInputType: TextInputType.emailAddress),
-                        SizedBox(
-                          height: screenHeight * 0.18,
-                        ),
-                        SizedBox(
-                          height: screenHeight * 0.06,
-                          width: screenWidth * 0.8,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Constants.primaryColor,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-                              onPressed: () {
-                                if (controller.firstNameController.text.isEmpty) {
-                                  showSnackBar(context, 'Enter valid first name');
-                                } else if (controller.lastNameController.text.isEmpty) {
-                                  showSnackBar(context, 'Enter valid last name');
-                                } else if (controller.phoneController.text.isEmpty) {
-                                  showSnackBar(context, 'Enter valid phone number');
-                                } else if (controller.emailController.text.isEmpty) {
-                                  showSnackBar(context, 'Enter valid email address');
-                                } else if (!validateEmail(controller.emailController.text)) {
-                                  showSnackBar(context, 'Invalid email address');
-                                } else {
-                                  controller.updateUserData();
-                                }
-                              },
-                              child: Text(
-                                'UPDATE',
-                                style: TextStyle(
-                                    fontFamily: Constants.fontsFamily,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              )),
-                        ),
-                        height(0.02),
-                      ]),
+                                  Positioned(
+                                      bottom: 0,
+                                      right: 0,
+                                      child: InkWell(
+                                        onTap: controller.updateProfileImage,
+                                        child: CircleAvatar(
+                                          backgroundColor: Constants.primaryColor,
+                                          child: Icon(
+                                            Icons.edit,
+                                            size: screenWidth * 0.04,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ))
+                                ],
+                              ),
+                              height(0.05),
+                              inputField(
+                                  controller: controller.firstNameController,
+                                  hintText: 'First name',
+                                  prefixIcon: Icons.account_circle_rounded,
+                                  textInputType: TextInputType.text),
+                              inputField(
+                                  controller: controller.lastNameController,
+                                  hintText: 'Last name',
+                                  prefixIcon: Icons.person,
+                                  textInputType: TextInputType.text),
+                              inputField(
+                                  controller: controller.phoneController,
+                                  hintText: 'Mobile number',
+                                  prefixIcon: Icons.phone,
+                                  textInputType: TextInputType.number,
+                                  maxLength: 10,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                                  ]),
+                              inputField(
+                                  controller: controller.emailController,
+                                  hintText: 'Email Address',
+                                  prefixIcon: Icons.email,
+                                  textInputType: TextInputType.emailAddress),
+                              SizedBox(
+                                height: screenHeight * 0.18,
+                              ),
+                              SizedBox(
+                                height: screenHeight * 0.06,
+                                width: screenWidth * 0.8,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Constants.primaryColor,
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+                                    onPressed: () {
+                                      if (controller.firstNameController.text.isEmpty) {
+                                        showSnackBar(context, 'Enter valid first name');
+                                      } else if (controller.lastNameController.text.isEmpty) {
+                                        showSnackBar(context, 'Enter valid last name');
+                                      } else if (controller.phoneController.text.isEmpty) {
+                                        showSnackBar(context, 'Enter valid phone number');
+                                      } else if (controller.emailController.text.isEmpty) {
+                                        showSnackBar(context, 'Enter valid email address');
+                                      } else if (!validateEmail(controller.emailController.text)) {
+                                        showSnackBar(context, 'Invalid email address');
+                                      } else {
+                                        controller.updateUserData();
+                                      }
+                                    },
+                                    child: Text(
+                                      'UPDATE',
+                                      style: TextStyle(
+                                          fontFamily: Constants.fontsFamily,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    )),
+                              ),
+                              height(0.02),
+                            ])
+                      : SizedBox(
+                          height: screenHeight,
+                          width: screenWidth,
+                          child: const Center(child: CircularProgressIndicator())),
                 )),
           ),
         );

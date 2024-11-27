@@ -20,13 +20,15 @@ class RIEUserApiService {
     return registeredToken;
   }
 
-  Future<Map<String, String>>  getHeaders({bool canJsonEncode=false}) async {
-    return canJsonEncode?{
-      'user-auth-token': (registeredToken ?? await _getRegisteredToken()).toString(),
-      'Content-Type': 'application/json'
-    }:{
-      'user-auth-token': (registeredToken ?? await _getRegisteredToken()).toString(),
-    };
+  Future<Map<String, String>> getHeaders({bool canJsonEncode = false}) async {
+    return canJsonEncode
+        ? {
+            'user-auth-token': (registeredToken ?? await _getRegisteredToken()).toString(),
+            'Content-Type': 'application/json'
+          }
+        : {
+            'user-auth-token': (registeredToken ?? await _getRegisteredToken()).toString(),
+          };
   }
 
   Future<dynamic> getApiCall({required String endPoint, Map<String, String>? headers}) async {
@@ -52,10 +54,12 @@ class RIEUserApiService {
     required String endPoint,
     required Map<String, dynamic> queryParams,
   }) async {
-    log('URL :: $endPoint ---- QueryParams :: ${queryParams.toString()} -- ${await getHeaders()} ');
+    log('URL :: ${AppUrls.baseUrl}$endPoint ---- QueryParams :: ${queryParams.toString()} -- ${await getHeaders()} ');
     try {
+      List<String> list = AppUrls.baseUrl.split('//');
+
       final response = await http.get(
-        Uri.https(endPoint, '/aa/ticket?', queryParams),
+        Uri.https(list.last.split('/')[0], '${list.last.split('/')[1]}/$endPoint', queryParams),
         headers: await getHeaders(),
       );
 
@@ -193,12 +197,14 @@ class RIEUserApiService {
       case 400:
         return _getErrorResponse(json.decode(response.body));
       case 401:
-        return _getErrorResponse(json.decode(response.body));
+        //RIEWidgets.getToast(message: 'Unauthorized access.Please login to authorize.', color: CustomTheme.errorColor);
+        unAuthorizeAccess();
+      // return _getErrorResponse(json.decode(response.body));
       case 402:
         return _getErrorResponse(json.decode(response.body));
       case 403:
-        RIEWidgets.getToast(message: 'Unauthorized access.Please login to authorize.', color: CustomTheme.errorColor);
-        Get.offAll(() => const LoginScreen());
+        // RIEWidgets.getToast(message: 'Unauthorized access.Please login to authorize.', color: CustomTheme.errorColor);
+        unAuthorizeAccess();
       //return _getErrorResponse(json.decode(response.body));
       case 404:
         return _getErrorResponse(json.decode(response.body));

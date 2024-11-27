@@ -1,34 +1,21 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/app_urls.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/functions/util_functions.dart';
 import '../../utils/model/property_model.dart';
 import '../../utils/services/rie_user_api_service.dart';
-import '../model/property_list_nodel.dart';
 
 class HomeController extends GetxController {
-  var isLoading = true.obs;
-  var isLoadingLocation = true.obs;
-  var apiPropertyList = <PropertyListModel>[].obs;
-  var othersController = TextEditingController();
-  var commentController = TextEditingController();
-  var selectedIndex = 0.obs;
-  var locationBy = "ALL".obs;
-  var categories = <String>[].obs;
-  final Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-  var offset = 10.obs;
   List<PropertyInfoModel>? propertyInfoList;
   List<PropertyInfoModel>? nearbyPropertyInfoList;
-
+  final GeolocatorPlatform _geoLocatorPlatform = GeolocatorPlatform.instance;
   final RIEUserApiService apiService = RIEUserApiService();
-
-  String userId = 'guest';
+  String currentLocation = '';
   String userName = '';
   String imageUrl = '';
 
@@ -36,25 +23,17 @@ class HomeController extends GetxController {
   void onInit() {
     localSetup();
     fetchProperties();
-    fetchNearbyProperties();
-    fetchAddress();
+    _getCurrentPositionLatLong();
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    offset(10);
-    super.onClose();
-  }
-
   void localSetup() {
-    userName = GetStorage().read(Constants.firstName) ?? '';
-    userId = GetStorage().read(Constants.userId) != null ? GetStorage().read(Constants.userId).toString() : "guest";
+    userName = GetStorage().read(Constants.firstName) ?? 'Guest';
     imageUrl = GetStorage().read(Constants.profileUrl) ?? '';
   }
 
-  void fetchNearbyProperties() async {
-    String url = '${AppUrls.listing}?available=true';
+  Future<void> fetchNearbyProperties(String locality) async {
+    String url = '${AppUrls.listing}?available=true&offset=1&limit=6&location=$locality';
 
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
@@ -69,11 +48,7 @@ class HomeController extends GetxController {
   }
 
   void fetchProperties() async {
-    String url = '${AppUrls.listing}?available=true';
-    if (locationBy.value != 'ALL') {
-      url = '${AppUrls.listing}?available=true&location=${locationBy.value}';
-    }
-
+    String url = '${AppUrls.listing}?available=true&offset=0&limit=5';
     final response = await apiService.getApiCallWithURL(endPoint: url);
 
     if (response["message"].toString().toLowerCase().contains('success') && response['data'] != null) {
@@ -86,28 +61,25 @@ class HomeController extends GetxController {
     update();
   }
 
-  void fetchAddress() async {
-    isLoadingLocation(true);
-    final response = await apiService
-        .getApiCall(endPoint: AppUrls.locations, headers: {'Auth-Token': GetStorage().read(Constants.token)});
-    isLoadingLocation(false);
-    if (response["message"].toString().toLowerCase().contains('success')) {
-      if (response['data'] != null) {
-        List<dynamic> location = response['data'] as List;
-        categories.add('ALL');
-        for (var i in location) {
-          categories.add(i.toString());
-        }
-      }
-    } else {
-      RIEWidgets.getToast(message: response["message"] ?? 'Something went wrong!', color: CustomTheme.errorColor);
+  Future<void> _getCurrentPositionLatLong() async {
+    final hasPermission = await _handlePermission();
+
+    if (!hasPermission) {
+      return;
     }
+
+    final position = await _geoLocatorPlatform.getCurrentPosition();
+    await getUserLocation(position);
   }
 
-  locationFunc(String newVal) {
-    locationBy.value = newVal;
-    update();
-    fetchProperties();
+  Future<void> getUserLocation(Position position) async {
+    List<Placemark> placeMarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    if (placeMarks.isNotEmpty) {
+      if (placeMarks.first.subLocality != null || placeMarks.first.subLocality!.isNotEmpty) {
+        currentLocation = placeMarks.first.subLocality ?? '';
+        fetchNearbyProperties(currentLocation);
+      }
+    }
   }
 
   Future<void> navigateToMap(String? latLang) async {
@@ -116,5 +88,33 @@ class HomeController extends GetxController {
     }
     List<String> locationList = latLang.split(',');
     navigateToNativeMap(lat: locationList[0], long: locationList[1]);
+  }
+
+  Future<bool> _handlePermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await _geoLocatorPlatform.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return false;
+    }
+
+    permission = await _geoLocatorPlatform.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await _geoLocatorPlatform.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      _openAppSettings();
+      return false;
+    }
+    return true;
+  }
+
+  void _openAppSettings() async {
+    final opened = await _geoLocatorPlatform.openAppSettings();
   }
 }

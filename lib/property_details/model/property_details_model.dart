@@ -27,34 +27,36 @@ class PropertyDetailsModel {
   int? stPrice;
   int? deposit;
   int? stDeposit;
+  List<NearByPlaces>? nearByPlaces;
 
   PropertyDetailsModel(
-      {id,
-        propId,
-        listingType,
-        furnishType,
-        title,
-        video,
-        description,
-        price,
-        dailyPrice,
-        rent,
-        area,
-        balconies,
-        bathrooms,
-        createdOn,
-        updateOn,
-        status,
-        active,
-        property,
-        units,
-        images,
-        listingAmenities,
-        wishlist,
-        availFrom,
-        stPrice,
-        deposit,
-        stDeposit});
+      {this.id,
+      this.propId,
+      this.listingType,
+      this.furnishType,
+      this.title,
+      this.video,
+      this.description,
+      this.price,
+      this.dailyPrice,
+      this.rent,
+      this.area,
+      this.balconies,
+      this.bathrooms,
+      this.createdOn,
+      this.updateOn,
+      this.status,
+      this.active,
+      this.property,
+      this.units,
+      this.images,
+      this.listingAmenities,
+      this.wishlist,
+      this.availFrom,
+      this.stPrice,
+      this.deposit,
+      this.stDeposit,
+      this.nearByPlaces});
 
   PropertyDetailsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -74,25 +76,23 @@ class PropertyDetailsModel {
     updateOn = json['updateOn'];
     status = json['status'];
     active = json['active'];
-    property = json['property'] != null
-        ?  Property.fromJson(json['property'])
-        : null;
+    property = json['property'] != null ? Property.fromJson(json['property']) : null;
     if (json['units'] != null) {
       units = <Units>[];
       json['units'].forEach((v) {
-        units!.add( Units.fromJson(v));
+        units!.add(Units.fromJson(v));
       });
     }
     if (json['images'] != null) {
       images = <Images>[];
       json['images'].forEach((v) {
-        images!.add( Images.fromJson(v));
+        images!.add(Images.fromJson(v));
       });
     }
     if (json['listingAmenities'] != null) {
       listingAmenities = <ListingAmenities>[];
       json['listingAmenities'].forEach((v) {
-        listingAmenities!.add( ListingAmenities.fromJson(v));
+        listingAmenities!.add(ListingAmenities.fromJson(v));
       });
     }
     wishlist = json['wishlist'];
@@ -100,10 +100,16 @@ class PropertyDetailsModel {
     stPrice = json['stPrice'];
     deposit = json['deposit'];
     stDeposit = json['stDeposit'];
+    if (json['nearByPlaces'] != null) {
+      nearByPlaces = <NearByPlaces>[];
+      json['nearByPlaces'].forEach((v) {
+        nearByPlaces!.add(NearByPlaces.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['propId'] = propId;
     data['listingType'] = listingType;
@@ -131,14 +137,16 @@ class PropertyDetailsModel {
       data['images'] = images!.map((v) => v.toJson()).toList();
     }
     if (listingAmenities != null) {
-      data['listingAmenities'] =
-          listingAmenities!.map((v) => v.toJson()).toList();
+      data['listingAmenities'] = listingAmenities!.map((v) => v.toJson()).toList();
     }
     data['wishlist'] = wishlist;
     data['availFrom'] = availFrom;
     data['stPrice'] = stPrice;
     data['deposit'] = deposit;
     data['stDeposit'] = stDeposit;
+    if (nearByPlaces != null) {
+      data['nearByPlaces'] = nearByPlaces!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -165,23 +173,23 @@ class Property {
 
   Property(
       {id,
-        type,
-        name,
-        locationId,
-        city,
-        latlng,
-        lat,
-        long,
-        plots,
-        floor,
-        address,
-        maintenance,
-        createdOn,
-        updateOn,
-        active,
-        online,
-        age,
-        positionDate});
+      type,
+      name,
+      locationId,
+      city,
+      latlng,
+      lat,
+      long,
+      plots,
+      floor,
+      address,
+      maintenance,
+      createdOn,
+      updateOn,
+      active,
+      online,
+      age,
+      positionDate});
 
   Property.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -205,7 +213,7 @@ class Property {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['type'] = type;
     data['name'] = name;
@@ -238,7 +246,7 @@ class Images {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['url'] = url;
     return data;
   }
@@ -250,12 +258,11 @@ class ListingAmenities {
   ListingAmenities({amenity});
 
   ListingAmenities.fromJson(Map<String, dynamic> json) {
-    amenity =
-    json['amenity'] != null ?  Amenity.fromJson(json['amenity']) : null;
+    amenity = json['amenity'] != null ? Amenity.fromJson(json['amenity']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (amenity != null) {
       data['amenity'] = amenity!.toJson();
     }
@@ -277,10 +284,61 @@ class Amenity {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['webIcon'] = webIcon;
     data['appIcon'] = appIcon;
+    return data;
+  }
+}
+
+class NearByPlaces {
+  String? placeType;
+  List<PlaceList>? placeList;
+
+  NearByPlaces({this.placeType, this.placeList});
+
+  NearByPlaces.fromJson(Map<String, dynamic> json) {
+    placeType = json['placeType'];
+    if (json['placeList'] != null) {
+      placeList = <PlaceList>[];
+      json['placeList'].forEach((v) {
+        placeList!.add(PlaceList.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['placeType'] = placeType;
+    if (placeList != null) {
+      data['placeList'] = placeList!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class PlaceList {
+  String? name;
+  String? lat;
+  String? long;
+  dynamic distance;
+
+  PlaceList({this.name, this.lat, this.long, this.distance});
+
+  PlaceList.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    lat = json['lat'];
+    long = json['long'];
+    distance = json['distance'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['lat'] = lat;
+    data['long'] = long;
+    data['distance'] = distance;
     return data;
   }
 }

@@ -13,6 +13,8 @@ import '../../checkout/view/checkout_screen.dart';
 import '../../property_details/view/property_details_screen.dart';
 import '../../site_visit/view/site_visit_screen.dart';
 import '../const/widgets.dart';
+import '../functions/util_functions.dart';
+import '../view/rie_widgets.dart';
 
 class NearByPropertyWidget extends StatelessWidget {
   final PropertyInfoModel propertyInfoModel;
@@ -178,17 +180,25 @@ class NearByPropertyWidget extends StatelessWidget {
                           width(0.02),
                           GestureDetector(
                             onTap: () {
-                              Get.to(() => CheckoutScreen(
-                                listingType: propertyInfoModel.listingType,
-                                listingId: propertyInfoModel.id.toString(),
-                                propertyUnitsList: propertyInfoModel.units,
-                              ));
+                              if (availableToBook(dateTime: propertyInfoModel.availFrom)) {
+                                Get.to(() => CheckoutScreen(
+                                      listingType: propertyInfoModel.listingType,
+                                      listingId: propertyInfoModel.id.toString(),
+                                      propertyUnitsList: propertyInfoModel.units,
+                                    ));
+                              } else {
+                                RIEWidgets.getToast(
+                                    message: 'Not available for booking', color: CustomTheme.errorColor);
+                              }
                             },
                             child: Container(
                               height: 30,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                  color: Constants.primaryColor, borderRadius: BorderRadius.circular(5)),
+                                  color: availableToBook(dateTime: propertyInfoModel.availFrom)
+                                      ? Constants.primaryColor
+                                      : Colors.grey,
+                                  borderRadius: BorderRadius.circular(5)),
                               width: screenWidth * 0.22,
                               child: const Text(
                                 'Book Now',

@@ -1,13 +1,12 @@
-
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rentitezy/add_kyc/view/add_kyc_screen.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:rentitezy/home/home_controller/home_controller.dart';
-import '../../search/search_properties_screen.dart';
+import '../../search/view/search_properties_screen.dart';
 import '../../utils/const/widgets.dart';
+import '../../utils/repo/property_repository.dart';
 import '../../utils/view/rie_widgets.dart';
 import '../../utils/widgets/app_drawer.dart';
 import '../../utils/widgets/nearby_property_widget.dart';
@@ -15,152 +14,230 @@ import '../../utils/widgets/property_view_widget.dart';
 
 class MyHomePage extends StatelessWidget {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final controller = Get.put(HomeController());
 
   MyHomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      init: HomeController(),
+      //init: HomeController(),
       builder: (controller) {
-        return Scaffold(
-            key: scaffoldKey,
-            backgroundColor: Colors.white,
-            drawer: AppDrawer(),
-            appBar: AppBar(
-              centerTitle: true,
-              elevation: 5,
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
-              backgroundColor: Constants.primaryColor,
-              title: RichText(
-                text: TextSpan(
-                  children: [
-                    WidgetSpan(
-                      child: Text("Hi, ",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: Constants.fontsFamily,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                    WidgetSpan(
-                      child: Text(controller.userName,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontFamily: Constants.fontsFamily,
-                              fontWeight: FontWeight.w500)),
-                    ),
-                  ],
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {
+            RIEWidgets.showExitDialog(context);
+          },
+          child: Scaffold(
+              key: scaffoldKey,
+              backgroundColor: Colors.white,
+              drawer: AppDrawer(),
+              appBar: AppBar(
+                centerTitle: true,
+                elevation: 5,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))),
+                backgroundColor: Constants.primaryColor,
+                title: RichText(
+                  text: TextSpan(
+                    children: [
+                      WidgetSpan(
+                        child: Text("Hi, ",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: Constants.fontsFamily,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                      WidgetSpan(
+                        child: Text(controller.userName,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: Constants.fontsFamily,
+                                fontWeight: FontWeight.w500)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            body: Container(
-              height: screenHeight,
-              width: screenWidth,
-              padding: EdgeInsets.only(left: screenWidth * 0.03, right: screenWidth * 0.03, top: screenHeight * 0.01),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
+              body: Container(
+                height: screenHeight,
+                width: screenWidth,
+                padding: EdgeInsets.only(left: screenWidth * 0.04, right: screenWidth * 0.04, top: screenHeight * 0.01),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     height(0.02),
                     searchView(controller),
-                    height(0.03),
-                    SizedBox(height: 45, width: screenWidth, child: buildTabBar(controller)),
-                    height(0.04),
-                    Text(
-                      "Near by Properties",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
-                    ),
-                    height(0.02),
-                    nearByPropertiesList(controller),
-                    height(0.04),
-                    Text(
-                      "Recommended Properties",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
-                    ),
-                    height(0.02),
-                    controller.propertyInfoList == null
-                        ? Center(child: RIEWidgets.getLoader())
-                        : controller.propertyInfoList != null && controller.propertyInfoList!.isEmpty
-                            ? const Center(
-                                child: Text(
-                                  'No Property Found!',
-                                  style: TextStyle(fontSize: 18, color: Colors.black),
-                                ),
-                              )
-                            : ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: controller.propertyInfoList?.length,
-                                itemBuilder: (context, index) {
-                                  return PropertyViewWidget(
-                                      propertyInfoModel: controller.propertyInfoList![index],
-                                      onWishlist: () => controller.update());
-                                },
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            height(0.03),
+                            if (controller.nearbyPropertyInfoList != null &&
+                                controller.nearbyPropertyInfoList!.isNotEmpty)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Near by Properties",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
+                                  ),
+                                  controller.nearbyPropertyInfoList != null &&
+                                          controller.nearbyPropertyInfoList!.length > 5
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            Get.to(
+                                              () => SearchPropertiesScreen(
+                                                location: controller.currentLocation,
+                                                title: 'Near by Properties',
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            "See All",
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: CustomTheme.appThemeContrast),
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                ],
                               ),
-                    height(0.02),
+                            if (controller.nearbyPropertyInfoList != null &&
+                                controller.nearbyPropertyInfoList!.isNotEmpty)
+                              height(0.02),
+                            if (controller.nearbyPropertyInfoList != null &&
+                                controller.nearbyPropertyInfoList!.isNotEmpty)
+                              nearByPropertiesList(controller),
+                            if (controller.nearbyPropertyInfoList != null &&
+                                controller.nearbyPropertyInfoList!.isNotEmpty)
+                              height(0.04),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Recommended Properties",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
+                                ),
+                                controller.propertyInfoList != null && controller.propertyInfoList!.length > 5
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          Get.to(
+                                            () => const SearchPropertiesScreen(
+                                              location: '',
+                                              title: 'Recommended Properties',
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          "See All",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: CustomTheme.appThemeContrast),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ],
+                            ),
+                            height(0.02),
+                            controller.propertyInfoList == null
+                                ? Center(child: RIEWidgets.getLoader())
+                                : controller.propertyInfoList != null && controller.propertyInfoList!.isEmpty
+                                    ? const Center(
+                                        child: Text(
+                                          'No Property Found!',
+                                          style: TextStyle(fontSize: 18, color: Colors.black),
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        physics: const NeverScrollableScrollPhysics(),
+                                        itemCount: controller.propertyInfoList!.length,
+                                        itemBuilder: (context, index) {
+                                          return PropertyViewWidget(
+                                              propertyInfoModel: controller.propertyInfoList![index],
+                                              onWishlist: () => controller.update());
+                                        },
+                                      ),
+                            height(0.02),
+                            controller.propertyInfoList == null
+                                ? const SizedBox.shrink()
+                                : GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => const SearchPropertiesScreen(
+                                          location: '',
+                                          title: 'Recommended Properties',
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width: screenWidth,
+                                      decoration: BoxDecoration(
+                                          color: Constants.primaryColor.withOpacity(0.1),
+                                          borderRadius: BorderRadius.circular(10)),
+                                      child: Row(
+                                        children: [
+                                          SizedBox(
+                                            width: screenWidth * 0.03,
+                                          ),
+                                          Text(
+                                            'View all recommended properties',
+                                            style: TextStyle(fontSize: 16, color: Constants.primaryColor),
+                                          ),
+                                          const Spacer(),
+                                          Icon(
+                                            Icons.arrow_forward_outlined,
+                                            color: Constants.primaryColor,
+                                          ),
+                                          SizedBox(
+                                            width: screenWidth * 0.03,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                            height(0.03),
+                            Text(
+                              "Looking For",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.w600, color: CustomTheme.appThemeContrast),
+                            ),
+                            height(0.02),
+                            propertyByType(),
+                            height(0.03),
+                          ],
+                        ),
+                      ),
+                    )
                   ],
                 ),
-              ),
-            ));
+              )),
+        );
       },
     );
-  }
-
-  Widget buildTabBar(HomeController homeController) {
-    return Obx(() => homeController.isLoadingLocation.value
-        ? Center(child: RIEWidgets.getLoader())
-        : ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: homeController.categories.length,
-            itemBuilder: (ctx, index) {
-              return GestureDetector(
-                  onTap: () {
-                    homeController.selectedIndex.value = index;
-                    homeController.locationFunc(homeController.categories[index]);
-                  },
-                  child: Obx(
-                    () => AnimatedContainer(
-                        margin: EdgeInsets.fromLTRB(index == 0 ? 15 : 5, 0, 5, 0),
-                        width: screenWidth * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
-                          color: index == homeController.selectedIndex.value
-                              ? Constants.primaryColor
-                              : Constants.primaryColor.withOpacity(0.1),
-                        ),
-                        duration: const Duration(milliseconds: 300),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                          alignment: Alignment.center,
-                          child: Text(
-                            homeController.categories[index],
-                            textAlign: TextAlign.center,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 13.0,
-                              fontWeight: FontWeight.w500,
-                              color: index == homeController.selectedIndex.value ? Colors.white : Colors.black,
-                            ),
-                          ),
-                        )),
-                  ));
-            }));
   }
 
   Widget searchView(HomeController homeController) {
     return GestureDetector(
       onTap: () {
-        Get.to(() => SearchPropertiesScreen(
-              locationsList: homeController.categories,
+        Get.to(() => const SearchPropertiesScreen(
+              location: '',
+              title: 'Search Properties',
             ));
       },
       child: Container(
@@ -198,7 +275,10 @@ class MyHomePage extends StatelessWidget {
               width: screenWidth * 0.2,
               child: ElevatedButton(
                 onPressed: () {
-                  Get.to(() => SearchPropertiesScreen(locationsList: homeController.categories));
+                  Get.to(() => const SearchPropertiesScreen(
+                        location: '',
+                        title: 'Search Properties',
+                      ));
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Constants.primaryColor,
@@ -215,18 +295,57 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
+  Widget propertyByType() {
+    return GridView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: propertyTypeList.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, crossAxisSpacing: 20, childAspectRatio: 1.0, mainAxisSpacing: 20),
+      itemBuilder: (BuildContext context, int index) {
+        var data = propertyTypeList[index];
+        return GestureDetector(
+          onTap: () => Get.to(
+            () => SearchPropertiesScreen(
+              location: '',
+              propertyType: data,
+              title: 'Properties',
+            ),
+          ),
+          child: Container(
+            alignment: Alignment.bottomCenter,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: const DecorationImage(
+                  image: NetworkImage(
+                      'https://img.freepik.com/free-photo/blue-house-with-blue-roof-sky-background_1340-25953.jpg'),
+                  fit: BoxFit.cover),
+            ),
+            child: Text(
+              data.name,
+              style: const TextStyle(fontSize: 22, color: Colors.white),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget nearByPropertiesList(HomeController homeController) {
     return FittedBox(
       child: SizedBox(
-          height: 330,
+          height: homeController.nearbyPropertyInfoList != null && homeController.nearbyPropertyInfoList!.isNotEmpty
+              ? 330
+              : 100,
           width: screenWidth,
           child: homeController.nearbyPropertyInfoList == null
               ? Center(child: RIEWidgets.getLoader())
               : homeController.nearbyPropertyInfoList != null && homeController.nearbyPropertyInfoList!.isEmpty
-                  ? const Center(
+                  ? Center(
                       child: Text(
                         'No any nearby property found!',
-                        style: TextStyle(fontSize: 18, color: Colors.black),
+                        style: TextStyle(fontSize: 18, color: CustomTheme.grey),
                       ),
                     )
                   : ListView.separated(

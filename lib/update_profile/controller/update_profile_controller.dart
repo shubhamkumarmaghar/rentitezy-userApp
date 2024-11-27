@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rentitezy/dashboard/view/dashboard_view.dart';
+import 'package:rentitezy/update_profile/model/user_profile_model.dart';
 import 'package:rentitezy/utils/services/rie_user_api_service.dart';
 import 'package:http/http.dart' as http;
 import '../../../dashboard/controller/dashboard_controller.dart';
@@ -23,27 +24,12 @@ class UpdateProfileController extends GetxController {
   RIEUserApiService userApiService = RIEUserApiService();
   final storage = GetStorage();
   String? imagePath;
-
-  String userId = '';
+  UserProfileModel? userProfileModel;
 
   @override
   void onInit() {
     super.onInit();
-    getUserDataFromLocalStorage();
-  }
-
-  void getUserDataFromLocalStorage() async {
-    if (storage.read(Constants.userId) != null && storage.read(Constants.userId) != '') {
-      userId = storage.read(Constants.userId).toString();
-    } else {
-      userId = 'guest';
-    }
-    firstNameController.text = storage.read(Constants.firstName) ??'';
-    lastNameController.text = storage.read(Constants.lastName) ??'';
-    emailController.text = storage.read(Constants.emailkey) ??'';
-    phoneController.text = storage.read(Constants.phonekey) ??'';
-    imagePath = storage.read(Constants.profileUrl)??'';
-    update();
+    getUserData();
   }
 
   void updateProfileImage() async {
@@ -76,7 +62,27 @@ class UpdateProfileController extends GetxController {
     }
   }
 
+  Future<void> getUserData() async {
+    await Future.delayed(Duration(seconds: 4));
+    final response = await userApiService.getApiCall(endPoint: AppUrls.updateProfileUrl);
+
+    if (response != null &&
+        response['message'].toString().toLowerCase().contains('success') &&
+        response['data'] != null) {
+      userProfileModel = UserProfileModel.fromJson(response['data']);
+      firstNameController.text = userProfileModel?.firstName ?? '';
+      lastNameController.text = userProfileModel?.lastName ?? '';
+      emailController.text = userProfileModel?.email ?? '';
+      phoneController.text = userProfileModel?.phone ?? '';
+      imagePath = userProfileModel?.image ?? '';
+    } else {
+      userProfileModel = UserProfileModel(phone: '-1');
+    }
+    update();
+  }
+
   void updateUserData() async {
+    var userId = storage.read(Constants.userId) ?? 'guest';
     showProgressLoader(Get.context!);
     final response = await userApiService.putApiCall(endPoint: AppUrls.updateProfileUrl, bodyParams: {
       'id': userId,
@@ -97,8 +103,8 @@ class UpdateProfileController extends GetxController {
       await storage.write(Constants.token, response['data']['authToken']);
       cancelLoader();
       Get.find<DashboardController>().setIndex(0);
-      Get.offAll(()=>const DashboardView());
-    }else{
+      Get.offAll(() => const DashboardView());
+    } else {
       cancelLoader();
     }
   }

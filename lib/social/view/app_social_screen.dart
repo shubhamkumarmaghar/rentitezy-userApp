@@ -15,110 +15,103 @@ class AppSocialScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvoked: (invoked) {
-        Get.find<DashboardController>().setIndex(0);
-      },
-      child: Scaffold(
-        appBar: appBarWidget(
-          title: 'Social',
-          onBack: () => Get.find<DashboardController>().setIndex(0),
-        ),
-        body: Container(
-          height: screenHeight,
-          width: screenWidth,
-          padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  iconWidget('contact_us', 20, 20),
-                  SizedBox(
-                    width: screenWidth * 0.04,
-                  ),
-                  Text(
-                    'Contact Info',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Constants.primaryColor),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: screenHeight * 0.02,
-              ),
-              Container(
-                padding: EdgeInsets.only(left: screenWidth * 0.09),
-                child: Column(
-                  children: [
-                    callViewTile('+918867319955'),
-                    const Divider(),
-                    callViewTile(AppUrls.phone),
-                    const Divider(),
-                    callViewTile('+918867319933'),
-                  ],
+    return Scaffold(
+      appBar: appBarWidget(
+        title: 'Contact us',
+      ),
+      body: Container(
+        height: screenHeight,
+        width: screenWidth,
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                iconWidget('contact_us', 20, 20),
+                SizedBox(
+                  width: screenWidth * 0.04,
                 ),
-              ),
-              SizedBox(
-                height: screenHeight * 0.07,
-              ),
-              navigateToWebsite(),
-              SizedBox(
-                height: screenHeight * 0.07,
-              ),
-              Row(
+                Text(
+                  'Contact Info',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Constants.primaryColor),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: screenHeight * 0.02,
+            ),
+            Container(
+              padding: EdgeInsets.only(left: screenWidth * 0.09),
+              child: Column(
                 children: [
-                  iconWidget('follow_us', 20, 20),
-                  SizedBox(
-                    width: screenWidth * 0.04,
-                  ),
-                  Text(
-                    'Follow us on',
-                    style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Constants.primaryColor),
-                  ),
+                  callViewTile('+918867319955'),
+                  const Divider(),
+                  callViewTile(AppUrls.phone),
+                  const Divider(),
+                  callViewTile('+918867319933'),
                 ],
               ),
-              SizedBox(
-                height: screenHeight * 0.02,
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: screenWidth * 0.08,
-                  ),
-                  getYoutubeButton(
-                      icon: youtubeIcon,
-                      onTap: () {
-                        Get.to(() => const WebViewPage(
-                              title: 'Youtube',
-                              uri: 'https://www.youtube.com/@sowerentbng',
-                            ));
-                      }),
-                  SizedBox(
-                    width: screenWidth * 0.15,
-                  ),
-                  getFollowingButton(
-                      icon: pinterestIcon,
-                      onTap: () {
-                        Get.to(() => const WebViewPage(
-                              title: 'Pinterest',
-                              uri: 'https://in.pinterest.com/sowerent/',
-                            ));
-                      }),
-                  SizedBox(
-                    width: screenWidth * 0.15,
-                  ),
-                  getFollowingButton(
-                      icon: linkedinIcon,
-                      onTap: () {
-                        Get.to(() => const WebViewPage(
-                              title: 'Linkedin',
-                              uri: 'https://www.linkedin.com/in/sowerent/',
-                            ));
-                      }),
-                ],
-              ),
-            ],
-          ),
+            ),
+            SizedBox(
+              height: screenHeight * 0.07,
+            ),
+            navigateToWebsite(),
+            SizedBox(
+              height: screenHeight * 0.07,
+            ),
+            Row(
+              children: [
+                iconWidget('follow_us', 20, 20),
+                SizedBox(
+                  width: screenWidth * 0.04,
+                ),
+                Text(
+                  'Follow us on',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20, color: Constants.primaryColor),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: screenHeight * 0.02,
+            ),
+            Row(
+              children: [
+                SizedBox(
+                  width: screenWidth * 0.08,
+                ),
+                getYoutubeButton(
+                    icon: youtubeIcon,
+                    onTap: () {
+                      Get.to(() => const WebViewPage(
+                            title: 'Youtube',
+                            uri: 'https://www.youtube.com/@sowerentbng',
+                          ));
+                    }),
+                SizedBox(
+                  width: screenWidth * 0.15,
+                ),
+                getFollowingButton(
+                    icon: pinterestIcon,
+                    onTap: () {
+                      Get.to(() => const WebViewPage(
+                            title: 'Pinterest',
+                            uri: 'https://in.pinterest.com/sowerent/',
+                          ));
+                    }),
+                SizedBox(
+                  width: screenWidth * 0.15,
+                ),
+                getFollowingButton(
+                    icon: linkedinIcon,
+                    onTap: () {
+                      Get.to(() => const WebViewPage(
+                            title: 'Linkedin',
+                            uri: 'https://www.linkedin.com/in/sowerent/',
+                          ));
+                    }),
+              ],
+            ),
+          ],
         ),
       ),
     );

@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:rentitezy/utils/const/appConfig.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../theme/custom_theme.dart';
 
@@ -128,6 +133,35 @@ class RIEWidgets {
         duration: const Duration(milliseconds: 1500),
         backgroundColor: color,
       ),
+    );
+  }
+ static void showExitDialog(BuildContext context) {
+    final CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title:
+      const Center(child: Text('Are you sure to exit?', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400))),
+      actions: <Widget>[
+        CupertinoDialogAction(
+          isDefaultAction: false,
+          child:  Text('Yes', style: TextStyle(fontSize: 16, color: Constants.primaryColor)),
+          onPressed: () {
+            exit(0);
+          },
+        ),
+        CupertinoDialogAction(
+          isDefaultAction: false,
+          child: Text('No', style: TextStyle(fontSize: 16, color: Constants.primaryColor)),
+          onPressed: () {
+            Get.back();
+          },
+        ),
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 

@@ -45,7 +45,7 @@ class InvoiceController extends GetxController {
   Future<void> invoicePayment({required String invoiceId}) async {
     String url = AppUrls.payInvoice;
     showProgressLoader(Get.context!);
-    final response = await apiService.postApiCall(endPoint: url, bodyParams: {"invoiceId": invoiceId, "source": 'app'});
+    final response = await apiService.postApiCall(endPoint: url, bodyParams: {"id": invoiceId, "source": 'app'});
     cancelLoader();
     if (response['message'].toString().toLowerCase().contains('success') && response['data'] != null) {
       final paymentModel = RazorpayPaymentResponseModel.fromJson(response['data']);

@@ -14,43 +14,38 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-   Future<void> alertDialog(
-      BuildContext context, String title, String subttitle) {
-    return showCupertinoDialog(
-      context: context,
-      builder: (context) {
-        return CupertinoAlertDialog(
-          title: Text(title,
-              style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-              )),
-          content: Text(subttitle,
-              style: TextStyle(
-                fontFamily: Constants.fontsFamily,
-              )),
-          actions: [
-            CupertinoDialogAction(
-                child: Text("YES",
-                    style: TextStyle(
-                      fontFamily: Constants.fontsFamily,
-                    )),
-                onPressed: () async {
-                  executeLogOut(context);
-                }),
-            CupertinoDialogAction(
-              child: Text("NO",
+Future<void> logoutAlertDialog(BuildContext context) {
+  return showCupertinoDialog(
+    context: context,
+    builder: (context) {
+      return CupertinoAlertDialog(
+        title: Text('Log Out',
+            style: TextStyle(fontFamily: Constants.fontsFamily, color: CustomTheme.appThemeContrast, fontSize: 16)),
+        content:
+            Text('are you sure to Logout ?', style: TextStyle(fontFamily: Constants.fontsFamily, color: Colors.grey)),
+        actions: [
+          CupertinoDialogAction(
+              child: Text("YES",
                   style: TextStyle(
                     fontFamily: Constants.fontsFamily,
                   )),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        );
-      },
-    );
-  }
+              onPressed: () async {
+                executeLogOut(context);
+              }),
+          CupertinoDialogAction(
+            child: Text("NO",
+                style: TextStyle(
+                  fontFamily: Constants.fontsFamily,
+                )),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      );
+    },
+  );
+}
 
 Map<String, String> amenitiesICons = {
   'Security Guard': 'security_guard',
@@ -109,6 +104,7 @@ class Constants {
   static Color textColor = getColorFromHex('99000000');
   static Color bgNearProperties = getColorFromHex('D9D9D9');
   static Color black = getColorFromHex('000000');
+
   //static Color primaryColor = getColorFromHex('0075FF');
 
   static Color primaryColor = getColorFromHex('12086F');
@@ -126,28 +122,30 @@ class Constants {
   }
 }
 
-executeLogOut(BuildContext context) async {
-  GetStorage().write(Constants.isLogin, false);
-  GetStorage().write(Constants.usernamekey, "guest");
-  GetStorage().write(Constants.userId, "guest");
-  GetStorage().write(Constants.phonekey, "guest");
-  GetStorage().write(Constants.emailkey, "guest");
-  GetStorage().write(Constants.isTenant, false);
+void executeLogOut(BuildContext context) async {
+  await GetStorage().erase();
 
   if (context.mounted) {
-    Navigator.pop(context);
     Get.offAll(() => const LoginScreen());
   }
 }
 
-void showSnackBar(BuildContext context, String result,[Color? color]) {
+void unAuthorizeAccess() async {
+  await GetStorage().erase();
+  Get.to(() => const LoginScreen(
+        canPop: true,
+      ));
+}
+
+void showSnackBar(BuildContext context, String result, [Color? color]) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(result,
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: Constants.fontsFamily,
         )),
-    duration: const Duration(seconds: 2),backgroundColor:color ?? CustomTheme.errorColor,
+    duration: const Duration(seconds: 2),
+    backgroundColor: color ?? CustomTheme.errorColor,
   ));
 }
 
@@ -163,8 +161,7 @@ void showCustomToast(
 }
 
 bool validateEmail(String? value) {
-  String pattern =
-      r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+  String pattern = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
       r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
       r"{0,253}[a-zA-Z0-9])?)*$";
   RegExp regex = RegExp(pattern);
@@ -204,8 +201,7 @@ addMonth(dateVal) {
   var inputDate = inputFormat.parse(dateVal);
   var tempInDate = DateTime(inputDate.year, inputDate.month + 1, inputDate.day);
   String changeFormat1 = tempInDate.toString().split('-')[1];
-  var dateOne =
-      '${tempInDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
+  var dateOne = '${tempInDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
   var inputFive = inputFormat.parse(dateOne);
   DateTime addFive = inputFive.add(const Duration(days: 4));
   var outputFormat = DateFormat.yMMMd().format(addFive);
@@ -217,8 +213,7 @@ curentMonth(dateVal) {
   var inputDate = inputFormat.parse(dateVal);
   // var tempInDate = DateTime(inputDate.year, inputDate.month - 1, inputDate.day);
   String changeFormat1 = inputDate.toString().split('-')[1];
-  var dateOne =
-      '${inputDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
+  var dateOne = '${inputDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
   var inputFive = inputFormat.parse(dateOne);
   DateTime addFive = inputFive.add(const Duration(days: 4));
   var outputFormat = DateFormat.yMMMd().format(addFive);
@@ -230,8 +225,7 @@ lastMonth(dateVal) {
   var inputDate = inputFormat.parse(dateVal);
   var tempInDate = DateTime(inputDate.year, inputDate.month - 1, inputDate.day);
   String changeFormat1 = tempInDate.toString().split('-')[1];
-  var dateOne =
-      '${tempInDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
+  var dateOne = '${tempInDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
   var inputFive = inputFormat.parse(dateOne);
   DateTime addFive = inputFive.add(const Duration(days: 4));
   var outputFormat = DateFormat.yMMMd().format(addFive);
@@ -243,8 +237,7 @@ nextPayDate(dateVal) {
   var inputDate = inputFormat.parse(dateVal);
   var tempInDate = DateTime(inputDate.year, inputDate.month + 1, inputDate.day);
   String changeFormat1 = tempInDate.toString().split('-')[1];
-  var dateOne =
-      '${tempInDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
+  var dateOne = '${tempInDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
   var inputFive = inputFormat.parse(dateOne);
   DateTime addFive = inputFive.add(const Duration(days: 4));
   var outputFormat = DateFormat.yMMMd().format(addFive);
@@ -257,8 +250,7 @@ getDayCount(dateVal) {
   var inputDate = inputFormat.parse(dateVal);
   var tempInDate = DateTime(inputDate.year, inputDate.month + 1, inputDate.day);
   String changeFormat1 = tempInDate.toString().split('-')[1];
-  var dateOne =
-      '${tempInDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
+  var dateOne = '${tempInDate.toString().split('-')[0]}-$changeFormat1-01T00:00:00.000Z';
   var inputFive = inputFormat.parse(dateOne);
   DateTime addFive = inputFive.add(const Duration(days: 4));
   return (addFive.difference(dateCurrent).inDays <= 0)
@@ -267,4 +259,3 @@ getDayCount(dateVal) {
           ? ('0${addFive.difference(dateCurrent).inDays}')
           : (addFive.difference(dateCurrent).inDays).toString();
 }
-

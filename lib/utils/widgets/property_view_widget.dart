@@ -1,26 +1,31 @@
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rentitezy/theme/custom_theme.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
 import 'package:unicons/unicons.dart';
 
 import '../../checkout/view/checkout_screen.dart';
+import '../../dashboard/controller/dashboard_controller.dart';
+import '../../login/view/login_screen.dart';
 import '../../property_details/view/property_details_screen.dart';
 import '../../site_visit/view/site_visit_screen.dart';
 import '../const/appConfig.dart';
 import '../functions/util_functions.dart';
 import '../model/property_model.dart';
 import '../services/utils_api_service.dart';
-
+import '../view/rie_widgets.dart';
 
 class PropertyViewWidget extends StatelessWidget {
   final PropertyInfoModel propertyInfoModel;
   final Function onWishlist;
+  final bool isLogin = GetStorage().read(Constants.isLogin) ?? false;
 
-  const PropertyViewWidget({super.key, required this.propertyInfoModel, required this.onWishlist});
+  PropertyViewWidget({super.key, required this.propertyInfoModel, required this.onWishlist});
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +48,7 @@ class PropertyViewWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 10),
       child: GestureDetector(
         onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
           Get.to(() => PropertyDetailsScreen(propertyId: propertyInfoModel.id?.toString() ?? ''));
         },
         child: Card(
@@ -114,10 +120,14 @@ class PropertyViewWidget extends StatelessWidget {
                     bottom: 17,
                     child: GestureDetector(
                       onTap: () async {
-                        final res = await UtilsApiService.wishlistProperty(
-                            context: context, propertyInfoModel: propertyInfoModel);
-                        if (res) {
-                          onWishlist();
+                        if (isLogin) {
+                          final res = await UtilsApiService.wishlistProperty(
+                              context: context, propertyInfoModel: propertyInfoModel);
+                          if (res) {
+                            onWishlist();
+                          }
+                        } else {
+                          unAuthorizeAccess();
                         }
                       },
                       child: Container(
@@ -255,38 +265,7 @@ class PropertyViewWidget extends StatelessWidget {
                     ),
                     Text('${propertyInfoModel.area}',
                         style: const TextStyle(color: CustomTheme.propertyTextColor, fontSize: 14)),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Visibility(
-                        visible: propertyInfoModel.availFrom != null && propertyInfoModel.availFrom!.isNotEmpty,
-                        replacement: const Row(
-                          children: [
-                            Text('Not Available',
-                                style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500)),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.info,
-                              color: Colors.grey,
-                              size: 18,
-                            )
-                          ],
-                        ),
-                        child: calculateDateDifference(propertyInfoModel.availFrom ?? '') < 1
-                            ? const Text('Available Now',
-                                style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))
-                            : Text('Available From : ${getLocalTime(propertyInfoModel.availFrom)}',
-                                style: const TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w500))),
+                    const Spacer(),
                     Visibility(
                       visible: propertyInfoModel.furnishType != null,
                       replacement: const SizedBox.shrink(),
@@ -304,6 +283,13 @@ class PropertyViewWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(
+                height: 5,
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.023),
+                child: calculateDateDifference(dateTime: propertyInfoModel.availFrom, shouldShowAvailFrom: true),
+              ),
+              const SizedBox(
                 height: 20,
               ),
               Container(
@@ -319,7 +305,11 @@ class PropertyViewWidget extends StatelessWidget {
                               backgroundColor: CustomTheme.appThemeContrast,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                           onPressed: () async {
-                            Get.to(() => SiteVisitScreen(propertyId: propertyInfoModel.id.toString()));
+                            if (isLogin) {
+                              Get.to(() => SiteVisitScreen(propertyId: propertyInfoModel.id.toString()));
+                            } else {
+                              unAuthorizeAccess();
+                            }
                           },
                           child: const Text(
                             'Site Visit',
@@ -332,14 +322,25 @@ class PropertyViewWidget extends StatelessWidget {
                       width: screenWidth * 0.3,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Constants.primaryColor,
+                              backgroundColor: availableToBook(dateTime: propertyInfoModel.availFrom)
+                                  ? Constants.primaryColor
+                                  : Colors.grey,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                           onPressed: () {
-                            Get.to(() => CheckoutScreen(
-                                  listingType: propertyInfoModel.listingType,
-                                  listingId: propertyInfoModel.id.toString(),
-                                  propertyUnitsList: propertyInfoModel.units,
-                                ));
+                            if (isLogin) {
+                              if (availableToBook(dateTime: propertyInfoModel.availFrom)) {
+                                Get.to(() => CheckoutScreen(
+                                      listingType: propertyInfoModel.listingType,
+                                      listingId: propertyInfoModel.id.toString(),
+                                      propertyUnitsList: propertyInfoModel.units,
+                                    ));
+                              } else {
+                                RIEWidgets.getToast(
+                                    message: 'Not available for booking', color: CustomTheme.errorColor);
+                              }
+                            } else {
+                              unAuthorizeAccess();
+                            }
                           },
                           child: const Text(
                             'Book Now',
@@ -373,5 +374,4 @@ class PropertyViewWidget extends StatelessWidget {
     List<String> locationList = latLang.split(',');
     navigateToNativeMap(lat: locationList[0], long: locationList[1]);
   }
-
 }

@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rentitezy/checkout/view/checkout_screen.dart';
 import 'package:rentitezy/property_details/model/property_details_model.dart';
 import 'package:rentitezy/site_visit/view/site_visit_screen.dart';
 import 'package:rentitezy/utils/enums/rent_type.dart';
 import '../../theme/custom_theme.dart';
+import '../../utils/const/appConfig.dart';
 import '../../utils/const/app_urls.dart';
 import '../../utils/functions/util_functions.dart';
 import '../../utils/services/rie_user_api_service.dart';
@@ -25,6 +27,7 @@ class PropertyDetailsController extends GetxController {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmcZfrx5HCXD6E0ROTB5onJjhxJp7u-ntyo2BbyVTgPw&s'
   ];
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  final bool isLogin = GetStorage().read(Constants.isLogin) ?? false;
 
   PropertyDetailsController({required this.propertyId});
 
@@ -108,18 +111,26 @@ class PropertyDetailsController extends GetxController {
   }
 
   void onBookNow() {
-    if (propertyDetailsModel != null) {
-      Get.to(() => CheckoutScreen(
-            listingType: propertyDetailsModel?.listingType,
-            listingId: propertyDetailsModel!.id.toString(),
-            propertyUnitsList: propertyDetailsModel?.units,
-          ));
+    if (isLogin) {
+      if (propertyDetailsModel != null) {
+        Get.to(() => CheckoutScreen(
+              listingType: propertyDetailsModel?.listingType,
+              listingId: propertyDetailsModel!.id.toString(),
+              propertyUnitsList: propertyDetailsModel?.units,
+            ));
+      }
+    } else {
+      unAuthorizeAccess();
     }
   }
 
   void onSiteVisit() {
-    if (propertyDetailsModel != null) {
-      Get.to(() => SiteVisitScreen(propertyId: propertyId));
+    if (isLogin) {
+      if (propertyDetailsModel != null) {
+        Get.to(() => SiteVisitScreen(propertyId: propertyId));
+      }
+    } else {
+      unAuthorizeAccess();
     }
   }
 }
