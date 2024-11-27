@@ -1,24 +1,12 @@
-import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:rentitezy/property_details/controller/property_details_controller.dart';
-import 'package:rentitezy/property_details/model/property_details_model.dart';
 import 'package:rentitezy/utils/const/widgets.dart';
-import 'package:rentitezy/utils/enums/rent_type.dart';
 import 'package:rentitezy/utils/view/rie_widgets.dart';
-import 'package:rentitezy/utils/widgets/youtube_player_widget.dart';
-import 'package:unicons/unicons.dart';
-import '../../login/view/login_screen.dart';
 import '../../theme/custom_theme.dart';
 import '../../utils/const/appConfig.dart';
 import '../../utils/functions/util_functions.dart';
-import '../../utils/services/utils_api_service.dart';
-import '../../utils/widgets/custom_photo_view.dart';
+import '../widgets/near_by_places_widget.dart';
 import '../widgets/property_details_widgets.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
@@ -149,6 +137,22 @@ class PropertyDetailsScreen extends StatelessWidget {
                   propertyDescription(controller: controller, model: data),
                   propertyAmenities(controller: controller, model: data),
                   // propertyEnquiry(controller: controller, model: data),
+                  if (data.nearByPlaces != null && data.nearByPlaces!.isNotEmpty)
+                    SizedBox(
+                      height: screenHeight * 0.01,
+                    ),
+                  if (data.nearByPlaces != null && data.nearByPlaces!.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Text(
+                        'Near-by Places',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomTheme.appThemeContrast),
+                      ),
+                    ),
+                  if (data.nearByPlaces != null && data.nearByPlaces!.isNotEmpty)
+                    NearByPlacesWidget(
+                      nearByPlaces: data.nearByPlaces ?? [],
+                    ),
                   showGoogleMaps(controller: controller, model: data),
                   SizedBox(
                     height: screenHeight * 0.05,
